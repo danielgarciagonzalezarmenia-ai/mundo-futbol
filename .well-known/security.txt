@@ -1,0 +1,10 @@
+# Security Policy
+# Plataforma operada por La14HD.com
+# https://la14hd.com/.well-known/security.txt
+
+Contact: mailto:security@la14hd.com
+Encryption: https://la14hd.com/.well-known/pgp-key.txt
+Preferred-Languages: es, en
+Canonical: https://la14hd.com/.well-known/security.txt
+Policy: https://la14hd.com/legal
+Acknowledgments: https://la14hd.com/security-hall-of-fame

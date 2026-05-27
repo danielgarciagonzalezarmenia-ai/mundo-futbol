@@ -1,0 +1,13 @@
+{
+  "name": "mundo-futbol-scraper",
+  "version": "1.0.0",
+  "description": "Scraper para Jamichoacan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "railway": "node railway-proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

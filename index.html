@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- La14HD.com - Plataforma Oficial de Streaming en Vivo -->
+    <!-- Desarrollado y operado por La14HD.com. Prohibida la reproduccion sin autorizacion. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>MundoFutbol - Partidos en Directo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MundoFutbol">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MundoFutbol">
+    <meta name="author" content="La14HD.com - Premium Streaming Solutions">
+    <meta name="copyright" content="© 2024 La14HD.com. All rights reserved.">
+    <meta name="generator" content="La14HD Streaming Engine v3.2">
+    <meta name="owner" content="La14HD.com">
+    <meta name="developer" content="La14HD Development Team">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://jamichoacan-scraper.goal-live-app.workers.dev https://roja-scraper.goal-live-app.workers.dev https://www.highperformanceformat.com https://pl29516059.effectivecpmnetwork.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https:; frame-ancestors 'none'; connect-src 'self' https://la14hd.com https://jamichoacan-scraper.goal-live-app.workers.dev https://futbolibre-proxy.mundofutbolcol.workers.dev; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="app-version" content="348">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%C3%91%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC%C3%81%C3%89%C3%8D%C3%93%C3%9A%C3%9C%C2%BF" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=29">
+    <style>
+        #popularChannels {
+            display: block;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 0.5rem;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--gutter-md);
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .match-card-large {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: var(--gutter-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            transition: var(--transition);
+            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+            background: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .match-card-large:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-md), var(--shadow-glow);
+        }
+
+        .match-card-event-badge {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            background: var(--accent-subtle);
+            color: var(--text-accent);
+            border: 1px solid var(--border-accent);
+        }
+
+        .match-card-teams {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .play-ad-notice {
+            width: fit-content;
+            max-width: min(720px, 100%);
+            margin: 0.8rem auto 1.2rem;
+            padding: 0.55rem 0.9rem;
+            border: 1px solid rgba(121, 143, 255, 0.28);
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(127, 44, 255, 0.14), rgba(45, 163, 255, 0.12));
+            color: #d5dcff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.01em;
+        }
+
+
+        .channel-logo-img {
+            width: 100%;
+            max-width: 120px;
+            height: 34px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+        }
+
+        @media (max-width: 1200px) {
+            .match-card-large {
+                min-height: 125px;
+            }
+        }
+
+        .events-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.55rem 0.9rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            cursor: default;
+            transition: background 0.15s;
+        }
+
+        .event-row:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .event-flag {
+            width: 22px;
+            height: 15px;
+            object-fit: contain;
+            border-radius: 2px;
+        }
+
+        .event-comp {
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .event-vs {
+            color: var(--text-muted);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .event-ch-count {
+            font-size: 0.7rem;
+            color: #b388ff;
+            background: rgba(127,44,255,0.15);
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .event-ch-btn {
+            background: rgba(127,44,255,0.2);
+            border: 1px solid rgba(127,44,255,0.3);
+            color: #c8b8ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .event-ch-btn:hover {
+            background: rgba(127,44,255,0.35);
+        }
+
+        @media (max-width: 768px) {
+            .event-row {
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+                padding: 0.75rem 1rem;
+                font-size: 1.2rem;
+                overflow: hidden;
+            }
+            .event-time {
+                font-size: 1.1rem;
+                flex-shrink: 0;
+            }
+            .event-flag {
+                width: 26px;
+                height: 16px;
+                flex-shrink: 0;
+            }
+            .event-comp {
+                font-size: 1.1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex-shrink: 1;
+                min-width: 0;
+            }
+            .event-vs {
+                font-size: 1.1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex-shrink: 2;
+                min-width: 0;
+            }
+        }
+
+        .channel-name-text {
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .all-channels {
+            display: block;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 0.5rem;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--gutter-md);
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .featured-time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(127,44,255,0.4);
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            backdrop-filter: blur(4px);
+        }
+
+        .featured-channel {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            background: rgba(255,255,255,0.85);
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 768px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .featured-card {
+                min-height: 130px;
+                padding: 1.2rem;
+            }
+            .featured-team {
+                font-size: 1rem;
+            }
+            .section-title-featured {
+                font-size: 1rem;
+                margin: 1rem 0 0.6rem;
+            }
+
+            #popularChannels {
+                padding: 0 0.9rem;
+            }
+
+            .match-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1rem;
+            }
+
+            .match-card-large {
+                width: 100%;
+                max-width: none;
+                min-height: 92px;
+                padding: 0.6rem 0.5rem;
+                border-radius: 14px;
+                aspect-ratio: 1.7 / 1;
+            }
+
+            .match-card-teams {
+                font-size: 0.9rem;
+            }
+
+            .channel-logo-img {
+                max-width: 96px;
+                height: 30px;
+            }
+
+            .match-card-event-badge {
+                font-size: 0.55rem;
+                padding: 0.2rem 0.55rem;
+            }
+
+            .play-ad-notice {
+                font-size: 0.74rem;
+                margin: 0.65rem auto 1rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+
+        }
+
+        .player-mobile-controls { display: none; }
+
+        @media (max-width: 768px) {
+            .player-header { display: none; }
+            .player-mobile-controls {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 1rem 0.5rem 0.5rem;
+                flex-wrap: wrap;
+            }
+            .mob-ctrl-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.45rem;
+                padding: 0.7rem 1.2rem;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 700;
+                font-family: 'Poppins', sans-serif;
+                cursor: pointer;
+                transition: 0.2s ease;
+            }
+            .mob-ctrl-btn svg { flex-shrink: 0; }
+            .mob-ctrl-back {
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                color: #fff;
+            }
+            .mob-ctrl-full {
+                background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                color: #fff;
+            }
+            .mob-ctrl-report {
+                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                color: #fff;
+            }
+            .mob-ctrl-btn:active { transform: scale(0.95); }
+        }
+
+    </style>
+</head>
+<body>
+    <script src="https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js"></script>
+    <div id="loadingScreen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0a1a 0%,#120426 50%,#1a0533 100%);transition:opacity .5s ease,visibility .5s ease;">
+        <div style="position:relative;width:80px;height:80px;margin-bottom:2rem;">
+            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(127,44,255,.15);"></div>
+            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#7f2cff;animation:spin 1s cubic-bezier(.6,.2,.4,.8) infinite;"></div>
+            <div style="position:absolute;inset:6px;border-radius:50%;border:3px solid transparent;border-bottom-color:#2da3ff;animation:spin 1.4s cubic-bezier(.6,.2,.4,.8) infinite reverse;"></div>
+            <div style="position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,#7f2cff,#2da3ff);opacity:.3;animation:pulse 1.5s ease-in-out infinite;"></div>
+        </div>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:700;color:#fff;margin:0;letter-spacing:-.02em;text-align:center;">
+            Mundo<span style="color:#7f2cff;">Futbol</span>
+        </h1>
+        <p style="font-family:'Poppins',sans-serif;font-size:clamp(.85rem,2.5vw,1rem);font-weight:300;color:rgba(255,255,255,.5);margin:.75rem 0 0;letter-spacing:.15em;text-transform:uppercase;">
+            Cargando...
+        </p>
+        <style>
+            @keyframes spin{to{transform:rotate(360deg)}}
+            @keyframes pulse{0%,100%{transform:scale(.85);opacity:.2}50%{transform:scale(1.15);opacity:.5}}
+        </style>
+    </div>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-text">Mundo<span class="logo-accent">Futbol</span></span>
+                </div>
+                <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-page="events">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Eventos</span>
+                </a>
+                <a href="#" class="nav-link" data-page="channels">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
+                        <polyline points="17 2 12 7 7 2"/>
+                    </svg>
+                    <span>Canales</span>
+                </a>
+                <a href="#" class="nav-link" data-page="legal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <span>Legal</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>(c) 2026 MundoFutbol</p>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle desktop-only" id="menuToggle" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h1 class="page-title" id="pageTitle">Eventos</h1>
+                <div class="topbar-right">
+                    <span class="live-badge" id="liveBadge" style="display:none;">
+                        <span class="pulse"></span>
+                        EN VIVO
+                    </span>
+                    <button id="installBtn" style="display:none;background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:0.35rem 0.75rem;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap;">Instalar</button>
+                    </span>
+                </div>
+            </header>
+            
+            <nav class="mobile-nav">
+                <a href="#" class="mobile-nav-link active" data-page="events">Eventos</a>
+                <a href="#" class="mobile-nav-link" data-page="channels">Canales</a>
+                <a href="#" class="mobile-nav-link" data-page="legal">Legal</a>
+            </nav>
+
+            <div class="ad-unit" style="text-align:center;padding:0.5rem;margin:0.5rem auto;max-width:100%;overflow:hidden;"></div>
+
+            <div class="content-area">
+                <section class="page" id="page-home">
+                    <div class="hero-header">
+                        <h1 class="hero-title">Mundo<span class="hero-accent">Fútbol</span></h1>
+                        <p class="hero-subtitle">Mira tus canales deportivos favoritos solo aquí en Mundo Futbol</p>
+                    </div>
+                    <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
+                    <div class="featured-events" id="featuredEvents"></div>
+                </section>
+
+                <section class="page active" id="page-events">
+                    <div class="hero-header">
+                        <h1 class="hero-title">Eventos<span class="hero-accent">Deportivos</span></h1>
+                        <p class="hero-subtitle">Todos los partidos y eventos en vivo</p>
+                    </div>
+                    <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
+                    <div class="ad-unit" style="text-align:center;padding:0.25rem;margin:0.5rem auto;max-width:100%;overflow:hidden;"></div>
+                    <div class="featured-events" id="allEvents"></div>
+                </section>
+
+                <section class="page" id="page-channels">
+                    <div class="hero-header">
+                        <h1 class="hero-title">Canales<span class="hero-accent">Deportivos</span></h1>
+                        <p class="hero-subtitle">Todos tus canales favoritos en un solo lugar</p>
+                    </div>
+                    <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
+                    <div class="ad-unit" style="text-align:center;padding:0.25rem;margin:0.5rem auto;max-width:100%;overflow:hidden;"></div>
+                    <div class="all-channels" id="allChannels"></div>
+                </section>
+
+                <section class="page" id="page-legal">
+                    <div class="legal-content">
+                        <div class="legal-header">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            <h1>Aviso Legal y Derechos de Autor</h1>
+                        </div>
+
+                        <div class="legal-section">
+                            <h2>Contenido de Terceros</h2>
+                            <p>Este sitio web actúa exclusivamente como un agregador de enlaces y transmisiones proporcionadas por terceros. No somos propietarios, productores ni distribuidores de ningún contenido audiovisual que se pueda visualizar a través de esta plataforma. Todos los partidos, eventos deportivos y señales de televisión que se muestran son propiedad intelectual de sus respectivos titulares de derechos.</p>
+                        </div>
+
+                        <div class="legal-section">
+                            <h2>Entidades Protectoras de Derechos</h2>
+                            <p>El contenido deportivo transmitido está protegido por las leyes de propiedad intelectual y los derechos de transmisión otorgados a las siguientes entidades, entre otras:</p>
+                            <ul class="entities-list">
+                                <li><strong>FIFA</strong> - Federación Internacional de Fútbol Asociación</li>
+                                <li><strong>UEFA</strong> - Unión de Asociaciones Europeas de Fútbol</li>
+                                <li><strong>CONMEBOL</strong> - Confederación Sudamericana de Fútbol</li>
+                                <li><strong>CONCACAF</strong> - Confederación de Fútbol Asociación de Norteamérica, Centroamérica y el Caribe</li>
+                                <li><strong>AFC</strong> - Confederación Asiática de Fútbol</li>
+                                <li><strong>CAF</strong> - Confederación Africana de Fútbol</li>
+                                <li><strong>OFC</strong> - Confederación de Fútbol de Oceanía</li>
+                                <li><strong>Liga de Fútbol Profesional (LaLiga)</strong></li>
+                                <li><strong>Premier League</strong></li>
+                                <li><strong>Serie A</strong></li>
+                                <li><strong>Bundesliga</strong></li>
+                                <li><strong>Ligue 1</strong></li>
+                                <li><strong>ESPN, Fox Sports, Star+, TNT Sports</strong> y demás operadores de señales</li>
+                            </ul>
+                        </div>
+
+                        <div class="legal-section warning">
+                            <h2>Advertencia sobre Uso Ilegal de Contenido</h2>
+                            <p>La reproducción, distribución, transmisión pública o cualquier forma de explotación del contenido protegido por derechos de autor sin la autorización expresa de sus titulares constituye una <strong>violación directa de las leyes de propiedad intelectual</strong> vigentes en la mayoría de los países del mundo.</p>
+                            <p>Las sanciones por infringir estos derechos pueden incluir:</p>
+                            <ul>
+                                <li>Multas económicas significativas</li>
+                                <li>Acciones legales civiles y penales</li>
+                                <li>Bloqueo de sitios web y servicios</li>
+                                <li>Responsabilidad penal en casos graves</li>
+                            </ul>
+                        </div>
+
+                        <div class="legal-section">
+                            <h2>Uso Permitido</h2>
+                            <p>El acceso a este sitio web se proporciona únicamente para fines informativos y de entretenimiento personal. Los usuarios se comprometen a:</p>
+                            <ul>
+                                <li>No descargar, grabar ni almacenar contenido audiovisual</li>
+                                <li>No redistribuir enlaces o transmisiones a terceros</li>
+                                <li>No utilizar el contenido con fines comerciales</li>
+                                <li>No intentar eludir medidas de protección tecnológica</li>
+                                <li>Respetar los derechos de los titulares de contenido</li>
+                            </ul>
+                        </div>
+
+                        <div class="legal-section">
+                            <h2>Exención de Responsabilidad</h2>
+                            <p>MundoFutbol no se hace responsable del contenido proporcionado por fuentes externas. Los enlaces y transmisiones son gestionados por terceros independientes. Si usted es titular de derechos de autor y considera que algún contenido infringe sus derechos, puede contactarnos para solicitar su retiro.</p>
+                            <p><strong>Contacto:</strong> legal@mundofutbol.com</p>
+                        </div>
+
+                        <div class="legal-footer">
+                            <p>Última actualización: Mayo 2026</p>
+                            <p>Al utilizar este sitio web, usted acepta los términos y condiciones aquí descritos.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal del reproductor estilo OnlineFutbol -->
+    <div class="player-modal" id="playerModal">
+        <div class="player-modal-overlay"></div>
+        <div class="player-modal-content">
+            <div class="player-layout">
+                <!-- Columna izquierda: Reproductor -->
+                <div class="player-main">
+                    <div class="player-header">
+                        <button class="player-back-btn" data-action="close-player" aria-label="Atrás">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12"/>
+                                <polyline points="12 19 5 12 12 5"/>
+                            </svg>
+                            Atrás
+                        </button>
+                        <span class="live-badge-player" style="display:none;">
+                            <span class="pulse-red"></span>
+                            EN VIVO
+                        </span>
+                        <button class="report-btn" data-action="toggle-fullscreen" aria-label="Pantalla completa">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Pantalla completa
+                        </button>
+                        <button class="report-btn" data-action="report-issue" aria-label="Reportar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                <line x1="4" y1="22" x2="4" y2="15"/>
+                            </svg>
+                            Reportar
+                        </button>
+                    </div>
+                    
+                    <div class="video-wrapper">
+                        <div class="video-container" id="playerContainer">
+                            <div class="video-placeholder">
+                                <div class="loading-spinner"></div>
+                                <p>Cargando transmisión...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ad-unit" style="text-align:center;padding:0.4rem;margin:0.5rem auto;max-width:100%;overflow:hidden;"></div>
+
+                    <div id="signalPanelMount"></div>
+
+                    <div id="eventChannelOptions" style="display:none;padding:0.75rem 1rem 0;"></div>
+
+                    <div class="match-info-panel">
+                        <div class="competition-badge">
+                            <span id="modalCompetition">COPA SUDAMERICANA</span>
+                        </div>
+                        <h2 class="match-title" id="modalMatchTitle">Gremio vs Palestino</h2>
+                            </div>
+                </div>
+
+                <!-- Columna derecha: Sidebar -->
+                <div class="player-sidebar">
+                    <div class="sidebar-section report-notice">
+                        <h3 class="section-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                <line x1="4" y1="22" x2="4" y2="15"/>
+                            </svg>
+                            REPORTAR CANAL
+                        </h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                            Si el canal no se reproduce correctamente, por favor reportalo usando el botón <strong>"Reportar"</strong> en la parte superior. Esto nos ayuda a arreglar los problemas rápidamente.
+                        </p>
+                    </div>
+                    <div class="player-mobile-controls">
+                        <button class="mob-ctrl-btn mob-ctrl-back" data-action="close-player">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="19" y1="12" x2="5" y2="12"/>
+                                <polyline points="12 19 5 12 12 5"/>
+                            </svg>
+                            Atrás
+                        </button>
+                        <button class="mob-ctrl-btn mob-ctrl-full" data-action="toggle-fullscreen">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Pantalla completa
+                        </button>
+                        <button class="mob-ctrl-btn mob-ctrl-report" data-action="report-issue">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                <line x1="4" y1="22" x2="4" y2="15"/>
+                            </svg>
+                            Reportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="page" id="page-admin" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; background: var(--bg-primary); padding: 2rem; overflow-y: auto;">
+        <div class="content-area">
+            <button data-action="close-admin" style="position: fixed; top: 1rem; right: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-primary); padding: 0.5rem 1rem; border-radius: var(--radius-sm); cursor: pointer;">Cerrar</button>
+            <h2 style="color: var(--text-primary); margin-bottom: 1rem;">Panel de Administracion - La14HD.com</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">Usuario: admin@la14hd.com | Acceso restringido a personal autorizado</p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">© La14HD.com - Prohibida la distribucion no autorizada de contenido</p>
+            <div id="apiEventsList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+        </div>
+    </section>
+
+    <!-- La14HD.com - Sistema de Distribucion de Contenido v3.2 -->
+    <!-- Si usted no es empleado autorizado de La14HD.com, no acceda a este sistema. -->
+    <script src="init.js?v=348"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1" integrity="sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn" crossorigin="anonymous"></script>
+    <script src="teams-logos.js?v=1"></script>
+    <script src="ads.js?v=348"></script>
+</body>
+</html>

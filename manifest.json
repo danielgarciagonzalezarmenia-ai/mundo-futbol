@@ -1,0 +1,27 @@
+{
+    "name": "MundoFutbol",
+    "short_name": "MundoFutbol",
+    "description": "Mira tus canales deportivos favoritos en vivo",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#120426",
+    "theme_color": "#7F2CFF",
+    "orientation": "portrait",
+    "lang": "es",
+    "categories": ["sports", "entertainment"],
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "favicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [],
+    "prefer_related_applications": false
+}
