@@ -317,23 +317,42 @@ const COMPETITION_FLAGS = {
     'Ligue 1': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/330px-Flag_of_France.svg.png',
     'Copa Colombia': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Colombia.svg/960px-Flag_of_Colombia.svg.png',
     'Copa Sudamericana': 'https://logodownload.org/wp-content/uploads/2018/10/copa-sulamericana-logo-1.png',
-    'Copa Libertadores': 'https://logodownload.org/wp-content/uploads/2018/10/copa-libertadores-logo.png'
+    'Copa Libertadores': 'https://logodownload.org/wp-content/uploads/2018/10/copa-libertadores-logo.png',
+    'UEFA Conference League': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/UEFA_Conference_League_full_logo_%282024_version%29.svg/3840px-UEFA_Conference_League_full_logo_%282024_version%29.svg.png'
 };
 
+var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
+
 const EVENTOS_MANUALES = [
-    { time: '13:30', comp: '2. Bundesliga', home: 'Greuther Fürth', away: 'Rot-Weiss Essen', channels: ['https://la14hd.com/vivo/canales.php?stream=foxsports2'] },
-    { time: '13:45', comp: 'Ligue 1', home: 'Saint-Étienne', away: 'Nice', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
-    { time: '15:30', comp: 'Copa Colombia', home: 'Real Cundinamarca', away: 'Rionegro Águilas', channels: ['Win Sports+'] },
-    { time: '17:00', comp: 'Copa Sudamericana', home: 'Grêmio', away: 'Torque', channels: ['https://la14hd.com/vivo/canales.php?stream=dsportsplus'] },
-    { time: '17:00', comp: 'Copa Sudamericana', home: 'Millonarios', away: 'O\'Higgins', channels: ['https://la14hd.com/vivo/canales.php?stream=dsports'] },
-    { time: '17:00', comp: 'Copa Libertadores', home: 'Lanús', away: 'Mirassol', channels: ['ESPN2'] },
-    { time: '17:00', comp: 'Copa Libertadores', home: 'LDU Quito', away: 'Always Ready', channels: ['ESPN'] },
-    { time: '19:00', comp: 'MLB', home: 'Texas Rangers', away: 'Houston Astros', channels: ['ESPN3'] },
-    { time: '19:30', comp: 'Copa Sudamericana', home: 'San Lorenzo', away: 'Deportivo Recoleta', channels: ['ESPN2'] },
-    { time: '19:30', comp: 'Copa Libertadores', home: 'Flamengo', away: 'Cusco', channels: ['ESPN7'] },
-    { time: '19:30', comp: 'Copa Libertadores', home: 'Universitario', away: 'Deportes Tolima', channels: ['ESPN6'] },
-    { time: '19:30', comp: 'Copa Libertadores', home: 'Estudiantes', away: 'Medellín', channels: ['ESPN'] }
+    { time: '12:00', comp: 'MLB', home: 'Toronto Blue Jays', away: 'Miami Marlins', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
+    { time: '14:00', comp: 'UEFA Conference League', home: 'Crystal Palace', away: 'Rayo Vallecano', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '16:00', comp: 'Copa Colombia', home: 'Boyacá Chicó', away: 'Llaneros', channels: ['Win Sports+'] },
+    { time: '17:00', comp: 'Copa Libertadores', home: 'Independiente del Valle', away: 'Rosario Central', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Racing Club', away: 'Independiente Petrolero', channels: ['https://la14hd.com/vivo/canales.php?stream=espn3'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Atlético Mineiro', away: 'Academia Puerto Cabello', channels: ['https://la14hd.com/vivo/canales.php?stream=espn4'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Caracas', away: 'Botafogo', channels: ['https://la14hd.com/vivo/canales.php?stream=dsportsplus'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Cienciano', away: 'Juventud', channels: ['https://la14hd.com/vivo/canales.php?stream=dsports'] },
+    { time: '17:00', comp: 'Copa Libertadores', home: 'Libertad', away: 'UCV', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Olimpia', away: 'Audax Italiano', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
+    { time: '17:00', comp: 'Copa Sudamericana', home: 'Vasco da Gama', away: 'Barracas Central', channels: ['https://la14hd.com/vivo/canales.php?stream=espn2'] },
+    { time: '19:30', comp: 'Copa Sudamericana', home: 'River Plate', away: 'Blooming', channels: ['https://la14hd.com/vivo/canales.php?stream=espn2'] },
+    { time: '19:30', comp: 'Copa Libertadores', home: 'Corinthians', away: 'Platense', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
+    { time: '19:30', comp: 'Copa Libertadores', home: 'Bolívar', away: 'Independiente Rivadavia', channels: ['https://la14hd.com/vivo/canales.php?stream=espn6'] },
+    { time: '19:30', comp: 'Copa Libertadores', home: 'Fluminense', away: 'Deportivo La Guaira', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
+    { time: '19:30', comp: 'Copa Libertadores', home: 'Peñarol', away: 'Santa Fe', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] }
 ];
+
+(function() {
+    var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
+    if (off !== 0) {
+        EVENTOS_MANUALES.forEach(function(e) {
+            var p = e.time.split(':');
+            var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
+            t = ((t % 1440) + 1440) % 1440;
+            e.time = String(100 + Math.floor(t / 60)).slice(1) + ':' + String(100 + (t % 60)).slice(1);
+        });
+    }
+})();
 
 let currentEventChannels = [];
 let currentEventChannelIdx = 0;
