@@ -1,23 +1,10 @@
 (function() {
-  var key = '63553ed7d05ed693bec4af3e09d22e4c';
   var units = document.querySelectorAll('.ad-unit');
   if (!units.length) return;
-  var idx = 0;
-  function loadNext() {
-    if (idx >= units.length) return;
-    var unit = units[idx++];
-    atOptions = {
-      'key': key,
-      'format': 'iframe',
-      'height': 90,
-      'width': 728,
-      'params': {}
-    };
+  units.forEach(function(unit) {
     var s = document.createElement('script');
-    s.src = 'https://www.highperformanceformat.com/' + key + '/invoke.js';
-    s.onload = loadNext;
-    s.onerror = loadNext;
+    s.src = 'https://pl29569361.effectivecpmnetwork.com/1b/f0/a2/1bf0a27dd67fe35433c34852eed28187.js';
+    s.async = true;
     unit.appendChild(s);
-  }
-  loadNext();
+  });
 })();
