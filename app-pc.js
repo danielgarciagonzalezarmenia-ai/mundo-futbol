@@ -413,12 +413,14 @@ const COMPETITION_FLAGS = {
     'UEFA Conference League': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/UEFA_Conference_League_full_logo_%282024_version%29.svg/3840px-UEFA_Conference_League_full_logo_%282024_version%29.svg.png',
     'Amistoso Internacional': 'https://static.wikia.nocookie.net/eqasxxrmc/images/3/39/FIFA-Logo-old.png/revision/latest?cb=20200520010230&path-prefix=es',
     'Serie B': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/960px-Flag_of_Italy.svg.png',
-    'Primera División': 'https://eeao2nst5vu.exactdn.com/wp-content/uploads/2013/05/Bandera-chilena.jpg?strip=all&lossy=1&ssl=1'
+    'Primera División': 'https://eeao2nst5vu.exactdn.com/wp-content/uploads/2013/05/Bandera-chilena.jpg?strip=all&lossy=1&ssl=1',
+    'Sorteo': 'https://cdn.worldvectorlogo.com/logos/conmebol.svg'
 };
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
+    { time: '10:00', comp: 'Sorteo', home: 'Sorteo Octavos de Final', away: 'Copa Libertadores y Sudamericana', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
     { time: '13:00', comp: 'Serie B', home: 'Monza', away: 'Catanzaro', channels: ['https://la14hd.com/vivo/canales.php?stream=espn3mx'] },
     { time: '13:30', comp: 'Amistoso Internacional', home: 'Bosnia-Herzegovina', away: 'Macedonia del Norte', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
     { time: '13:45', comp: 'Ligue 1', home: 'Nice', away: 'Saint-Étienne', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
