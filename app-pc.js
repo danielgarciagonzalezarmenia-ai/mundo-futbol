@@ -411,20 +411,22 @@ const COMPETITION_FLAGS = {
     'Copa Sudamericana': 'https://logodownload.org/wp-content/uploads/2018/10/copa-sulamericana-logo-1.png',
     'Copa Libertadores': 'https://logodownload.org/wp-content/uploads/2018/10/copa-libertadores-logo.png',
     'UEFA Conference League': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/UEFA_Conference_League_full_logo_%282024_version%29.svg/3840px-UEFA_Conference_League_full_logo_%282024_version%29.svg.png',
-    'Amistoso Internacional': 'https://static.wikia.nocookie.net/eqasxxrmc/images/3/39/FIFA-Logo-old.png/revision/latest?cb=20200520010230&path-prefix=es'
+    'Amistoso Internacional': 'https://static.wikia.nocookie.net/eqasxxrmc/images/3/39/FIFA-Logo-old.png/revision/latest?cb=20200520010230&path-prefix=es',
+    'Serie B': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/960px-Flag_of_Italy.svg.png',
+    'Primera División': 'https://eeao2nst5vu.exactdn.com/wp-content/uploads/2013/05/Bandera-chilena.jpg?strip=all&lossy=1&ssl=1'
 };
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '13:00', comp: 'Amistoso Internacional', home: 'Egipto', away: 'Rusia', channels: ['https://la14hd.com/vivo/canales.php?stream=foxdeportes'] },
-    { time: '13:45', comp: 'Amistoso Internacional', home: 'República de Irlanda', away: 'Qatar', channels: ['https://la14hd.com/vivo/canales.php?stream=foxsports2_usa'] },
-    { time: '17:00', comp: 'Copa Libertadores', home: 'Palmeiras', away: 'Junior', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '17:00', comp: 'Copa Libertadores', home: 'Cerro Porteño', away: 'Sporting Cristal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn2'] },
-    { time: '19:30', comp: 'Copa Libertadores', home: 'Boca Juniors', away: 'Universidad Católica', channels: ['https://la14hd.com/vivo/canales.php?stream=espn2'] },
-    { time: '19:30', comp: 'Copa Libertadores', home: 'Cruzeiro', away: 'Barcelona', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
-    { time: '19:30', comp: 'Copa Sudamericana', home: 'América de Cali', away: 'Macará', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '19:30', comp: 'Copa Sudamericana', home: 'Tigre', away: 'Alianza Atlético', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] }
+    { time: '13:00', comp: 'Serie B', home: 'Monza', away: 'Catanzaro', channels: ['https://la14hd.com/vivo/canales.php?stream=espn3mx'] },
+    { time: '13:30', comp: 'Amistoso Internacional', home: 'Bosnia-Herzegovina', away: 'Macedonia del Norte', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
+    { time: '13:45', comp: 'Ligue 1', home: 'Nice', away: 'Saint-Étienne', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
+    { time: '15:00', comp: 'Primera B', home: 'Envigado', away: 'Real Cartagena', channels: ['https://la14hd.com/vivo/canales.php?stream=winsportsplus'] },
+    { time: '15:00', comp: 'Liga 1', home: 'Atlético Grau', away: 'Deportivo Moquegua', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
+    { time: '17:00', comp: 'Primera División', home: 'Cobresal', away: 'Ñublense', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] },
+    { time: '18:00', comp: 'MLB', home: 'New York Mets', away: 'Miami Marlins', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
+    { time: '19:30', comp: 'Primera División', home: 'Univ. Concepción', away: 'Unión La Calera', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] }
 ];
 
 (function() {
@@ -991,7 +993,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         // Inyectar script de bloqueo después de cargar el iframe
         setTimeout(() => {
             injectAdBlockScript();
-        }, 2000);
+        }, 500);
     }
 
     function injectAdBlockScript() {
@@ -1058,132 +1060,142 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
     }
 
     function loadPlayerWithProxy(url) {
-        setTimeout(() => {
-            playerContainer.innerHTML = '<video id="hlsPlayer" class="hls-player" controls autoplay muted playsinline style="background: #000;"></video>';
-            signalPanelMount.innerHTML = `
-                <div class="signal-panel">
-                    <span>Canal directo</span>
-                    <div class="signal-options">
-                        <a class="signal-option external" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir stream</a>
-                    </div>
+        playerContainer.innerHTML = '<video id="hlsPlayer" class="hls-player" controls autoplay muted playsinline style="background: #000;"></video>';
+        signalPanelMount.innerHTML = `
+            <div class="signal-panel">
+                <span>Canal directo</span>
+                <div class="signal-options">
+                    <a class="signal-option external" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir stream</a>
                 </div>
-            `;
+            </div>
+        `;
 
-            const video = document.getElementById('hlsPlayer');
-            const proxyUrl = $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,3,12,74,81,88,19,2,25,18,23,22,89,0,13,20,25,12,27,76,86,26,15,19,25,6,64,79,91,7,8,21,4,25,64,92,81,3,76,79,3,24,2,5]) + encodeURIComponent(url);
+        const video = document.getElementById('hlsPlayer');
+        const proxyUrl = $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,3,12,74,81,88,19,2,25,18,23,22,89,0,13,20,25,12,27,76,86,26,15,19,25,6,64,79,91,7,8,21,4,25,64,92,81,3,76,79,3,24,2,5]) + encodeURIComponent(url);
+        
+        console.log('Usando proxy URL:', proxyUrl);
+        
+        const enableSound = () => {
+            if (video.muted) {
+                video.muted = false;
+                console.log('Sonido activado');
+            }
+        };
+
+        video.addEventListener('click', enableSound);
+        video.addEventListener('play', enableSound);
+        
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = proxyUrl;
+            video.play().catch(e => console.log('Autoplay bloqueado:', e));
+            return;
+        }
+
+        if (window.Hls && Hls.isSupported()) {
+            const hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                startFragPrefetch: true,
+                manifestLoadingTimeOut: 5000,
+                levelLoadingTimeOut: 5000,
+                fragLoadingTimeOut: 5000,
+                manifestLoadingMaxRetry: 1,
+                levelLoadingMaxRetry: 2,
+                maxBufferLength: 15,
+                maxMaxBufferLength: 30,
+                backBufferLength: 30,
+                maxLoadingDelay: 2
+            });
+            hls.loadSource(proxyUrl);
+            hls.attachMedia(video);
             
-            console.log('Usando proxy URL:', proxyUrl);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                console.log('Manifesto cargado, iniciando reproducción');
+                video.play().then(() => {
+                    setTimeout(() => {
+                        video.muted = false;
+                    }, 500);
+                }).catch(e => console.log('Autoplay bloqueado:', e));
+            });
             
-            const enableSound = () => {
-                if (video.muted) {
-                    video.muted = false;
-                    console.log('Sonido activado');
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                    console.error('Error fatal HLS:', data);
+                    playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
                 }
-            };
-
-            video.addEventListener('click', enableSound);
-            video.addEventListener('play', enableSound);
-            
-            if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxyUrl;
-                video.play().catch(e => console.log('Autoplay bloqueado:', e));
-                return;
-            }
-
-            if (window.Hls && Hls.isSupported()) {
-                const hls = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    backBufferLength: 90,
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60
-                });
-                hls.loadSource(proxyUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    console.log('Manifesto cargado, iniciando reproducción');
-                    video.play().then(() => {
-                        setTimeout(() => {
-                            video.muted = false;
-                        }, 1000);
-                    }).catch(e => console.log('Autoplay bloqueado:', e));
-                });
-                
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        console.error('Error fatal HLS:', data);
-                        playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
-                    }
-                });
-            } else {
-                playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
-            }
-        }, 200);
+            });
+        } else {
+            playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
+        }
     }
 
     function loadPlayer(url) {
-        setTimeout(() => {
-            playerContainer.innerHTML = '<video id="hlsPlayer" class="hls-player" controls autoplay muted playsinline style="background: #000;"></video>';
-            signalPanelMount.innerHTML = `
-                <div class="signal-panel">
-                    <span>Canal directo</span>
-                    <div class="signal-options">
-                        <a class="signal-option external" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir m3u8</a>
-                    </div>
+        playerContainer.innerHTML = '<video id="hlsPlayer" class="hls-player" controls autoplay muted playsinline style="background: #000;"></video>';
+        signalPanelMount.innerHTML = `
+            <div class="signal-panel">
+                <span>Canal directo</span>
+                <div class="signal-options">
+                    <a class="signal-option external" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir m3u8</a>
                 </div>
-            `;
+            </div>
+        `;
 
-            const video = document.getElementById('hlsPlayer');
+        const video = document.getElementById('hlsPlayer');
+        
+        console.log('Cargando stream con URL:', url);
+        
+        const enableSound = () => {
+            if (video.muted) {
+                video.muted = false;
+                console.log('Sonido activado');
+            }
+        };
+
+        video.addEventListener('click', enableSound);
+        video.addEventListener('play', enableSound);
+        
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.play().catch(e => console.log('Autoplay bloqueado:', e));
+            return;
+        }
+
+        if (window.Hls && Hls.isSupported()) {
+            const hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                startFragPrefetch: true,
+                manifestLoadingTimeOut: 5000,
+                levelLoadingTimeOut: 5000,
+                fragLoadingTimeOut: 5000,
+                manifestLoadingMaxRetry: 1,
+                levelLoadingMaxRetry: 2,
+                maxBufferLength: 15,
+                maxMaxBufferLength: 30,
+                backBufferLength: 30,
+                maxLoadingDelay: 2
+            });
+            hls.loadSource(url);
+            hls.attachMedia(video);
             
-            console.log('Cargando stream con URL:', url);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                console.log('Manifesto cargado, iniciando reproducción');
+                video.play().then(() => {
+                    setTimeout(() => {
+                        video.muted = false;
+                    }, 500);
+                }).catch(e => console.log('Autoplay bloqueado:', e));
+            });
             
-            const enableSound = () => {
-                if (video.muted) {
-                    video.muted = false;
-                    console.log('Sonido activado');
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                    console.error('Error fatal HLS:', data);
+                    playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
                 }
-            };
-
-            video.addEventListener('click', enableSound);
-            video.addEventListener('play', enableSound);
-            
-            if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = url;
-                video.play().catch(e => console.log('Autoplay bloqueado:', e));
-                return;
-            }
-
-            if (window.Hls && Hls.isSupported()) {
-                const hls = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    backBufferLength: 90,
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60
-                });
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    console.log('Manifesto cargado, iniciando reproducción');
-                    video.play().then(() => {
-                        setTimeout(() => {
-                            video.muted = false;
-                        }, 1000);
-                    }).catch(e => console.log('Autoplay bloqueado:', e));
-                });
-                
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        console.error('Error fatal HLS:', data);
-                        playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
-                    }
-                });
-            } else {
-                playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
-            }
-        }, 200);
+            });
+        } else {
+            playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
+        }
     }
 }
 
