@@ -14,12 +14,8 @@ let currentChannelIndex = 0;
 const playerModal = document.getElementById('playerModal');
 const playerModalOverlay = document.querySelector('.player-modal-overlay');
 const playerModalClose = document.querySelector('.player-modal-close');
-const menuToggle = document.getElementById('menuToggle');
-const sidebarClose = document.getElementById('sidebarClose');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
 const pageTitle = document.getElementById('pageTitle');
 const liveBadge = document.getElementById('liveBadge');
-const sidebar = document.getElementById('sidebar');
 
 // Mapeo de nombres de canales a los del JSON de la14hd.com
 const CHANNEL_NAME_MAP = {
@@ -1313,30 +1309,10 @@ function navigateTo(page) {
 
     // Guardar página actual en localStorage
     localStorage.setItem('currentPage', page);
-
-    closeSidebar();
 }
 
 function navigateToPage(page) {
     navigateTo(page);
-}
-
-function openSidebar() {
-    sidebar.classList.add('open');
-    sidebarOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeSidebar() {
-    sidebar.classList.remove('open');
-    sidebarOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-    setTimeout(() => {
-        if (sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('active');
-        }
-    }, 100);
 }
 
 function setupEventListeners() {
@@ -1350,11 +1326,6 @@ function setupEventListeners() {
         return null;
     };
 
-    menuToggle.addEventListener('click', openSidebar);
-    sidebarClose.addEventListener('click', closeSidebar);
-    sidebarOverlay.addEventListener('click', closeSidebar);
-
-    // Handle both desktop sidebar nav links and mobile nav links
     const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
     allNavLinks.forEach(link => {
         link.addEventListener('click', (e) => {

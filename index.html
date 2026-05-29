@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://la14hd.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%C3%91%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC%C3%81%C3%89%C3%8D%C3%93%C3%9A%C3%9C%C2%BF" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=29">
+    <link rel="stylesheet" href="styles.css?v=30">
     <style>
         #popularChannels {
             display: block;
@@ -66,9 +66,9 @@
         }
 
         .match-card-large:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             border-color: var(--border-accent);
-            box-shadow: var(--shadow-md), var(--shadow-glow);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
         }
 
         .match-card-event-badge {
@@ -96,10 +96,10 @@
             max-width: min(720px, 100%);
             margin: 0.8rem auto 1.2rem;
             padding: 0.55rem 0.9rem;
-            border: 1px solid rgba(121, 143, 255, 0.28);
+            border: 1px solid rgba(249, 115, 22, 0.25);
             border-radius: 999px;
-            background: linear-gradient(135deg, rgba(127, 44, 255, 0.14), rgba(45, 163, 255, 0.12));
-            color: #d5dcff;
+            background: rgba(249, 115, 22, 0.06);
+            color: var(--text-accent);
             font-size: 0.8rem;
             font-weight: 500;
             text-align: center;
@@ -170,8 +170,8 @@
 
         .event-ch-count {
             font-size: 0.7rem;
-            color: #b388ff;
-            background: rgba(127,44,255,0.15);
+            color: var(--text-accent);
+            background: var(--accent-subtle);
             padding: 0.1rem 0.5rem;
             border-radius: 999px;
             margin-left: auto;
@@ -179,9 +179,9 @@
         }
 
         .event-ch-btn {
-            background: rgba(127,44,255,0.2);
-            border: 1px solid rgba(127,44,255,0.3);
-            color: #c8b8ff;
+            background: var(--accent-subtle);
+            border: 1px solid var(--border-accent);
+            color: var(--text-accent);
             padding: 0.3rem 0.8rem;
             border-radius: 8px;
             font-size: 0.75rem;
@@ -191,7 +191,7 @@
         }
 
         .event-ch-btn:hover {
-            background: rgba(127,44,255,0.35);
+            background: rgba(249,115,22,0.25);
         }
 
         @media (max-width: 768px) {
@@ -257,7 +257,7 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: #fff;
-            background: rgba(127,44,255,0.4);
+            background: rgba(249,115,22,0.4);
             padding: 0.2rem 0.7rem;
             border-radius: 999px;
             backdrop-filter: blur(4px);
@@ -266,7 +266,7 @@
         .featured-channel {
             font-size: 0.75rem;
             font-weight: 700;
-            color: #1a1a2e;
+            color: #07070a;
             background: rgba(255,255,255,0.85);
             padding: 0.25rem 0.8rem;
             border-radius: 999px;
@@ -359,15 +359,15 @@
             }
             .mob-ctrl-btn svg { flex-shrink: 0; }
             .mob-ctrl-back {
-                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                background: linear-gradient(135deg, #f97316, #ea580c);
                 color: #fff;
             }
             .mob-ctrl-full {
-                background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                background: linear-gradient(135deg, #e11d48, #be123c);
                 color: #fff;
             }
             .mob-ctrl-report {
-                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                background: linear-gradient(135deg, #f97316, #e11d48);
                 color: #fff;
             }
             .mob-ctrl-btn:active { transform: scale(0.95); }
@@ -379,15 +379,15 @@
     <script src="https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js"></script>
     <script src="https://pl29573725.effectivecpmnetwork.com/b5/3c/69/b53c69ae661772079385a4f2243185d5.js"></script>
     <script src="https://pl29569361.effectivecpmnetwork.com/1b/f0/a2/1bf0a27dd67fe35433c34852eed28187.js"></script>
-    <div id="loadingScreen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0a1a 0%,#120426 50%,#1a0533 100%);transition:opacity .5s ease,visibility .5s ease;">
+    <div id="loadingScreen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#07070a 0%,#0e0a06 50%,#1a0a04 100%);transition:opacity .5s ease,visibility .5s ease;">
         <div style="position:relative;width:80px;height:80px;margin-bottom:2rem;">
-            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(127,44,255,.15);"></div>
-            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#7f2cff;animation:spin 1s cubic-bezier(.6,.2,.4,.8) infinite;"></div>
-            <div style="position:absolute;inset:6px;border-radius:50%;border:3px solid transparent;border-bottom-color:#2da3ff;animation:spin 1.4s cubic-bezier(.6,.2,.4,.8) infinite reverse;"></div>
-            <div style="position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,#7f2cff,#2da3ff);opacity:.3;animation:pulse 1.5s ease-in-out infinite;"></div>
+            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(249,115,22,.15);"></div>
+            <div style="position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#f97316;animation:spin 1s cubic-bezier(.6,.2,.4,.8) infinite;"></div>
+            <div style="position:absolute;inset:6px;border-radius:50%;border:3px solid transparent;border-bottom-color:#e11d48;animation:spin 1.4s cubic-bezier(.6,.2,.4,.8) infinite reverse;"></div>
+            <div style="position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,#f97316,#e11d48);opacity:.3;animation:pulse 1.5s ease-in-out infinite;"></div>
         </div>
         <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:700;color:#fff;margin:0;letter-spacing:-.02em;text-align:center;">
-            Mundo<span style="color:#7f2cff;">Futbol</span>
+            Mundo<span style="color:#f97316;">Futbol</span>
         </h1>
         <p style="font-family:'Poppins',sans-serif;font-size:clamp(.85rem,2.5vw,1rem);font-weight:300;color:rgba(255,255,255,.5);margin:.75rem 0 0;letter-spacing:.15em;text-transform:uppercase;">
             Cargando...
@@ -397,74 +397,48 @@
             @keyframes pulse{0%,100%{transform:scale(.85);opacity:.2}50%{transform:scale(1.15);opacity:.5}}
         </style>
     </div>
+    <nav class="top-nav">
+        <a href="#" class="top-nav-logo" onclick="switchPage('events'); return false;">
+            Mundo<span class="top-nav-logo-accent">Futbol</span>
+        </a>
+        <div class="top-nav-links">
+            <a href="#" class="nav-link active" data-page="events">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Eventos
+            </a>
+            <a href="#" class="nav-link" data-page="channels">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
+                    <polyline points="17 2 12 7 7 2"/>
+                </svg>
+                Canales
+            </a>
+            <a href="#" class="nav-link" data-page="legal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Legal
+            </a>
+        </div>
+        <div class="top-nav-right">
+            <span class="live-badge" id="liveBadge" style="display:none;">
+                <span class="pulse"></span>
+                EN VIVO
+            </span>
+            <button id="installBtn" style="display:none;background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.65rem;font-size:0.7rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:var(--transition);">Instalar</button>
+        </div>
+    </nav>
+
     <div class="app-layout">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-text">Mundo<span class="logo-accent">Futbol</span></span>
-                </div>
-                <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menu">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-link active" data-page="events">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                    <span>Eventos</span>
-                </a>
-                <a href="#" class="nav-link" data-page="channels">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
-                        <polyline points="17 2 12 7 7 2"/>
-                    </svg>
-                    <span>Canales</span>
-                </a>
-                <a href="#" class="nav-link" data-page="legal">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <polyline points="10 9 9 9 8 9"/>
-                    </svg>
-                    <span>Legal</span>
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <p>(c) 2026 MundoFutbol</p>
-            </div>
-        </aside>
-
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
         <main class="main-content">
-            <header class="topbar">
-                <button class="menu-toggle desktop-only" id="menuToggle" aria-label="Abrir menú">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <h1 class="page-title" id="pageTitle">Eventos</h1>
-                <div class="topbar-right">
-                    <span class="live-badge" id="liveBadge" style="display:none;">
-                        <span class="pulse"></span>
-                        EN VIVO
-                    </span>
-                    <button id="installBtn" style="display:none;background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:0.35rem 0.75rem;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap;">Instalar</button>
-                    </span>
-                </div>
-            </header>
-            
             <nav class="mobile-nav">
                 <a href="#" class="mobile-nav-link active" data-page="events">Eventos</a>
                 <a href="#" class="mobile-nav-link" data-page="channels">Canales</a>

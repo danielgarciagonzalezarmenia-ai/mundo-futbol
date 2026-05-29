@@ -96,10 +96,6 @@ const CHANNEL_LOGOS = {
     'MLS': 'https://1000marcas.net/wp-content/uploads/2020/03/logo-MLS.png'
 };
 
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const sidebarClose = document.getElementById('sidebarClose');
-const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.querySelectorAll('.nav-link');
 const pageTitle = document.getElementById('pageTitle');
 const liveBadge = document.getElementById('liveBadge');
@@ -1302,30 +1298,10 @@ function navigateTo(page) {
 
     // Guardar página actual en localStorage
     localStorage.setItem('currentPage', page);
-
-    closeSidebar();
 }
 
 function navigateToPage(page) {
     navigateTo(page);
-}
-
-function openSidebar() {
-    sidebar.classList.add('open');
-    sidebarOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeSidebar() {
-    sidebar.classList.remove('open');
-    sidebarOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-    setTimeout(() => {
-        if (sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('active');
-        }
-    }, 100);
 }
 
 function setupEventListeners() {
@@ -1337,10 +1313,6 @@ function setupEventListeners() {
         console.log('Popup bloqueado:', url);
         return null;
     };
-
-    menuToggle.addEventListener('click', openSidebar);
-    sidebarClose.addEventListener('click', closeSidebar);
-    sidebarOverlay.addEventListener('click', closeSidebar);
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
