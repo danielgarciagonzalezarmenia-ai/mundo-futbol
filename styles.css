@@ -602,6 +602,105 @@ body.player-open .top-nav {
     transform: scale(1.05);
 }
 
+/* ==================== FEATURED FINAL CARD ==================== */
+.featured-final-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(225, 29, 72, 0.08) 100%);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.featured-final-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+}
+
+.featured-final-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(249, 115, 22, 0.4);
+    box-shadow: 0 8px 40px rgba(249, 115, 22, 0.15);
+}
+
+.featured-final-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 0.25rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+}
+
+.featured-final-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.featured-final-flag {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    margin-bottom: 0.25rem;
+}
+
+.featured-final-comp {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-accent);
+    letter-spacing: 0.02em;
+}
+
+.featured-final-teams {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.featured-final-vs {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.featured-final-time {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .featured-final-card {
+        padding: 1.25rem 1rem;
+    }
+    .featured-final-teams {
+        font-size: 1.1rem;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 /* ==================== HOME: Tendencia / Canales populares / Eventos ==================== */
 .home-section-header {
     margin-bottom: 1rem;

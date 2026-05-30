@@ -317,22 +317,19 @@ const COMPETITION_FLAGS = {
     'UEFA Conference League': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/UEFA_Conference_League_full_logo_%282024_version%29.svg/3840px-UEFA_Conference_League_full_logo_%282024_version%29.svg.png',
     'Amistoso Internacional': 'https://static.wikia.nocookie.net/eqasxxrmc/images/3/39/FIFA-Logo-old.png/revision/latest?cb=20200520010230&path-prefix=es',
     'Serie B': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/960px-Flag_of_Italy.svg.png',
-    'Primera División': 'https://eeao2nst5vu.exactdn.com/wp-content/uploads/2013/05/Bandera-chilena.jpg?strip=all&lossy=1&ssl=1',
-    'Sorteo': 'https://cdn.worldvectorlogo.com/logos/conmebol.svg'
+    'Primera División': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_Uruguay.svg/1280px-Flag_of_Uruguay.svg.png',
+    'Sorteo': 'https://cdn.worldvectorlogo.com/logos/conmebol.svg',
+    'UEFA Champions League': 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Logo_UEFA_Champions_League.png',
+    'LaLiga SmartBank': 'https://static.vecteezy.com/system/resources/thumbnails/023/832/950/small/flag-of-spain-spanish-flag-vector.jpg'
 };
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '10:00', comp: 'Sorteo', home: 'Sorteo Octavos de Final', away: 'Copa Libertadores y Sudamericana', channels: ['https://la14hd.com/vivo/canales.php?stream=dsports'] },
-    { time: '13:00', comp: 'Serie B', home: 'Monza', away: 'Catanzaro', channels: ['https://la14hd.com/vivo/canales.php?stream=espn3mx'] },
-    { time: '13:30', comp: 'Amistoso Internacional', home: 'Bosnia-Herzegovina', away: 'Macedonia del Norte', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
-    { time: '13:45', comp: 'Ligue 1', home: 'Nice', away: 'Saint-Étienne', channels: ['https://la14hd.com/vivo/canales.php?stream=espn5'] },
-    { time: '15:00', comp: 'Primera B', home: 'Envigado', away: 'Real Cartagena', channels: ['https://la14hd.com/vivo/canales.php?stream=winsportsplus'] },
-    { time: '15:00', comp: 'Liga 1', home: 'Atlético Grau', away: 'Deportivo Moquegua', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
-    { time: '17:00', comp: 'Primera División', home: 'Cobresal', away: 'Ñublense', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] },
-    { time: '18:00', comp: 'MLB', home: 'New York Mets', away: 'Miami Marlins', channels: ['https://la14hd.com/vivo/canales.php?stream=espn7'] },
-    { time: '19:30', comp: 'Primera División', home: 'Univ. Concepción', away: 'Unión La Calera', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] }
+    { time: '08:00', comp: 'Primera División', home: 'Racing', away: 'Defensor Sporting', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
+    { time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
+    { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'], featured: true },
+    { time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] }
 ];
 
 (function() {
@@ -402,12 +399,34 @@ function renderFeaturedEvents() {
         cont.innerHTML = '';
         return;
     }
-    cont.innerHTML = `
-        <div class="events-compact">
-            ${EVENTOS_MANUALES.map((e, i) => {
+    const featured = EVENTOS_MANUALES.find(e => e.featured);
+    const regular = EVENTOS_MANUALES.filter(e => !e.featured);
+    let html = '';
+    if (featured) {
+        const fi = EVENTOS_MANUALES.indexOf(featured);
+        const fflag = COMPETITION_FLAGS[featured.comp] || '';
+        html += `
+            <div class="featured-final-card" data-event-idx="${fi}">
+                <div class="featured-final-badge">🏆 FINAL</div>
+                <div class="featured-final-content">
+                    ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
+                    <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
+                    <div class="featured-final-teams">
+                        <span class="featured-final-team">${escapeHtml(featured.home)}</span>
+                        <span class="featured-final-vs">vs</span>
+                        <span class="featured-final-team">${escapeHtml(featured.away)}</span>
+                    </div>
+                    <div class="featured-final-time">${escapeHtml(featured.time)}</div>
+                </div>
+            </div>
+        `;
+    }
+    if (regular.length > 0) {
+        html += `<div class="events-compact">
+            ${regular.map((e, i) => {
                 const flag = COMPETITION_FLAGS[e.comp] || '';
                 return `
-                <div class="event-row" data-event-idx="${i}">
+                <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
                     <span class="event-time">${escapeHtml(e.time)}</span>
                     ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
                     <span class="event-comp">${escapeHtml(e.comp)}</span>
@@ -415,8 +434,9 @@ function renderFeaturedEvents() {
                 </div>
             `;
             }).join('')}
-        </div>
-    `;
+        </div>`;
+    }
+    cont.innerHTML = html;
 }
 
 function normalizeApiEvent(item) {
@@ -472,22 +492,46 @@ function renderAllEvents() {
     
     let manualHtml = '';
     if (EVENTOS_MANUALES.length > 0) {
-        manualHtml = `
-            <h3 class="section-subtitle" style="margin:1rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Eventos Destacados</h3>
-            <div class="events-compact" style="margin-bottom:1.5rem;">
-                ${EVENTOS_MANUALES.map((e, i) => {
-                    const flag = COMPETITION_FLAGS[e.comp] || '';
-                    return `
-                    <div class="event-row" data-event-idx="${i}">
-                        <span class="event-time">${escapeHtml(e.time)}</span>
-                        ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
-                        <span class="event-comp">${escapeHtml(e.comp)}</span>
-                        <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
+        const featured = EVENTOS_MANUALES.find(e => e.featured);
+        const regular = EVENTOS_MANUALES.filter(e => !e.featured);
+        let eventsHtml = '';
+        if (featured) {
+            const fi = EVENTOS_MANUALES.indexOf(featured);
+            const fflag = COMPETITION_FLAGS[featured.comp] || '';
+            eventsHtml += `
+                <div class="featured-final-card" data-event-idx="${fi}">
+                    <div class="featured-final-badge">🏆 FINAL</div>
+                    <div class="featured-final-content">
+                        ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
+                        <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
+                        <div class="featured-final-teams">
+                            <span class="featured-final-team">${escapeHtml(featured.home)}</span>
+                            <span class="featured-final-vs">vs</span>
+                            <span class="featured-final-team">${escapeHtml(featured.away)}</span>
+                        </div>
+                        <div class="featured-final-time">${escapeHtml(featured.time)}</div>
                     </div>
-                `;
-                }).join('')}
-            </div>
-        `;
+                </div>
+            `;
+        }
+        if (regular.length > 0) {
+            eventsHtml += `
+                <div class="events-compact" style="margin-top:0.75rem;">
+                    ${regular.map((e, i) => {
+                        const flag = COMPETITION_FLAGS[e.comp] || '';
+                        return `
+                        <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
+                            <span class="event-time">${escapeHtml(e.time)}</span>
+                            ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
+                            <span class="event-comp">${escapeHtml(e.comp)}</span>
+                            <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
+                        </div>
+                    `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        manualHtml = `<h3 class="section-subtitle" style="margin:1rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Eventos Destacados</h3>${eventsHtml}`;
     }
     
     if (allEvents.length === 0) {
