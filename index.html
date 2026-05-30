@@ -128,13 +128,17 @@
             flex-direction: column;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
         }
 
         .event-row {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.55rem 0.9rem;
+            gap: 0.75rem;
+            padding: 0.6rem 1rem;
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 10px;
@@ -152,12 +156,14 @@
             height: 15px;
             object-fit: contain;
             border-radius: 2px;
+            flex-shrink: 0;
         }
 
         .event-comp {
             font-weight: 700;
             color: var(--text-primary);
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .event-vs {
@@ -166,6 +172,8 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            flex: 1;
+            min-width: 0;
         }
 
         .event-ch-count {
