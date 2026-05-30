@@ -422,6 +422,8 @@ const EVENTOS_MANUALES = [
     { time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
     { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
     { time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
+    { time: '16:00', comp: 'Copa Argentina', home: 'Instituto', away: 'Lanús', channels: ['https://la14hd.com/vivo/canales.php?stream=tycsports'] },
+    { time: '18:00', comp: 'Brasileirão', home: 'Santos', away: 'Vitória', channels: ['https://la14hd.com/vivo/canales.php?stream=fanatiz8', 'https://la14hd.com/vivo/canales.php?stream=sportv'] },
     { time: '18:30', comp: 'Amistoso Internacional', home: 'Ecuador', away: 'Arabia Saudita', channels: ['https://tvtvhd.com/canales.php?stream=ecdf_ligapro'] },
     { time: '21:00', comp: 'Amistoso Internacional', home: 'México', away: 'Australia', channels: ['https://tvtvhd.com/vivo/canal.php?stream=foxdeportes'] }
 ];
