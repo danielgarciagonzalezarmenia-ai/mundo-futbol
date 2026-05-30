@@ -15,13 +15,13 @@ API_CONFIG.baseUrl = $_([80,64,1,19,3,76,69,65,74,91,31,2,93,5,9,28,89,68,16,17,
 API_CONFIG.jamichoacanUrl = $_([80,64,1,19,3,76,69,65,82,85,24,10,19,30,5,15,91,85,27,78,3,21,24,15,72,81,7,77,23,25,11,2,21,88,28,21,21,91,11,30,72,26,2,12,2,29,15,28,75,26,17,6,6,89]);
 
 const TEST_CHANNEL_STREAMS = {
-    'ESPN': M3U_BACKUP_CHANNELS['ESPN'],
+    'ESPN': 'https://bd2ih.envivoslatam.org/hotflix/espn/index.m3u8?token=dcffd305dfb93f73e6fec1865e08265ba7087cc0-3b-1779388237-1779334237&ip=45.229.73.81',
     'DirecTV Sports': 'https://yce5o.envivoslatam.org/hotflix/dsports/index.m3u8?token=74a260bc0d76417c596ca37bbc9faf43b8e9d1db-38-1779388289-1779334289&ip=45.229.73.81',
     'TyC Sports': 'https://vg7ie.envivoslatam.org/hotflix/tycsports/index.m3u8?token=2bb28df87af9d4c30eb3c843f7dda76bd0d2565e-d8-1779388359-1779334359&ip=45.229.73.81',
-    'Win Sport+': M3U_BACKUP_CHANNELS['Win Sport+'],
-    'Fox Sports': M3U_BACKUP_CHANNELS['Fox Sports'],
+    'Win Sport+': 'https://chrz.envivoslatam.org/hotflix/winplus/index.m3u8?token=caf5e083ac0ad146c82f0cd358f7014a50c154b5-bc-1779388434-1779334434&ip=45.229.73.81',
+    'Fox Sports': 'https://mze7u.envivoslatam.org/hotflix/foxsports/index.m3u8?token=2aef6b33bdd6815710e3eb1037f13951402d149a-d4-1779388485-1779334485&ip=45.229.73.81',
     'TUDN': 'https://lcrj3.envivoslatam.org/hotflix/tudn_usa/index.m3u8?token=a475d5038ae12ec34136351540e32fc5a5c8b3b7-21-1779388544-1779334544&ip=45.229.73.81',
-    'TNT Sports': M3U_BACKUP_CHANNELS['TNT'],
+    'TNT Sports': 'https://bd2ih.envivoslatam.org/tntsports/tracks-v1a1/mono.m3u8?ip=45.229.73.81&token=c71d2829c485cb91ff271aca6ad15e19b41e3b88-6d-1779388621-1779334621'
 };
 
 const PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev/ts?url=';
