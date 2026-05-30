@@ -420,7 +420,7 @@ var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 const EVENTOS_MANUALES = [
     { time: '08:00', comp: 'Primera División', home: 'Racing', away: 'Defensor Sporting', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
     { time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
-    { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'], featured: true },
+    { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
     { time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
     { time: '18:30', comp: 'Amistoso Internacional', home: 'Ecuador', away: 'Arabia Saudita', channels: ['https://tvtvhd.com/canales.php?stream=ecdf_ligapro'] },
     { time: '21:00', comp: 'Amistoso Internacional', home: 'México', away: 'Australia', channels: ['https://tvtvhd.com/vivo/canal.php?stream=foxdeportes'] }
@@ -498,33 +498,43 @@ function renderFeaturedEvents() {
     let html = '';
     if (featured) {
         const fi = EVENTOS_MANUALES.indexOf(featured);
-        const fflag = COMPETITION_FLAGS[featured.comp] || '';
         html += `
             <div class="featured-final-card" data-event-idx="${fi}">
                 <div class="featured-final-badge">🏆 FINAL</div>
                 <div class="featured-final-content">
-                    ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
                     <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                    <div class="featured-final-teams">
-                        <span class="featured-final-team">${escapeHtml(featured.home)}</span>
-                        <span class="featured-final-vs">vs</span>
-                        <span class="featured-final-team">${escapeHtml(featured.away)}</span>
+                    <div class="event-matchup">
+                        <div class="event-team home">
+                            ${teamLogoHtml(featured.home)}
+                            <span class="event-team-name">${escapeHtml(featured.home)}</span>
+                        </div>
+                        <div class="event-time-center">${escapeHtml(featured.time)}</div>
+                        <div class="event-team away">
+                            <span class="event-team-name">${escapeHtml(featured.away)}</span>
+                            ${teamLogoHtml(featured.away)}
+                        </div>
                     </div>
-                    <div class="featured-final-time">${escapeHtml(featured.time)}</div>
                 </div>
             </div>
         `;
     }
     if (regular.length > 0) {
         html += `<div class="events-compact">
-            ${regular.map((e, i) => {
-                const flag = COMPETITION_FLAGS[e.comp] || '';
+            ${regular.map((e) => {
                 return `
                 <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                    <span class="event-time">${escapeHtml(e.time)}</span>
-                    ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
-                    <span class="event-comp">${escapeHtml(e.comp)}</span>
-                    <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
+                    <div class="event-matchup">
+                        <div class="event-team home">
+                            ${teamLogoHtml(e.home)}
+                            <span class="event-team-name">${escapeHtml(e.home)}</span>
+                        </div>
+                        <div class="event-time-center">${escapeHtml(e.time)}</div>
+                        <div class="event-team away">
+                            <span class="event-team-name">${escapeHtml(e.away)}</span>
+                            ${teamLogoHtml(e.away)}
+                        </div>
+                    </div>
+                    <div class="event-comp-label">${escapeHtml(e.comp)}</div>
                 </div>
             `;
             }).join('')}
@@ -584,7 +594,7 @@ function renderAllEvents() {
     
     const allEvents = allMatches;
     
-    // Build manual events HTML (compact style with channels)
+    // Build manual events HTML
     let manualHtml = '';
     if (EVENTOS_MANUALES.length > 0) {
         const featured = EVENTOS_MANUALES.find(e => e.featured);
@@ -592,19 +602,22 @@ function renderAllEvents() {
         let eventsHtml = '';
         if (featured) {
             const fi = EVENTOS_MANUALES.indexOf(featured);
-            const fflag = COMPETITION_FLAGS[featured.comp] || '';
             eventsHtml += `
                 <div class="featured-final-card" data-event-idx="${fi}">
                     <div class="featured-final-badge">🏆 FINAL</div>
                     <div class="featured-final-content">
-                        ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
                         <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                        <div class="featured-final-teams">
-                            <span class="featured-final-team">${escapeHtml(featured.home)}</span>
-                            <span class="featured-final-vs">vs</span>
-                            <span class="featured-final-team">${escapeHtml(featured.away)}</span>
+                        <div class="event-matchup">
+                            <div class="event-team home">
+                                ${teamLogoHtml(featured.home)}
+                                <span class="event-team-name">${escapeHtml(featured.home)}</span>
+                            </div>
+                            <div class="event-time-center">${escapeHtml(featured.time)}</div>
+                            <div class="event-team away">
+                                <span class="event-team-name">${escapeHtml(featured.away)}</span>
+                                ${teamLogoHtml(featured.away)}
+                            </div>
                         </div>
-                        <div class="featured-final-time">${escapeHtml(featured.time)}</div>
                     </div>
                 </div>
             `;
@@ -612,14 +625,21 @@ function renderAllEvents() {
         if (regular.length > 0) {
             eventsHtml += `
                 <div class="events-compact" style="margin-top:0.75rem;">
-                    ${regular.map((e, i) => {
-                        const flag = COMPETITION_FLAGS[e.comp] || '';
+                    ${regular.map((e) => {
                         return `
                         <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                            <span class="event-time">${escapeHtml(e.time)}</span>
-                            ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
-                            <span class="event-comp">${escapeHtml(e.comp)}</span>
-                            <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
+                            <div class="event-matchup">
+                                <div class="event-team home">
+                                    ${teamLogoHtml(e.home)}
+                                    <span class="event-team-name">${escapeHtml(e.home)}</span>
+                                </div>
+                                <div class="event-time-center">${escapeHtml(e.time)}</div>
+                                <div class="event-team away">
+                                    <span class="event-team-name">${escapeHtml(e.away)}</span>
+                                    ${teamLogoHtml(e.away)}
+                                </div>
+                            </div>
+                            <div class="event-comp-label">${escapeHtml(e.comp)}</div>
                         </div>
                     `;
                     }).join('')}
@@ -638,21 +658,24 @@ function renderAllEvents() {
         ${manualHtml ? '<h3 class="section-subtitle" style="margin:1.5rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Todos los Eventos</h3>' : ''}
         <div class="featured-grid">
             ${allEvents.map(e => {
-                const homeLogo = getTeamLogo(e.homeTeam);
-                const awayLogo = getTeamLogo(e.awayTeam);
                 const channelsList = e.signals && e.signals.length > 0 
                     ? e.signals.map(s => s.name).join(', ') 
                     : (e.channel || '');
                 
                 return `
                 <div class="featured-card" data-match="${Number(e.id)}">
-                    <div class="featured-teams">
-                        ${homeLogo ? `<img src="${escapeHtml(homeLogo)}" class="featured-team-logo" alt="${escapeHtml(e.homeTeam)}">` : `<span class="featured-team">${escapeHtml(e.homeTeam)}</span>`}
-                        <span class="featured-vs">vs</span>
-                        ${awayLogo ? `<img src="${escapeHtml(awayLogo)}" class="featured-team-logo" alt="${escapeHtml(e.awayTeam)}">` : `<span class="featured-team">${escapeHtml(e.awayTeam)}</span>`}
+                    <div class="event-matchup">
+                        <div class="event-team home">
+                            ${teamLogoHtml(e.homeTeam)}
+                            <span class="event-team-name">${escapeHtml(e.homeTeam)}</span>
+                        </div>
+                        <div class="event-time-center">${escapeHtml(e.time)}</div>
+                        <div class="event-team away">
+                            <span class="event-team-name">${escapeHtml(e.awayTeam)}</span>
+                            ${teamLogoHtml(e.awayTeam)}
+                        </div>
                     </div>
                     <div class="featured-footer">
-                        <span class="featured-time">${escapeHtml(e.time)}</span>
                         <span class="featured-channel">${escapeHtml(channelsList)}</span>
                     </div>
                 </div>
@@ -671,24 +694,27 @@ function renderHomeTrending() {
         return;
     }
     cont.innerHTML = trending.map(m => {
-        const homeLogo = getTeamLogo(m.homeTeam);
-        const awayLogo = getTeamLogo(m.awayTeam);
         const channelsList = m.signals && m.signals.length > 0 
             ? m.signals.map(s => s.name).join(', ') 
             : (m.channel || '');
         
         return `
         <div class="trending-banner-card" data-play="${Number(m.id)}">
-            <div class="trending-bg">
-                ${homeLogo ? `<img src="${escapeHtml(homeLogo)}" class="tb-logo left" alt="${escapeHtml(m.homeTeam)}">` : `<span class="tb-team left">${escapeHtml(m.homeTeam.charAt(0))}</span>`}
-                <span class="tb-vs">VS</span>
-                ${awayLogo ? `<img src="${escapeHtml(awayLogo)}" class="tb-logo right" alt="${escapeHtml(m.awayTeam)}">` : `<span class="tb-team right">${escapeHtml(m.awayTeam.charAt(0))}</span>`}
+            <div class="event-matchup">
+                <div class="event-team home">
+                    ${teamLogoHtml(m.homeTeam)}
+                    <span class="event-team-name">${escapeHtml(m.homeTeam)}</span>
+                </div>
+                <div class="event-time-center">${escapeHtml(m.time)}</div>
+                <div class="event-team away">
+                    <span class="event-team-name">${escapeHtml(m.awayTeam)}</span>
+                    ${teamLogoHtml(m.awayTeam)}
+                </div>
             </div>
             <div class="trending-info">
-                <h3>${escapeHtml(m.homeTeam)} vs ${escapeHtml(m.awayTeam)}</h3>
                 <p>${escapeHtml(m.league)} ${channelsList ? `• ${escapeHtml(channelsList)}` : ''}</p>
+                ${m.status === 'live' ? '<span class="badge-live-pill">En vivo</span>' : ''}
             </div>
-            ${m.status === 'live' ? '<span class="badge-live-pill">En vivo</span>' : ''}
         </div>
     `;
     }).join('');

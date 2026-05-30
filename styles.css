@@ -2711,6 +2711,103 @@ body.player-open .top-nav {
   border-radius: var(--radius-lg);
 }
 
+/* ============ EVENT MATCHUP LAYOUT (logo | name — time — name | logo) ============ */
+.event-matchup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+}
+.event-team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.event-team.home {
+  justify-content: flex-end;
+}
+.event-team.away {
+  justify-content: flex-start;
+}
+.event-team-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+.event-team.home .event-team-name {
+  text-align: right;
+}
+.event-team.away .event-team-name {
+  text-align: left;
+}
+.event-time-center {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-accent);
+  flex-shrink: 0;
+  padding: 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+.event-team-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.team-shield {
+  width: 38px;
+  height: 38px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+.event-comp-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+  z-index: 1;
+  position: relative;
+}
+
+/* Override featured-final styles for new matchup */
+.featured-final-card .event-matchup {
+  margin-top: 10px;
+}
+.featured-final-card .event-team-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.featured-final-card .event-time-center {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.featured-final-card .event-team-logo {
+  width: 48px;
+  height: 48px;
+}
+.featured-final-card .team-shield {
+  width: 48px;
+  height: 48px;
+}
+.featured-card .event-team-name {
+  font-size: 0.78rem;
+}
+.featured-card .event-time-center {
+  font-size: 0.95rem;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1100px) {
   .popular-channels { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) }

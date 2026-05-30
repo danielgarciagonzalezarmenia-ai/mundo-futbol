@@ -90,3 +90,15 @@ const TEAM_LOGOS = {
 function getTeamLogo(teamName) {
     return TEAM_LOGOS[teamName] || '';
 }
+
+// Genera HTML para logo con fallback a escudo genérico
+function teamLogoHtml(teamName) {
+    const url = getTeamLogo(teamName);
+    const safe = String(teamName).replace(/[&<>"']/g, function(c) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+    if (url) {
+        return '<img class="event-team-logo" src="' + url.replace(/&/g,'&amp;') + '" alt="' + safe + '" loading="lazy" decoding="async">';
+    }
+    return '<svg class="event-team-logo team-shield" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5"><path d="M50 8L15 25v30c0 20 14 34 35 42 21-8 35-22 35-42V25L50 8z"/><line x1="30" y1="42" x2="70" y2="42"/><line x1="50" y1="22" x2="50" y2="62"/></svg>';
+}
