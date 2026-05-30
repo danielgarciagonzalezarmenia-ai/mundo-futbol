@@ -123,61 +123,6 @@
             }
         }
 
-        .events-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .event-row {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.55rem 0.9rem;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 10px;
-            font-size: 0.85rem;
-            cursor: default;
-            transition: background 0.15s;
-        }
-
-        .event-row:hover {
-            background: rgba(255,255,255,0.08);
-        }
-
-        .event-flag {
-            width: 22px;
-            height: 15px;
-            object-fit: contain;
-            border-radius: 2px;
-        }
-
-        .event-comp {
-            font-weight: 700;
-            color: var(--text-primary);
-            white-space: nowrap;
-        }
-
-        .event-vs {
-            color: var(--text-muted);
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .event-ch-count {
-            font-size: 0.7rem;
-            color: var(--text-accent);
-            background: var(--accent-subtle);
-            padding: 0.1rem 0.5rem;
-            border-radius: 999px;
-            margin-left: auto;
-            white-space: nowrap;
-        }
-
         .event-ch-btn {
             background: var(--accent-subtle);
             border: 1px solid var(--border-accent);
@@ -637,6 +582,40 @@
                         <div class="legal-footer">
                             <p>Última actualización: Mayo 2026</p>
                             <p>Al utilizar este sitio web, usted acepta los términos y condiciones aquí descritos.</p>
+                        </div>
+                    </div>
+                    <div class="admin-section" id="adminSection">
+                        <button class="admin-unlock-btn" id="adminUnlockBtn">⚙️ Panel de Administración</button>
+                        <div class="admin-panel" id="adminPanel" style="display:none;">
+                            <div class="admin-login" id="adminLogin">
+                                <input type="password" id="adminPassword" placeholder="Contraseña de administrador">
+                                <button id="adminLoginBtn">Entrar</button>
+                                <p class="admin-error" id="adminError" style="display:none;">Contraseña incorrecta</p>
+                            </div>
+                            <div class="admin-content" id="adminContent" style="display:none;">
+                                <h3 style="margin-bottom:1rem;">Agregar Evento</h3>
+                                <form id="addEventForm" class="admin-form">
+                                    <div class="admin-form-row">
+                                        <input name="time" placeholder="Hora (ej: 18:30)" required>
+                                        <input name="comp" placeholder="Competencia (ej: Champions)" required>
+                                    </div>
+                                    <div class="admin-form-row">
+                                        <input name="home" placeholder="Equipo local" required>
+                                        <input name="away" placeholder="Equipo visitante" required>
+                                    </div>
+                                    <input name="image" placeholder="URL de imagen de fondo (opcional)">
+                                    <div class="admin-channels" id="adminChannels">
+                                        <label>Canales (URLs de transmisión):</label>
+                                        <div class="admin-channel-row">
+                                            <input type="url" name="channel0" placeholder="https://..." required>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="admin-add-channel" id="addChannelBtn">+ Agregar otro canal</button>
+                                    <button type="submit" class="admin-submit">Agregar Evento</button>
+                                </form>
+                                <h3 style="margin-top:2rem;margin-bottom:1rem;">Eventos Actuales</h3>
+                                <div id="adminEventsList"></div>
+                            </div>
                         </div>
                     </div>
                 </section>

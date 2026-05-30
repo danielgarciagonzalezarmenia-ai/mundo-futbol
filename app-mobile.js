@@ -325,19 +325,50 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [
-    { time: '08:00', comp: 'Primera División', home: 'Racing', away: 'Defensor Sporting', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
-    { time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
-    { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'], featured: true },
-    { time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
-    { time: '18:30', comp: 'Amistoso Internacional', home: 'Ecuador', away: 'Arabia Saudita', channels: ['https://tvtvhd.com/canales.php?stream=ecdf_ligapro'] },
-    { time: '21:00', comp: 'Amistoso Internacional', home: 'México', away: 'Australia', channels: ['https://tvtvhd.com/vivo/canal.php?stream=foxdeportes'] }
-];
+const EVENTS_KEY = 'mf_events';
+const ADMIN_PASSWORD = '1090276128Daniel';
+let _eventsCache = null;
+
+function getSeedEvents() {
+    return [
+        { id: Date.now() + 1, time: '08:00', comp: 'Primera División', home: 'Racing', away: 'Defensor Sporting', image: '', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
+        { id: Date.now() + 2, time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', image: '', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
+        { id: Date.now() + 3, time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', image: '', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+        { id: Date.now() + 4, time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', image: '', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
+        { id: Date.now() + 5, time: '18:30', comp: 'Amistoso Internacional', home: 'Ecuador', away: 'Arabia Saudita', image: '', channels: ['https://tvtvhd.com/canales.php?stream=ecdf_ligapro'] },
+        { id: Date.now() + 6, time: '21:00', comp: 'Amistoso Internacional', home: 'México', away: 'Australia', image: '', channels: ['https://tvtvhd.com/vivo/canal.php?stream=foxdeportes'] }
+    ];
+}
+
+function getEvents() {
+    if (_eventsCache) return _eventsCache;
+    try {
+        const data = localStorage.getItem(EVENTS_KEY);
+        if (data) {
+            const events = JSON.parse(data);
+            if (Array.isArray(events) && events.length > 0) {
+                _eventsCache = events;
+                return events;
+            }
+        }
+    } catch(e) {}
+    _eventsCache = getSeedEvents();
+    saveEvents(_eventsCache);
+    return _eventsCache;
+}
+
+function saveEvents(events) {
+    localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+    _eventsCache = events;
+    renderFeaturedEvents();
+    renderAllEvents();
+    renderAdminEventsList();
+}
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
     if (off !== 0) {
-        EVENTOS_MANUALES.forEach(function(e) {
+        getEvents().forEach(function(e) {
             var p = e.time.split(':');
             var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
             t = ((t % 1440) + 1440) % 1440;
@@ -350,7 +381,8 @@ let currentEventChannels = [];
 let currentEventChannelIdx = 0;
 
 function openEventPlayer(idx) {
-    const e = EVENTOS_MANUALES[idx];
+    const events = getEvents();
+    const e = events[idx];
     if (!e || !e.channels || e.channels.length === 0) return;
     currentEventChannels = e.channels;
     currentEventChannelIdx = 0;
@@ -394,51 +426,43 @@ function renderEventChannel(idx, label, comp) {
     document.body.style.overflow = 'hidden';
 }
 
+function renderManualEventCard(e, idx) {
+    const bgStyle = e.image ? `background-image:url('${escapeHtml(e.image)}');background-size:cover;background-position:center;` : '';
+    const overlay = e.image ? '<div class="event-thumb-overlay"></div>' : '';
+    return `
+    <div class="event-card" data-event-idx="${idx}">
+        <div class="event-thumb" style="${bgStyle}">
+            ${overlay}
+            <div class="event-teams-logos">
+                <span class="event-team-initial">${escapeHtml(e.home.charAt(0))}</span>
+                <span class="event-vs">vs</span>
+                <span class="event-team-initial">${escapeHtml(e.away.charAt(0))}</span>
+            </div>
+            <span class="event-time">${escapeHtml(e.time)}</span>
+            <button class="event-play" aria-label="Reproducir">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <span class="event-views">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ${e.channels ? e.channels.length : 0}
+            </span>
+        </div>
+        <div class="event-info">
+            <h3>${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</h3>
+            <p><span class="event-comp-dot"></span>${escapeHtml(e.comp)}</p>
+        </div>
+    </div>`;
+}
+
 function renderFeaturedEvents() {
     const cont = document.getElementById('featuredEvents');
     if (!cont) return;
-    if (EVENTOS_MANUALES.length === 0) {
+    const events = getEvents();
+    if (events.length === 0) {
         cont.innerHTML = '';
         return;
     }
-    const featured = EVENTOS_MANUALES.find(e => e.featured);
-    const regular = EVENTOS_MANUALES.filter(e => !e.featured);
-    let html = '';
-    if (featured) {
-        const fi = EVENTOS_MANUALES.indexOf(featured);
-        const fflag = COMPETITION_FLAGS[featured.comp] || '';
-        html += `
-            <div class="featured-final-card" data-event-idx="${fi}">
-                <div class="featured-final-badge">🏆 FINAL</div>
-                <div class="featured-final-content">
-                    ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
-                    <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                    <div class="featured-final-teams">
-                        <span class="featured-final-team">${escapeHtml(featured.home)}</span>
-                        <span class="featured-final-vs">vs</span>
-                        <span class="featured-final-team">${escapeHtml(featured.away)}</span>
-                    </div>
-                    <div class="featured-final-time">${escapeHtml(featured.time)}</div>
-                </div>
-            </div>
-        `;
-    }
-    if (regular.length > 0) {
-        html += `<div class="events-compact">
-            ${regular.map((e, i) => {
-                const flag = COMPETITION_FLAGS[e.comp] || '';
-                return `
-                <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                    <span class="event-time">${escapeHtml(e.time)}</span>
-                    ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
-                    <span class="event-comp">${escapeHtml(e.comp)}</span>
-                    <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
-                </div>
-            `;
-            }).join('')}
-        </div>`;
-    }
-    cont.innerHTML = html;
+    cont.innerHTML = `<div class="events-grid">${events.map((e, i) => renderManualEventCard(e, i)).join('')}</div>`;
 }
 
 function normalizeApiEvent(item) {
@@ -493,47 +517,10 @@ function renderAllEvents() {
     const allEvents = allMatches;
     
     let manualHtml = '';
-    if (EVENTOS_MANUALES.length > 0) {
-        const featured = EVENTOS_MANUALES.find(e => e.featured);
-        const regular = EVENTOS_MANUALES.filter(e => !e.featured);
-        let eventsHtml = '';
-        if (featured) {
-            const fi = EVENTOS_MANUALES.indexOf(featured);
-            const fflag = COMPETITION_FLAGS[featured.comp] || '';
-            eventsHtml += `
-                <div class="featured-final-card" data-event-idx="${fi}">
-                    <div class="featured-final-badge">🏆 FINAL</div>
-                    <div class="featured-final-content">
-                        ${fflag ? `<img class="featured-final-flag" src="${escapeHtml(fflag)}" alt="">` : ''}
-                        <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                        <div class="featured-final-teams">
-                            <span class="featured-final-team">${escapeHtml(featured.home)}</span>
-                            <span class="featured-final-vs">vs</span>
-                            <span class="featured-final-team">${escapeHtml(featured.away)}</span>
-                        </div>
-                        <div class="featured-final-time">${escapeHtml(featured.time)}</div>
-                    </div>
-                </div>
-            `;
-        }
-        if (regular.length > 0) {
-            eventsHtml += `
-                <div class="events-compact" style="margin-top:0.75rem;">
-                    ${regular.map((e, i) => {
-                        const flag = COMPETITION_FLAGS[e.comp] || '';
-                        return `
-                        <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                            <span class="event-time">${escapeHtml(e.time)}</span>
-                            ${flag ? `<img class="event-flag" src="${escapeHtml(flag)}" alt="" data-img-error>` : ''}
-                            <span class="event-comp">${escapeHtml(e.comp)}</span>
-                            <span class="event-vs">${escapeHtml(e.home)} vs ${escapeHtml(e.away)}</span>
-                        </div>
-                    `;
-                    }).join('')}
-                </div>
-            `;
-        }
-        manualHtml = `<h3 class="section-subtitle" style="margin:1rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Eventos Destacados</h3>${eventsHtml}`;
+    const manualEvents = getEvents();
+    if (manualEvents.length > 0) {
+        manualHtml = `<h3 class="section-subtitle" style="margin:1rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Eventos Destacados</h3>
+        <div class="events-grid">${manualEvents.map((e, i) => renderManualEventCard(e, i)).join('')}</div>`;
     }
     
     if (allEvents.length === 0) {
@@ -1445,6 +1432,118 @@ document.addEventListener('click', function(e) {
     }
   }
 });
+
+// ====== ADMIN FUNCTIONS ======
+let adminChannelCount = 1;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const unlockBtn = document.getElementById('adminUnlockBtn');
+    const panel = document.getElementById('adminPanel');
+    const login = document.getElementById('adminLogin');
+    const content = document.getElementById('adminContent');
+    const passwordInput = document.getElementById('adminPassword');
+    const loginBtn = document.getElementById('adminLoginBtn');
+    const error = document.getElementById('adminError');
+    const form = document.getElementById('addEventForm');
+    const addChannelBtn = document.getElementById('addChannelBtn');
+    
+    if (!unlockBtn) return;
+    
+    unlockBtn.addEventListener('click', function() {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        if (panel.style.display === 'none') {
+            content.style.display = 'none';
+            login.style.display = 'flex';
+            passwordInput.value = '';
+            error.style.display = 'none';
+        }
+    });
+    
+    function checkPassword() {
+        if (passwordInput.value === ADMIN_PASSWORD) {
+            login.style.display = 'none';
+            content.style.display = 'block';
+            error.style.display = 'none';
+            renderAdminEventsList();
+        } else {
+            error.style.display = 'block';
+        }
+    }
+    
+    loginBtn.addEventListener('click', checkPassword);
+    passwordInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkPassword();
+    });
+    
+    addChannelBtn.addEventListener('click', function() {
+        const container = document.getElementById('adminChannels');
+        const row = document.createElement('div');
+        row.className = 'admin-channel-row';
+        row.innerHTML = '<input type="url" name="channel' + adminChannelCount + '" placeholder="https://..." required>' +
+            '<button type="button" class="remove-channel" onclick="this.parentElement.remove()">✕</button>';
+        container.appendChild(row);
+        adminChannelCount++;
+    });
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const channels = [];
+        for (var i = 0; i < adminChannelCount; i++) {
+            const val = fd.get('channel' + i);
+            if (val && val.trim()) channels.push(val.trim());
+        }
+        if (channels.length === 0) { alert('Agrega al menos un canal'); return; }
+        var events = getEvents();
+        events.push({
+            id: Date.now(),
+            time: fd.get('time'),
+            comp: fd.get('comp'),
+            home: fd.get('home'),
+            away: fd.get('away'),
+            image: fd.get('image') || '',
+            channels: channels
+        });
+        saveEvents(events);
+        form.reset();
+        document.querySelectorAll('#adminChannels .admin-channel-row:not(:first-child)').forEach(function(el) { el.remove(); });
+        adminChannelCount = 1;
+        renderAdminEventsList();
+        alert('Evento agregado correctamente');
+    });
+});
+
+function renderAdminEventsList() {
+    const container = document.getElementById('adminEventsList');
+    if (!container) return;
+    const events = getEvents();
+    if (events.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">No hay eventos.</p>';
+        return;
+    }
+    container.innerHTML = events.map(function(e, i) {
+        var chs = (e.channels || []).map(function(ch) {
+            return '<span class="aev-channel">' + escapeHtml(ch) + '</span>';
+        }).join('');
+        return '<div class="admin-event-item">' +
+            '<div class="admin-event-info">' +
+                '<div class="aev-title">' + escapeHtml(e.time) + ' — ' + escapeHtml(e.home) + ' vs ' + escapeHtml(e.away) + '</div>' +
+                '<div class="aev-meta">' + escapeHtml(e.comp) + '</div>' +
+                (chs ? '<div class="admin-event-channels">' + chs + '</div>' : '') +
+            '</div>' +
+            '<button class="admin-delete-btn" onclick="adminRemoveEvent(' + i + ')">Eliminar</button>' +
+        '</div>';
+    }).join('');
+    container.style.marginTop = '0.5rem';
+}
+
+function adminRemoveEvent(idx) {
+    if (!confirm('¿Eliminar este evento?')) return;
+    var events = getEvents();
+    events.splice(idx, 1);
+    saveEvents(events);
+    renderAdminEventsList();
+}
 
 // ====== SEGURIDAD ======
 (function(){

@@ -2253,10 +2253,278 @@ body.player-open .top-nav {
 .match-card:nth-child(8), .event-card:nth-child(8), .channel-card:nth-child(8), .popular-channel-card:nth-child(8) { animation-delay: 0.23s; }
 .match-card:nth-child(n+9), .event-card:nth-child(n+9), .channel-card:nth-child(n+9), .popular-channel-card:nth-child(n+9) { animation-delay: 0.26s; }
 
-/* Constrain event rows on desktop */
+/* Event card background image overlay */
+.event-thumb {
+    position: relative;
+    overflow: hidden;
+}
+
+.event-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%);
+    z-index: 0;
+}
+
+.event-thumb .event-teams-logos,
+.event-thumb .event-time,
+.event-thumb .event-play,
+.event-thumb .event-views {
+    z-index: 1;
+    position: relative;
+}
+
+.event-thumb .event-time {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+/* Admin panel styles */
+.admin-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.admin-unlock-btn {
+    background: none;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.admin-unlock-btn:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.admin-panel {
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+}
+
+.admin-login {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-login input {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-subtle);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+.admin-login input:focus {
+    outline: none;
+    border-color: var(--orange);
+}
+
+.admin-login button {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.admin-error {
+    color: var(--danger);
+    font-size: 0.8rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.admin-form-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.admin-form-row input,
+.admin-form input[type="text"],
+.admin-form input[type="url"],
+.admin-form input:not([type]) {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-subtle);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+.admin-form input:focus {
+    outline: none;
+    border-color: var(--orange);
+}
+
+.admin-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.admin-channels label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.admin-channel-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.admin-channel-row input {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-subtle);
+    padding: 0.45rem 0.7rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+}
+
+.admin-channel-row .remove-channel {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.2rem;
+    line-height: 1;
+}
+
+.admin-add-channel {
+    background: none;
+    border: 1px dashed var(--border-accent);
+    color: var(--text-accent);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    align-self: flex-start;
+}
+
+.admin-add-channel:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.admin-submit {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    align-self: flex-start;
+}
+
+.admin-submit:hover {
+    opacity: 0.9;
+}
+
+/* Admin events list */
+.admin-event-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.8rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    gap: 0.75rem;
+}
+
+.admin-event-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-event-info .aev-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.admin-event-info .aev-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.admin-event-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+}
+
+.admin-event-channels .aev-channel {
+    font-size: 0.6rem;
+    background: var(--accent-subtle);
+    color: var(--text-accent);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-delete-btn {
+    background: none;
+    border: 1px solid rgba(239,68,68,0.3);
+    color: var(--danger);
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.admin-delete-btn:hover {
+    background: rgba(239,68,68,0.15);
+}
+
+/* Grid layout for events (desktop constraint) */
 @media (min-width: 1201px) {
-    .featured-events {
-        max-width: 760px;
+    .events-grid {
+        max-width: 1100px;
         margin-left: auto;
         margin-right: auto;
     }
