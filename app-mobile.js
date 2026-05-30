@@ -348,15 +348,103 @@ const EVENTOS_MANUALES = [
 
 let currentEventChannels = [];
 let currentEventChannelIdx = 0;
+let currentEventLabel = '';
+let currentEventComp = '';
+let hlsRecoverCount = 0;
+let stallMonitorInterval = null;
+let streamRetryTimeout = null;
+let streamRetryCount = 0;
+let iframeRefreshTimer = null;
+let isRecovering = false;
+
+function showReconnecting(msg) {
+    const cont = document.getElementById('playerContainer');
+    if (cont) {
+        cont.innerHTML = `
+            <div class="video-placeholder">
+                <div class="loading-spinner"></div>
+                <p style="color:var(--orange);font-weight:600;font-size:1rem;">${escapeHtml(msg)}</p>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">No cierres esta ventana</p>
+            </div>
+        `;
+    }
+}
+
+function trySwitchChannel() {
+    if (isRecovering) return false;
+    isRecovering = true;
+    const total = currentEventChannels.length;
+    if (total <= 1) { isRecovering = false; return false; }
+    for (let i = 1; i < total; i++) {
+        const nextIdx = (currentEventChannelIdx + i) % total;
+        if (nextIdx !== currentEventChannelIdx) {
+            clearInterval(stallMonitorInterval);
+            clearTimeout(streamRetryTimeout);
+            stallMonitorInterval = null;
+            streamRetryTimeout = null;
+            hlsRecoverCount = 0;
+            showReconnecting('Cambiando de fuente...');
+            const label = currentEventLabel;
+            const comp = currentEventComp;
+            isRecovering = false;
+            renderEventChannel(nextIdx, label, comp);
+            return true;
+        }
+    }
+    isRecovering = false;
+    return false;
+}
+
+function scheduleStreamRetry() {
+    streamRetryCount++;
+    const delay = Math.min(5000 * Math.pow(2, streamRetryCount - 1), 120000);
+    const seconds = Math.round(delay / 1000);
+    showReconnecting(`Reconectando en ${seconds}s... (intento ${streamRetryCount})`);
+    clearTimeout(streamRetryTimeout);
+    streamRetryTimeout = setTimeout(() => {
+        currentEventChannelIdx = 0;
+        hlsRecoverCount = 0;
+        streamRetryTimeout = null;
+        renderEventChannel(0, currentEventLabel, currentEventComp);
+    }, delay);
+}
+
+function startStallMonitor(videoEl) {
+    clearInterval(stallMonitorInterval);
+    let lastTime = -1;
+    let stallCount = 0;
+    stallMonitorInterval = setInterval(() => {
+        if (videoEl.paused || videoEl.ended || videoEl.readyState === 0) return;
+        const ct = videoEl.currentTime;
+        if (ct === lastTime && videoEl.readyState < 3) {
+            stallCount++;
+            if (stallCount >= 5) {
+                console.log('Transmision detenida por ~50s, recuperando...');
+                stallCount = 0;
+                clearInterval(stallMonitorInterval);
+                stallMonitorInterval = null;
+                if (!trySwitchChannel()) {
+                    scheduleStreamRetry();
+                }
+            }
+        } else {
+            stallCount = 0;
+        }
+        lastTime = ct;
+    }, 10000);
+}
 
 function openEventPlayer(idx) {
     const e = EVENTOS_MANUALES[idx];
     if (!e || !e.channels || e.channels.length === 0) return;
     currentEventChannels = e.channels;
     currentEventChannelIdx = 0;
-    const label = `${e.home} vs ${e.away}`;
-    const comp = e.comp;
-    renderEventChannel(0, label, comp);
+    currentEventLabel = `${e.home} vs ${e.away}`;
+    currentEventComp = e.comp;
+    streamRetryCount = 0;
+    hlsRecoverCount = 0;
+    isRecovering = false;
+    renderEventChannel(0, currentEventLabel, currentEventComp);
 }
 
 function renderEventChannel(idx, label, comp) {
@@ -1046,14 +1134,22 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
 
         video.addEventListener('click', enableSound);
         video.addEventListener('play', enableSound);
+        video.addEventListener('error', () => {
+            console.log('Error en video, recuperando...');
+            clearInterval(stallMonitorInterval);
+            stallMonitorInterval = null;
+            if (!trySwitchChannel()) scheduleStreamRetry();
+        });
         
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = proxyUrl;
             video.play().catch(e => console.log('Autoplay bloqueado:', e));
+            startStallMonitor(video);
             return;
         }
 
         if (window.Hls && Hls.isSupported()) {
+            hlsRecoverCount = 0;
             const hls = new Hls({
                 enableWorker: true,
                 lowLatencyMode: true,
@@ -1061,8 +1157,9 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
                 manifestLoadingTimeOut: 5000,
                 levelLoadingTimeOut: 5000,
                 fragLoadingTimeOut: 5000,
-                manifestLoadingMaxRetry: 1,
-                levelLoadingMaxRetry: 2,
+                manifestLoadingMaxRetry: 3,
+                levelLoadingMaxRetry: 3,
+                fragLoadingMaxRetry: 3,
                 maxBufferLength: 15,
                 maxMaxBufferLength: 30,
                 backBufferLength: 30,
@@ -1083,12 +1180,35 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             hls.on(Hls.Events.ERROR, (event, data) => {
                 if (data.fatal) {
                     console.error('Error fatal HLS:', data);
-                    playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
+                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+                        hlsRecoverCount++;
+                        if (hlsRecoverCount < 3) {
+                            console.log('Recuperando error de red HLS...');
+                            showReconnecting('Recuperando señal...');
+                            setTimeout(() => hls.startLoad(), 1000);
+                            return;
+                        }
+                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                        hlsRecoverCount++;
+                        if (hlsRecoverCount < 3) {
+                            console.log('Recuperando error multimedia HLS...');
+                            showReconnecting('Recuperando señal...');
+                            hls.recoverMediaError();
+                            return;
+                        }
+                    }
+                    clearInterval(stallMonitorInterval);
+                    stallMonitorInterval = null;
+                    if (!trySwitchChannel()) {
+                        scheduleStreamRetry();
+                    }
                 }
             });
         } else {
             playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
         }
+        
+        startStallMonitor(video);
     }
 
     function loadIframePlayer(url) {
@@ -1114,6 +1234,15 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         setTimeout(() => {
             injectAdBlockScript();
         }, 500);
+        
+        clearTimeout(iframeRefreshTimer);
+        iframeRefreshTimer = setTimeout(() => {
+            const iframe = document.getElementById('playerIframe');
+            if (iframe && document.getElementById('playerModal').classList.contains('active')) {
+                console.log('Refrescando iframe por mantenimiento...');
+                iframe.src = iframe.src;
+            }
+        }, 1200000);
     }
 
     function injectAdBlockScript() {
@@ -1208,14 +1337,22 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
 
         video.addEventListener('click', enableSound);
         video.addEventListener('play', enableSound);
+        video.addEventListener('error', () => {
+            console.log('Error en video, recuperando...');
+            clearInterval(stallMonitorInterval);
+            stallMonitorInterval = null;
+            if (!trySwitchChannel()) scheduleStreamRetry();
+        });
         
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = proxiedUrl;
             video.play().catch(e => console.log('Autoplay bloqueado:', e));
+            startStallMonitor(video);
             return;
         }
 
         if (window.Hls && Hls.isSupported()) {
+            hlsRecoverCount = 0;
             const hls = new Hls({
                 enableWorker: true,
                 lowLatencyMode: true,
@@ -1223,8 +1360,9 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
                 manifestLoadingTimeOut: 5000,
                 levelLoadingTimeOut: 5000,
                 fragLoadingTimeOut: 5000,
-                manifestLoadingMaxRetry: 1,
-                levelLoadingMaxRetry: 2,
+                manifestLoadingMaxRetry: 3,
+                levelLoadingMaxRetry: 3,
+                fragLoadingMaxRetry: 3,
                 maxBufferLength: 15,
                 maxMaxBufferLength: 30,
                 backBufferLength: 30,
@@ -1245,12 +1383,35 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             hls.on(Hls.Events.ERROR, (event, data) => {
                 if (data.fatal) {
                     console.error('Error fatal HLS:', data);
-                    playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
+                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+                        hlsRecoverCount++;
+                        if (hlsRecoverCount < 3) {
+                            console.log('Recuperando error de red HLS...');
+                            showReconnecting('Recuperando señal...');
+                            setTimeout(() => hls.startLoad(), 1000);
+                            return;
+                        }
+                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                        hlsRecoverCount++;
+                        if (hlsRecoverCount < 3) {
+                            console.log('Recuperando error multimedia HLS...');
+                            showReconnecting('Recuperando señal...');
+                            hls.recoverMediaError();
+                            return;
+                        }
+                    }
+                    clearInterval(stallMonitorInterval);
+                    stallMonitorInterval = null;
+                    if (!trySwitchChannel()) {
+                        scheduleStreamRetry();
+                    }
                 }
             });
         } else {
             playerContainer.innerHTML = '<div class="video-placeholder"><p>Este navegador no soporta HLS directo.</p></div>';
         }
+        
+        startStallMonitor(video);
     }
 }
 
@@ -1330,6 +1491,15 @@ function closePlayer() {
     document.getElementById('playerContainer').innerHTML = '';
     document.getElementById('signalPanelMount').innerHTML = '';
     document.getElementById('eventChannelOptions').innerHTML = '';
+    clearInterval(stallMonitorInterval);
+    clearTimeout(streamRetryTimeout);
+    clearTimeout(iframeRefreshTimer);
+    stallMonitorInterval = null;
+    streamRetryTimeout = null;
+    iframeRefreshTimer = null;
+    streamRetryCount = 0;
+    hlsRecoverCount = 0;
+    isRecovering = false;
 }
 
 function navigateTo(page) {
