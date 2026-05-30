@@ -505,13 +505,13 @@ function renderFeaturedEvents() {
                     <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
                     <div class="event-matchup">
                         <div class="event-team home">
-                            ${teamLogoHtml(featured.home)}
                             <span class="event-team-name">${escapeHtml(featured.home)}</span>
+                            ${teamLogoHtml(featured.home)}
                         </div>
                         <div class="event-time-center">${escapeHtml(featured.time)}</div>
                         <div class="event-team away">
-                            <span class="event-team-name">${escapeHtml(featured.away)}</span>
                             ${teamLogoHtml(featured.away)}
+                            <span class="event-team-name">${escapeHtml(featured.away)}</span>
                         </div>
                     </div>
                 </div>
@@ -525,13 +525,13 @@ function renderFeaturedEvents() {
                 <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
                     <div class="event-matchup">
                         <div class="event-team home">
-                            ${teamLogoHtml(e.home)}
                             <span class="event-team-name">${escapeHtml(e.home)}</span>
+                            ${teamLogoHtml(e.home)}
                         </div>
                         <div class="event-time-center">${escapeHtml(e.time)}</div>
                         <div class="event-team away">
-                            <span class="event-team-name">${escapeHtml(e.away)}</span>
                             ${teamLogoHtml(e.away)}
+                            <span class="event-team-name">${escapeHtml(e.away)}</span>
                         </div>
                     </div>
                     <div class="event-comp-label">${escapeHtml(e.comp)}</div>
@@ -608,15 +608,15 @@ function renderAllEvents() {
                     <div class="featured-final-content">
                         <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
                         <div class="event-matchup">
-                            <div class="event-team home">
-                                ${teamLogoHtml(featured.home)}
-                                <span class="event-team-name">${escapeHtml(featured.home)}</span>
-                            </div>
-                            <div class="event-time-center">${escapeHtml(featured.time)}</div>
-                            <div class="event-team away">
-                                <span class="event-team-name">${escapeHtml(featured.away)}</span>
-                                ${teamLogoHtml(featured.away)}
-                            </div>
+                        <div class="event-team home">
+                            <span class="event-team-name">${escapeHtml(featured.home)}</span>
+                            ${teamLogoHtml(featured.home)}
+                        </div>
+                        <div class="event-time-center">${escapeHtml(featured.time)}</div>
+                        <div class="event-team away">
+                            ${teamLogoHtml(featured.away)}
+                            <span class="event-team-name">${escapeHtml(featured.away)}</span>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -629,17 +629,17 @@ function renderAllEvents() {
                         return `
                         <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
                             <div class="event-matchup">
-                                <div class="event-team home">
-                                    ${teamLogoHtml(e.home)}
-                                    <span class="event-team-name">${escapeHtml(e.home)}</span>
-                                </div>
-                                <div class="event-time-center">${escapeHtml(e.time)}</div>
-                                <div class="event-team away">
-                                    <span class="event-team-name">${escapeHtml(e.away)}</span>
-                                    ${teamLogoHtml(e.away)}
-                                </div>
-                            </div>
-                            <div class="event-comp-label">${escapeHtml(e.comp)}</div>
+                        <div class="event-team home">
+                            <span class="event-team-name">${escapeHtml(e.home)}</span>
+                            ${teamLogoHtml(e.home)}
+                        </div>
+                        <div class="event-time-center">${escapeHtml(e.time)}</div>
+                        <div class="event-team away">
+                            ${teamLogoHtml(e.away)}
+                            <span class="event-team-name">${escapeHtml(e.away)}</span>
+                        </div>
+                    </div>
+                    <div class="event-comp-label">${escapeHtml(e.comp)}</div>
                         </div>
                     `;
                     }).join('')}
@@ -666,13 +666,13 @@ function renderAllEvents() {
                 <div class="featured-card" data-match="${Number(e.id)}">
                     <div class="event-matchup">
                         <div class="event-team home">
-                            ${teamLogoHtml(e.homeTeam)}
                             <span class="event-team-name">${escapeHtml(e.homeTeam)}</span>
+                            ${teamLogoHtml(e.homeTeam)}
                         </div>
                         <div class="event-time-center">${escapeHtml(e.time)}</div>
                         <div class="event-team away">
-                            <span class="event-team-name">${escapeHtml(e.awayTeam)}</span>
                             ${teamLogoHtml(e.awayTeam)}
+                            <span class="event-team-name">${escapeHtml(e.awayTeam)}</span>
                         </div>
                     </div>
                     <div class="featured-footer">
@@ -702,13 +702,13 @@ function renderHomeTrending() {
         <div class="trending-banner-card" data-play="${Number(m.id)}">
             <div class="event-matchup">
                 <div class="event-team home">
-                    ${teamLogoHtml(m.homeTeam)}
                     <span class="event-team-name">${escapeHtml(m.homeTeam)}</span>
+                    ${teamLogoHtml(m.homeTeam)}
                 </div>
                 <div class="event-time-center">${escapeHtml(m.time)}</div>
                 <div class="event-team away">
-                    <span class="event-team-name">${escapeHtml(m.awayTeam)}</span>
                     ${teamLogoHtml(m.awayTeam)}
+                    <span class="event-team-name">${escapeHtml(m.awayTeam)}</span>
                 </div>
             </div>
             <div class="trending-info">

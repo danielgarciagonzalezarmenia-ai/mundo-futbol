@@ -2711,12 +2711,12 @@ body.player-open .top-nav {
   border-radius: var(--radius-lg);
 }
 
-/* ============ EVENT MATCHUP LAYOUT (logo | name — time — name | logo) ============ */
+/* ============ EVENT MATCHUP LAYOUT (name | shield — time — shield | name) ============ */
 .event-matchup {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   z-index: 1;
   position: relative;
@@ -2724,7 +2724,7 @@ body.player-open .top-nav {
 .event-team {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
@@ -2741,48 +2741,64 @@ body.player-open .top-nav {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
-}
-.event-team.home .event-team-name {
-  text-align: right;
-}
-.event-team.away .event-team-name {
-  text-align: left;
+  max-width: 130px;
 }
 .event-time-center {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-accent);
   flex-shrink: 0;
-  padding: 0 6px;
+  padding: 0 8px;
   font-variant-numeric: tabular-nums;
 }
 .event-team-logo {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   flex-shrink: 0;
 }
 .team-shield {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   color: var(--text-muted);
   opacity: 0.4;
   flex-shrink: 0;
 }
 .event-comp-label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: var(--text-muted);
   text-align: center;
-  margin-top: 4px;
+  margin-top: 3px;
   z-index: 1;
   position: relative;
 }
 
+/* Spacing between events */
+.events-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.event-row {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-smooth);
+}
+.event-row:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-subtle);
+  transform: translateX(3px);
+}
+
 /* Override featured-final styles for new matchup */
 .featured-final-card .event-matchup {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 .featured-final-card .event-team-name {
   font-size: 1rem;
@@ -2794,18 +2810,32 @@ body.player-open .top-nav {
   font-weight: 800;
 }
 .featured-final-card .event-team-logo {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
 }
 .featured-final-card .team-shield {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
 }
 .featured-card .event-team-name {
   font-size: 0.78rem;
 }
 .featured-card .event-time-center {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+}
+
+/* Mobile: same as desktop */
+@media (max-width: 700px) {
+  .event-matchup { gap: 6px }
+  .event-team-name { font-size: 0.78rem; max-width: 80px }
+  .event-time-center { font-size: 0.9rem; padding: 0 4px }
+  .event-team-logo, .team-shield { width: 28px; height: 28px }
+  .featured-final-card .event-team-name { font-size: 0.85rem }
+  .featured-final-card .event-time-center { font-size: 1.1rem }
+  .featured-final-card .event-team-logo,
+  .featured-final-card .team-shield { width: 36px; height: 36px }
+  .event-row { padding: 6px 10px }
+  .events-compact { gap: 4px }
 }
 
 /* ============ RESPONSIVE ============ */
