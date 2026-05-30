@@ -2253,6 +2253,15 @@ body.player-open .top-nav {
 .match-card:nth-child(8), .event-card:nth-child(8), .channel-card:nth-child(8), .popular-channel-card:nth-child(8) { animation-delay: 0.23s; }
 .match-card:nth-child(n+9), .event-card:nth-child(n+9), .channel-card:nth-child(n+9), .popular-channel-card:nth-child(n+9) { animation-delay: 0.26s; }
 
+/* Constrain event rows on desktop */
+@media (min-width: 1201px) {
+    .featured-events {
+        max-width: 760px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 /* Live badge glow */
 .live-badge, .live-badge-player {
     animation: glow 2s ease-in-out infinite;
