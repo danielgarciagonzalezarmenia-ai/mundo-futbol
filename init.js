@@ -23,7 +23,7 @@ setTimeout(function() {
 (function() {
   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   var ver = (document.querySelector('meta[name=app-version]') || {}).content || '348';
-  document.write('<script src="' + (isMobile ? 'app-mobile' : 'app-pc') + '.js?v=' + ver + '"><\/script>');
+  document.write('<script src="' + (isMobile ? 'app-mobile' : 'app-pc') + '.js?v=' + ver + '" defer><\/script>');
 })();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
