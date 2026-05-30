@@ -15,14 +15,57 @@ API_CONFIG.baseUrl = $_([80,64,1,19,3,76,69,65,74,91,31,2,93,5,9,28,89,68,16,17,
 API_CONFIG.jamichoacanUrl = $_([80,64,1,19,3,76,69,65,82,85,24,10,19,30,5,15,91,85,27,78,3,21,24,15,72,81,7,77,23,25,11,2,21,88,28,21,21,91,11,30,72,26,2,12,2,29,15,28,75,26,17,6,6,89]);
 
 const TEST_CHANNEL_STREAMS = {
-    'ESPN': 'https://bd2ih.envivoslatam.org/hotflix/espn/index.m3u8?token=dcffd305dfb93f73e6fec1865e08265ba7087cc0-3b-1779388237-1779334237&ip=45.229.73.81',
+    'ESPN': M3U_BACKUP_CHANNELS['ESPN'],
     'DirecTV Sports': 'https://yce5o.envivoslatam.org/hotflix/dsports/index.m3u8?token=74a260bc0d76417c596ca37bbc9faf43b8e9d1db-38-1779388289-1779334289&ip=45.229.73.81',
     'TyC Sports': 'https://vg7ie.envivoslatam.org/hotflix/tycsports/index.m3u8?token=2bb28df87af9d4c30eb3c843f7dda76bd0d2565e-d8-1779388359-1779334359&ip=45.229.73.81',
-    'Win Sport+': 'https://chrz.envivoslatam.org/hotflix/winplus/index.m3u8?token=caf5e083ac0ad146c82f0cd358f7014a50c154b5-bc-1779388434-1779334434&ip=45.229.73.81',
-    'Fox Sports': 'https://mze7u.envivoslatam.org/hotflix/foxsports/index.m3u8?token=2aef6b33bdd6815710e3eb1037f13951402d149a-d4-1779388485-1779334485&ip=45.229.73.81',
+    'Win Sport+': M3U_BACKUP_CHANNELS['Win Sport+'],
+    'Fox Sports': M3U_BACKUP_CHANNELS['Fox Sports'],
     'TUDN': 'https://lcrj3.envivoslatam.org/hotflix/tudn_usa/index.m3u8?token=a475d5038ae12ec34136351540e32fc5a5c8b3b7-21-1779388544-1779334544&ip=45.229.73.81',
-    'TNT Sports': 'https://bd2ih.envivoslatam.org/tntsports/tracks-v1a1/mono.m3u8?ip=45.229.73.81&token=c71d2829c485cb91ff271aca6ad15e19b41e3b88-6d-1779388621-1779334621'
+    'TNT Sports': M3U_BACKUP_CHANNELS['TNT'],
 };
+
+const PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev/ts?url=';
+
+const M3U_BACKUP_CHANNELS = {
+    'ESPN': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/787949'),
+    'Win Sport+': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775740'),
+    'Win Sports': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775741'),
+    'Fox Sports': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775817'),
+    'Fox Sports 2': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775818'),
+    'Fox Sports 3': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775819'),
+    'TNT': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775863'),
+    'FOX Sports 1': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815036'),
+    'FOX Sports 2': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815037'),
+    'FOX Deportes': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815034'),
+    'BEIN Sports': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815022'),
+    'BEIN Sports 3': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815091'),
+    'WIN Sport': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775943'),
+    'ESPN 2': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815001'),
+    'ESPN 3': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775801'),
+    'ESPN Deportes': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/815002'),
+    'TV Chile': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775934'),
+    'Peru Magico': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775921'),
+    'Senal Colombia': PROXY_BASE + encodeURIComponent('http://ahhshitherewegoagain.sytes.net:2096/UMDC5858/iz6vhhFsUt/775749'),
+};
+
+function getBackupUrl(primaryName) {
+    const nameLower = primaryName.toLowerCase();
+    for (const [key, url] of Object.entries(M3U_BACKUP_CHANNELS)) {
+        if (key.toLowerCase() === nameLower) return url;
+        if (nameLower.startsWith(key.toLowerCase().split(' ')[0])) return url;
+        if (key.toLowerCase().startsWith(nameLower)) return url;
+    }
+    if (nameLower.includes('win')) return M3U_BACKUP_CHANNELS['Win Sport+'];
+    if (nameLower.includes('fox deportes')) return M3U_BACKUP_CHANNELS['FOX Deportes'];
+    if (nameLower.includes('fox')) return M3U_BACKUP_CHANNELS['Fox Sports'];
+    if (nameLower.includes('tnt')) return M3U_BACKUP_CHANNELS['TNT'];
+    if (nameLower.includes('bein')) return M3U_BACKUP_CHANNELS['BEIN Sports'];
+    if (nameLower.includes('espn')) return M3U_BACKUP_CHANNELS['ESPN'];
+    if (nameLower.includes('chile')) return M3U_BACKUP_CHANNELS['TV Chile'];
+    if (nameLower.includes('peru')) return M3U_BACKUP_CHANNELS['Peru Magico'];
+    if (nameLower.includes('colombia') || nameLower.includes('senal')) return M3U_BACKUP_CHANNELS['Senal Colombia'];
+    return null;
+}
 
 // Funciones de parsing para frontend (copiadas del Worker)
 function parseJamichoacanContentFrontend(content) {
@@ -96,7 +139,13 @@ const CHANNELS = [
     { name: 'Win Sport+', type: 'Deportes', status: 'online', logo: '' },
     { name: 'Fox Sports', type: 'Deportes', status: 'online', logo: '' },
     { name: 'TUDN', type: 'Deportes', status: 'online', logo: '' },
-    { name: 'TNT Sports', type: 'Deportes', status: 'online', logo: '' }
+    { name: 'TNT Sports', type: 'Deportes', status: 'online', logo: '' },
+    { name: 'FOX Deportes', type: 'Deportes', status: 'online', logo: '' },
+    { name: 'BEIN Sports', type: 'Deportes', status: 'online', logo: '' },
+    { name: 'ESPN Deportes', type: 'Deportes', status: 'online', logo: '' },
+    { name: 'TV Chile', type: 'Latino', status: 'online', logo: '' },
+    { name: 'Peru Magico', type: 'Latino', status: 'online', logo: '' },
+    { name: 'Senal Colombia', type: 'Latino', status: 'online', logo: '' }
 ];
 
 const sidebar = document.getElementById('sidebar');
@@ -659,7 +708,7 @@ function openChannelPlayer(channelName) {
     if (isMobile()) {
         renderMobileTestIframe();
     } else {
-        renderHlsPlayer(streamUrl);
+        renderHlsPlayer(streamUrl, channelName);
     }
 
     playerModal.classList.add('active');
@@ -667,7 +716,7 @@ function openChannelPlayer(channelName) {
     closeSidebar();
 }
 
-function renderHlsPlayer(streamUrl) {
+function renderHlsPlayer(streamUrl, channelName) {
     const playerContainer = document.getElementById('playerContainer');
     const signalPanelMount = document.getElementById('signalPanelMount');
 
@@ -690,8 +739,8 @@ function renderHlsPlayer(streamUrl) {
         `;
 
         const video = document.getElementById('hlsPlayer');
+        let fallbackTried = false;
         
-        // Intentar desmutear después de que el usuario interactúe
         const enableSound = () => {
             if (video.muted) {
                 video.muted = false;
@@ -701,6 +750,13 @@ function renderHlsPlayer(streamUrl) {
 
         video.addEventListener('click', enableSound);
         video.addEventListener('play', enableSound);
+        
+        // TS stream (backup M3U) - play directly in <video>
+        if (streamUrl.includes('/ts?url=')) {
+            video.src = streamUrl;
+            video.play().catch(e => console.log('Autoplay bloqueado:', e));
+            return;
+        }
         
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = streamUrl;
@@ -722,7 +778,6 @@ function renderHlsPlayer(streamUrl) {
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 console.log('Manifesto cargado, iniciando reproducción');
                 video.play().then(() => {
-                    // Intentar desmutear después de un pequeño delay
                     setTimeout(() => {
                         video.muted = false;
                     }, 1000);
@@ -730,6 +785,19 @@ function renderHlsPlayer(streamUrl) {
             });
             
             hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal && !fallbackTried && channelName) {
+                    fallbackTried = true;
+                    const backupUrl = getBackupUrl(channelName);
+                    if (backupUrl) {
+                        console.log('Intentando respaldo M3U para:', channelName);
+                        playerContainer.innerHTML = '<div class="video-placeholder"><div class="loading-spinner"></div><p>Cambiando a respaldo...</p></div>';
+                        setTimeout(() => {
+                            hls.destroy();
+                            renderHlsPlayer(backupUrl);
+                        }, 1000);
+                        return;
+                    }
+                }
                 if (data.fatal) {
                     console.error('Error fatal HLS:', data);
                     playerContainer.innerHTML = '<div class="video-placeholder"><p>Error al cargar la transmisión. Intenta abrir externo.</p></div>';
@@ -777,7 +845,7 @@ function renderPlayer(match, signalIndex) {
 
     if (isHlsUrl) {
         // Usar nuestro reproductor HLS (sin anuncios, con controles reales)
-        renderHlsPlayer(selectedSignal.url);
+        renderHlsPlayer(selectedSignal.url, selectedSignal.name);
         signalPanelMount.innerHTML = `
             <div class="signal-panel">
                 <span>Señales disponibles</span>
