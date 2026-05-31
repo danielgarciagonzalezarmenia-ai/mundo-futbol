@@ -20,15 +20,15 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="app-version" content="372">
-    <link rel="apple-touch-icon" href="favicon.png?v=377">
+    <link rel="apple-touch-icon" href="favicon.png?v=378">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="favicon.png?v=377">
-    <link rel="shortcut icon" href="favicon.ico?v=377" type="image/x-icon">
+    <link rel="icon" type="image/png" href="favicon.png?v=378">
+    <link rel="shortcut icon" href="favicon.ico?v=378" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://la14hd.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=377">
+    <link rel="stylesheet" href="styles.css?v=378">
     <style>
         #popularChannels { display: block; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 8px; }
     </style>
@@ -102,7 +102,7 @@
             <span class="tz-bubble-time" id="tzClock">--:--:--</span>
             <span class="tz-bubble-zone" id="tzName"></span>
             <span class="tz-bubble-sep"></span>
-            <span class="tz-bubble-daily" id="dailyCount"></span>
+            <span class="tz-bubble-daily" id="dailyCount">0 hoy</span>
         </div>
         <main class="main-content">
             <nav class="mobile-nav">
@@ -120,7 +120,7 @@
                     </div>
                     <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
                     <div class="home-banner">
-                        <img src="img/anuncio.png?v=377" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
+                        <img src="img/anuncio.png?v=378" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
                     </div>
                     <div class="featured-events" id="featuredEvents"></div>
                     <div id="trendingBanners"></div>
@@ -299,10 +299,10 @@
         </div>
     </section>
 
-    <script src="init.js?v=377"></script>
+    <script src="init.js?v=378"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1" integrity="sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn" crossorigin="anonymous"></script>
-    <script src="img/escudos/logo-index.js?v=377"></script>
-    <script src="teams-logos.js?v=377"></script>
+    <script src="img/escudos/logo-index.js?v=378"></script>
+    <script src="teams-logos.js?v=378"></script>
     <script id="_waumf">var _wau = _wau || []; _wau.push(["dynamic", "a82geyit9j", "mf", "c4302bffffff", "small"]);</script><script async src="//waust.at/d.js"></script>
     <script>
     (function(){
@@ -312,14 +312,16 @@
         if (!tc || !tn || !dc) return;
 
         function daily(){
-            var n=new Date();
-            var y=n.getFullYear();
-            var m=String(n.getMonth()+1).padStart(2,'0');
-            var d=String(n.getDate()).padStart(2,'0');
-            fetch('https://api.countapi.xyz/hit/mundofutbolcol.online/visitas-'+y+'-'+m+'-'+d)
-                .then(function(r){return r.json()})
-                .then(function(r){dc.textContent=Number(r.value).toLocaleString()+' hoy'})
-                .catch(function(){dc.textContent=''});
+            try{
+                var n=new Date();
+                var y=n.getFullYear();
+                var m=String(n.getMonth()+1).padStart(2,'0');
+                var d=String(n.getDate()).padStart(2,'0');
+                fetch('https://api.countapi.xyz/hit/mundofutbolcol.online/daily-'+y+m+d)
+                    .then(function(r){return r.json()})
+                    .then(function(r){dc.textContent=(r.value||0).toLocaleString()+' hoy'})
+                    .catch(function(){});
+            }catch(e){}
         }
         daily();
 
