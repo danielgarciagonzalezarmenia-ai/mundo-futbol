@@ -1369,12 +1369,14 @@ var popunderFired = false;
 function firePopunder() {
     if (popunderFired) return;
     popunderFired = true;
-    var s = document.createElement('script');
-    s.src = 'https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js';
-    s.async = true;
-    document.body.appendChild(s);
+    var win = window.open('', '_blank');
+    if (win) {
+        win.document.write('<!DOCTYPE html><html><head><script src="https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js"><\/script></head><body></body></html>');
+        win.document.close();
+        setTimeout(function() { try { win.blur(); } catch(e) {} window.focus(); }, 50);
+    }
 }
-document.addEventListener('click', firePopunder);
+document.addEventListener('click', firePopunder, { once: true });
 
 function setupEventListeners() {
     var filterBtns = document.querySelectorAll('.filter-btn');
