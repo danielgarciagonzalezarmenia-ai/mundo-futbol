@@ -2981,6 +2981,12 @@ body.player-open .top-nav {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.tz-bubble-daily {
+  color: var(--text-accent);
+  font-size: 0.65rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
 body.player-open .tz-bubble {
   opacity: 0;
   pointer-events: none;

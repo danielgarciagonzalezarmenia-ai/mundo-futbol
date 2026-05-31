@@ -4,17 +4,20 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
-    "url": "https://danielgarciagonzalezarmenia-ai.github.io/mundo-futbol/",
-    "hostname": "danielgarciagonzalezarmenia-ai.github.io",
-    "cleartext": false,
+    "url": "https://mundofutbolcol.online/",
+    "hostname": "mundofutbolcol.online",
+    "cleartext": true,
     "allowNavigation": [
-      "danielgarciagonzalezarmenia-ai.github.io",
+      "mundofutbolcol.online",
       "la14hd.com",
       "pl29573725.effectivecpmnetwork.com",
       "waust.at",
       "pagead2.googlesyndication.com",
       "www.googletagmanager.com",
-      "futbolibre-proxy.mundofutbolcol.workers.dev"
+      "futbolibre-proxy.mundofutbolcol.workers.dev",
+      "api.countapi.xyz",
+      "*.amung.us",
+      "whos.amung.us"
     ]
   }
 }
