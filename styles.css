@@ -2932,3 +2932,25 @@ body.player-open .top-nav {
 @media (min-width: 769px) {
   .player-mobile-controls { display: none !important }
 }
+
+.home-banner {
+  width: 100%;
+  max-width: 728px;
+  margin: 16px auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border-hairline);
+  transition: all 0.3s var(--ease-smooth);
+}
+.home-banner:hover {
+  border-color: var(--border-card);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+.home-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: var(--bg-deep);
+}
