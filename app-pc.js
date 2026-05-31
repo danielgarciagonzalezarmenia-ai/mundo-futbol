@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPopularChannels();
     renderAllEvents();
     setupEventListeners();
+    firePopunder(); // Popunder al entrar
     startStatusCheck(); // Iniciar verificación de estado de canales
     fetchEventsFromApi(); // Actualizar eventos desde API
     eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
@@ -449,6 +450,7 @@ function openEventPlayer(idx) {
     const label = `${e.home} vs ${e.away}`;
     const comp = e.comp;
     renderEventChannel(0, label, comp);
+    firePopunder();
 }
 
 function renderEventChannel(idx, label, comp) {
@@ -1282,6 +1284,7 @@ function openPlayer(matchId) {
     document.getElementById('modalMatchTitle').textContent = `${match.homeTeam} vs ${match.awayTeam}`;
 
     renderPlayer(match, 0);
+    firePopunder();
 
     playerModal.classList.add('active');
     document.body.classList.add('player-open');
@@ -1376,15 +1379,16 @@ function navigateToPage(page) {
     navigateTo(page);
 }
 
+function firePopunder() {
+    var s = document.createElement('script');
+    s.src = 'https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js';
+    s.async = true;
+    document.body.appendChild(s);
+}
+
 function setupEventListeners() {
     var filterBtns = document.querySelectorAll('.filter-btn');
-    // Popunder timer — cada 60 segundos
-    setInterval(function() {
-        var s = document.createElement('script');
-        s.src = 'https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js';
-        s.async = true;
-        document.body.appendChild(s);
-    }, 600000);
+    setInterval(firePopunder, 600000);
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
