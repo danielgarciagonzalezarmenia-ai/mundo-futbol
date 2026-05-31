@@ -1385,7 +1385,6 @@ function firePopunder() {
     s.async = true;
     document.body.appendChild(s);
 }
-document.addEventListener('click', firePopunder, { once: true });
 
 function setupEventListeners() {
     var filterBtns = document.querySelectorAll('.filter-btn');
