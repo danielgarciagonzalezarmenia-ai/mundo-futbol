@@ -1373,7 +1373,7 @@ function setupEventListeners() {
         s.src = 'https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js';
         s.async = true;
         document.body.appendChild(s);
-    }, 60000);
+    }, 600000);
 
     var allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
     allNavLinks.forEach(link => {
