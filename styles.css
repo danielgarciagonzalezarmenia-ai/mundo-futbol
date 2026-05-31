@@ -2933,28 +2933,6 @@ body.player-open .top-nav {
   .player-mobile-controls { display: none !important }
 }
 
-/* Stats bar */
-.live-stats-bar {
-  border-bottom: 1px solid var(--border-hairline);
-  background: var(--bg-surface);
-}
-.live-stats-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 16px;
-}
-.inline-widget {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-.inline-widget * {
-  vertical-align: middle !important;
-}
-
 /* Clock bubble */
 .tz-bubble {
   position: fixed;
@@ -2963,13 +2941,13 @@ body.player-open .top-nav {
   z-index: 999;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: var(--bg-glass-strong);
   backdrop-filter: blur(32px) saturate(1.4);
   -webkit-backdrop-filter: blur(32px) saturate(1.4);
   border: 1px solid var(--border-hairline);
   border-radius: var(--radius-pill);
-  padding: 6px 14px;
+  padding: 5px 14px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
@@ -2977,6 +2955,19 @@ body.player-open .top-nav {
   white-space: nowrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   transition: opacity 0.3s var(--ease-smooth);
+}
+.tz-bubble .inline-widget {
+  display: flex;
+  align-items: center;
+}
+.tz-bubble .inline-widget * {
+  vertical-align: middle !important;
+}
+.tz-bubble-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border-hairline);
+  flex-shrink: 0;
 }
 .tz-bubble-time {
   color: var(--text-primary);
