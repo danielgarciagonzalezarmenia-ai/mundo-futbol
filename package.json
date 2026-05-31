@@ -9,5 +9,19 @@
   },
   "dependencies": {
     "express": "^4.18.2"
-  }
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielgarciagonzalezarmenia-ai/mundo-futbol.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielgarciagonzalezarmenia-ai/mundo-futbol/issues"
+  },
+  "homepage": "https://github.com/danielgarciagonzalezarmenia-ai/mundo-futbol#readme"
 }

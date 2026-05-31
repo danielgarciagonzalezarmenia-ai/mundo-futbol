@@ -1,0 +1,20 @@
+{
+  "appId": "com.mundofutbol.app",
+  "appName": "MundoFutbol",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://danielgarciagonzalezarmenia-ai.github.io/mundo-futbol/",
+    "hostname": "danielgarciagonzalezarmenia-ai.github.io",
+    "cleartext": false,
+    "allowNavigation": [
+      "danielgarciagonzalezarmenia-ai.github.io",
+      "la14hd.com",
+      "pl29573725.effectivecpmnetwork.com",
+      "waust.at",
+      "pagead2.googlesyndication.com",
+      "www.googletagmanager.com",
+      "futbolibre-proxy.mundofutbolcol.workers.dev"
+    ]
+  }
+}
