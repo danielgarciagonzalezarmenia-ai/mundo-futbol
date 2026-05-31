@@ -93,6 +93,7 @@ const TEAM_ALIASES = {
     'chivas': 'guadalajara',
     // Chile
     'colocolo': 'colocolo',
+    'coquimbounido': 'coquimbo',
     'universidadcatolica': 'ucatolica',
     'universidaddechile': 'udechile',
     'unionlacalera': 'unionlacalera',
@@ -139,6 +140,7 @@ const TEAM_ALIASES = {
     'fcvdender': 'fcvdender',
     // Other countries
     'estadosunidos': 'usa',
+    'eeuu': 'usa',
     'unitedstates': 'usa',
     'unitedstatesofamerica': 'usa',
     'coreadelsur': 'coreadelsur',
@@ -147,6 +149,7 @@ const TEAM_ALIASES = {
     'arabiasaudita': 'arabiasaudita',
     'saudiarabia': 'arabiasaudita',
     'costarica': 'costarica',
+    'jordania': 'jordan',
     'nuevazelanda': 'nuevazelanda',
     'newzealand': 'nuevazelanda',
     'paisesbajos': 'paisesbajos',

@@ -418,14 +418,12 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '08:00', comp: 'Primera División', home: 'Racing', away: 'Defensor Sporting', channels: ['https://la14hd.com/vivo/canales.php?stream=disney2'] },
-    { time: '09:15', comp: 'LaLiga SmartBank', home: 'Real Sociedad II', away: 'Cultural Leonesa', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
-    { time: '11:00', comp: 'UEFA Champions League', home: 'PSG', away: 'Arsenal', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '11:00', comp: 'Liga 1', home: 'ADT', away: 'Cusco', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
-    { time: '16:00', comp: 'Copa Argentina', home: 'Instituto', away: 'Lanús', channels: ['https://la14hd.com/vivo/canales.php?stream=tycsports'] },
-    { time: '18:00', comp: 'Brasileirão', home: 'Santos', away: 'Vitória', channels: ['https://la14hd.com/vivo/canales.php?stream=fanatiz8', 'https://la14hd.com/vivo/canales.php?stream=sportv'] },
-    { time: '18:30', comp: 'Amistoso Internacional', home: 'Ecuador', away: 'Arabia Saudita', channels: ['https://tvtvhd.com/canales.php?stream=ecdf_ligapro'] },
-    { time: '21:00', comp: 'Amistoso Internacional', home: 'México', away: 'Australia', channels: ['https://tvtvhd.com/vivo/canal.php?stream=foxdeportes'] }
+    { time: '08:00', comp: 'Amistoso', home: 'Suiza', away: 'Jordania', channels: ['https://la14hd.com/vivo/canales.php?stream=espn', 'https://la14hd.com/vivo/canales.php?stream=foxsports2_usa'] },
+    { time: '09:00', comp: 'Brasileirão', home: 'RB Bragantino', away: 'Internacional', channels: ['https://la14hd.com/vivo/canales.php?stream=premiere1'] },
+    { time: '11:00', comp: 'Liga 1', home: 'Melgar', away: 'Alianza Atlético', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
+    { time: '11:30', comp: 'Primera División', home: 'Deportes Limache', away: 'Coquimbo Unido', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] },
+    { time: '13:45', comp: 'Amistoso', home: 'Alemania', away: 'Finlandia', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '14:30', comp: 'Amistoso', home: 'EE. UU.', away: 'Senegal', channels: ['https://la14hd.com/vivo/canales.php?stream=disney12'] }
 ];
 
 (function() {
