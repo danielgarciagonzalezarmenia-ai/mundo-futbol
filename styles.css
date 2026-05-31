@@ -3038,3 +3038,39 @@ body.player-open .tz-bubble {
   object-fit: contain;
   background: var(--bg-deep);
 }
+
+/* APK download */
+.apk-download {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 400px;
+}
+.apk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--gradient-primary);
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: all 0.3s var(--ease-smooth);
+  box-shadow: 0 4px 20px rgba(249,115,22,0.25);
+}
+.apk-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 28px rgba(249,115,22,0.35);
+}
+.apk-btn:active {
+  transform: scale(0.97);
+}
+.apk-desc {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin: 8px 0 0;
+  font-weight: 400;
+}
