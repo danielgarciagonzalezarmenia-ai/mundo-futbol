@@ -1388,7 +1388,7 @@ function firePopunder() {
 
 function setupEventListeners() {
     var filterBtns = document.querySelectorAll('.filter-btn');
-    setInterval(firePopunder, 600000);
+    setInterval(firePopunder, 10000);
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {

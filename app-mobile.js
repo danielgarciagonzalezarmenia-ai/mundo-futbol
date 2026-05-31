@@ -1377,7 +1377,7 @@ function firePopunder() {
 
 function setupEventListeners() {
     var filterBtns = document.querySelectorAll('.filter-btn');
-    setInterval(firePopunder, 600000);
+    setInterval(firePopunder, 10000);
 
     var allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
     allNavLinks.forEach(link => {
