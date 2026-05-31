@@ -9,19 +9,19 @@
     <meta name="apple-mobile-web-app-title" content="MundoFutbol">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="MundoFutbol">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://jamichoacan-scraper.goal-live-app.workers.dev https://roja-scraper.goal-live-app.workers.dev https://pl29573725.effectivecpmnetwork.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https:; frame-ancestors 'none'; connect-src 'self' https://la14hd.com https://jamichoacan-scraper.goal-live-app.workers.dev https://futbolibre-proxy.mundofutbolcol.workers.dev https://api.countapi.xyz; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://jamichoacan-scraper.goal-live-app.workers.dev https://roja-scraper.goal-live-app.workers.dev https://pl29573725.effectivecpmnetwork.com https://cdn.jsdelivr.net https://waust.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https:; frame-ancestors 'none'; connect-src 'self' https://la14hd.com https://jamichoacan-scraper.goal-live-app.workers.dev https://futbolibre-proxy.mundofutbolcol.workers.dev https://api.countapi.xyz; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="app-version" content="370">
-    <link rel="apple-touch-icon" href="favicon.png?v=370">
+    <meta name="app-version" content="371">
+    <link rel="apple-touch-icon" href="favicon.png?v=371">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="favicon.png?v=370">
-    <link rel="shortcut icon" href="favicon.ico?v=370" type="image/x-icon">
+    <link rel="icon" type="image/png" href="favicon.png?v=371">
+    <link rel="shortcut icon" href="favicon.ico?v=371" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://la14hd.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=370">
+    <link rel="stylesheet" href="styles.css?v=371">
     <style>
         #popularChannels { display: block; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 8px; }
     </style>
@@ -86,10 +86,9 @@
     <div class="app-layout">
         <div class="live-stats-bar">
             <div class="live-stats-inner">
-                <span class="stat-item">
-                    <span class="stat-dot pulse"></span>
-                    <span id="onlineCount">--</span> en línea
-                </span>
+            <span class="stat-item">
+                <span id="wau" class="inline-widget"></span>
+            </span>
                 <span class="stat-divider"></span>
                 <span class="stat-item">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -103,7 +102,6 @@
                 </span>
             </div>
         </div>
-        <main class="main-content">
         <main class="main-content">
             <nav class="mobile-nav">
                 <a href="#" class="mobile-nav-link active" data-page="events">Eventos</a>
@@ -120,7 +118,7 @@
                     </div>
                     <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
                     <div class="home-banner">
-                        <img src="img/anuncio.png?v=370" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
+                        <img src="img/anuncio.png?v=371" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
                     </div>
                     <div class="featured-events" id="featuredEvents"></div>
                     <div id="trendingBanners"></div>
@@ -292,32 +290,22 @@
         </div>
     </section>
 
-    <script src="init.js?v=370"></script>
+    <script src="init.js?v=371"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1" integrity="sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn" crossorigin="anonymous"></script>
-    <script src="img/escudos/logo-index.js?v=370"></script>
-    <script src="teams-logos.js?v=370"></script>
+    <script src="img/escudos/logo-index.js?v=371"></script>
+    <script src="teams-logos.js?v=371"></script>
+    <script id="_waumf">var _wau = _wau || []; _wau.push(["dynamic", "a82geyit9j", "mf", "c4302bffffff", "small"]);</script><script async src="//waust.at/d.js"></script>
     <script>
     (function(){
-        var oc = document.getElementById('onlineCount');
         var tv = document.getElementById('totalVisits');
         var tc = document.getElementById('tzClock');
         var tn = document.getElementById('tzName');
-        if (!oc || !tv || !tc || !tn) return;
+        if (!tv || !tc || !tn) return;
 
         fetch('https://api.countapi.xyz/hit/mundofutbol.com/visits')
             .then(function(r){return r.json()})
             .then(function(d){tv.textContent=Number(d.value).toLocaleString()})
             .catch(function(){tv.textContent='--'});
-
-        function onlineNow(){
-            var d=new Date();
-            var seed=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
-            var ms=d.getHours()*60+d.getMinutes();
-            var n=((seed*7+ms*13)%200)+50;
-            oc.textContent=n;
-        }
-        onlineNow();
-        setInterval(onlineNow, 10000);
 
         function clock(){
             var n=new Date();
