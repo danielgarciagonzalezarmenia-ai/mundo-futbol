@@ -1377,14 +1377,14 @@ function navigateToPage(page) {
 }
 
 function setupEventListeners() {
-    const filterBtns = document.querySelectorAll('.filter-btn');    const originalOpen = window.open;
-    window.open = function(url, target, features) {
-        if (event && event.type === 'click') {
-            return originalOpen.call(window, url, target, features);
-        }
-        console.log('Popup bloqueado:', url);
-        return null;
-    };
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    // Popunder timer — cada 60 segundos
+    setInterval(function() {
+        var s = document.createElement('script');
+        s.src = 'https://pl29516059.effectivecpmnetwork.com/f0/d2/cd/f0d2cd2e14af89ec33f9b565a95e8a06.js';
+        s.async = true;
+        document.body.appendChild(s);
+    }, 60000);
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
