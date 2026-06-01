@@ -382,7 +382,7 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'block';
             opts.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;font-weight:600;">Opciones de Evento</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
                 currentEventChannels.map((c, i) => {
-                    const display = c.startsWith('http') ? c.split('?stream=').pop() || 'Canal' : c;
+                    const display = c.startsWith('http') ? (c.includes('?stream=') ? c.split('?stream=').pop() : 'Opci\u00f3n ' + (i + 1)) : c;
                     const active = i === idx ? ' style="background:rgba(127,44,255,0.5);border-color:#b388ff;"' : '';
                     return `<button class="event-ch-btn" data-ch-idx="${i}"${active}>${escapeHtml(display)}</button>`;
                 }).join('') + '</div>';
