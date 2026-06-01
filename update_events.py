@@ -38,7 +38,10 @@ def read_existing_channels(content):
         away = m.group(2)
         key = home + ' vs ' + away
         try:
-            channels = json.loads(m.group(3))
+            raw = m.group(3)
+            # Convert single-quoted JS array to valid JSON
+            json_str = raw.replace("'", '"')
+            channels = json.loads(json_str)
         except Exception:
             channels = []
         existing[key] = channels
