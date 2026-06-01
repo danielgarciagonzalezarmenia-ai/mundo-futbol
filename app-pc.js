@@ -423,7 +423,7 @@ const EVENTOS_MANUALES = [
     { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv'] },
     { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=espn'] },
     { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=caracol'] },
-    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
+    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=foxsports2_usa'] },
 ];
 
 (function() {
