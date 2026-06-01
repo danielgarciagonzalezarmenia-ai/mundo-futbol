@@ -419,7 +419,9 @@ var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
     { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=disney5'] }
+    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=disney5'] },
+    { time: '12:00', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=caracol'] }
 ];
 
 (function() {
