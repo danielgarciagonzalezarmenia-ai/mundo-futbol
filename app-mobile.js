@@ -166,8 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startStatusCheck();
     fetchEventsFromApi();
     eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
-    fetchLa14hdEvents();
-    LA14HD_EVENTS_INTERVAL = setInterval(fetchLa14hdEvents, 300000);
     
     // Restaurar página guardada
     const savedPage = localStorage.getItem('currentPage');
@@ -336,67 +334,10 @@ const EVENTOS_MANUALES = [
     { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ["https://la14hd.com/vivo/canales.php?stream=caracol"] },
 ];
 
-var MANUAL_EVENTS_BACKUP = [
-    { time: '12:00', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=caracol'] }
-];
-
-var LA14HD_EVENTS_INTERVAL = null;
-
-function fetchLa14hdEvents() {
-    fetch('https://futbolibre-proxy.mundofutbolcol.workers.dev/la14hd-events')
-        .then(function(r){return r.json()})
-        .then(function(data){
-            if (!data || !data.length) return;
-            var today = new Date();
-            var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-            var apiEvents = data.filter(function(e){return e.date === todayStr});
-            if (!apiEvents.length) return;
-            var parsed = apiEvents.map(function(e){
-                var comp = 'Futbol', home = '', away = '';
-                var title = e.title || '';
-                var colonIdx = title.indexOf(': ');
-                if (colonIdx > 0) { comp = title.substring(0, colonIdx); title = title.substring(colonIdx + 2); }
-                var vsIdx = title.indexOf(' vs ');
-                if (vsIdx > 0) { home = title.substring(0, vsIdx); away = title.substring(vsIdx + 4); }
-                else { home = title; }
-                // Adjust time from Colombia timezone to user local
-                var adjTime = e.time;
-                if (typeof COLOMBIA_OFFSET !== 'undefined') {
-                    var off2 = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
-                    if (off2 !== 0) {
-                        var p = e.time.split(':');
-                        var t2 = parseInt(p[0],10)*60 + parseInt(p[1],10) + off2;
-                        t2 = ((t2%1440)+1440)%1440;
-                        adjTime = String(100+Math.floor(t2/60)).slice(1)+':'+String(100+(t2%60)).slice(1);
-                    }
-                }
-                return { time: adjTime, comp: comp, home: home, away: away, channels: [e.link] };
-            });
-            var titles = {};
-            parsed.forEach(function(e){titles[e.home+' vs '+e.away]=1});
-            EVENTOS_MANUALES.length = 0;
-            parsed.forEach(function(e){EVENTOS_MANUALES.push(e)});
-            MANUAL_EVENTS_BACKUP.forEach(function(e){
-                var key = e.home+' vs '+e.away;
-                if (!titles[key]) { EVENTOS_MANUALES.push(e); titles[key]=1; }
-            });
-            renderFeaturedEvents();
-            renderAllEvents();
-        })
-        .catch(function(){});
-}
-
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
     if (off !== 0) {
         EVENTOS_MANUALES.forEach(function(e) {
-            var p = e.time.split(':');
-            var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
-            t = ((t % 1440) + 1440) % 1440;
-            e.time = String(100 + Math.floor(t / 60)).slice(1) + ':' + String(100 + (t % 60)).slice(1);
-        });
-        MANUAL_EVENTS_BACKUP.forEach(function(e) {
             var p = e.time.split(':');
             var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
             t = ((t % 1440) + 1440) % 1440;
