@@ -326,15 +326,15 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '17:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: [] },
-    { time: '17:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: [] },
-    { time: '17:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: [] },
-    { time: '18:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: [] },
-    { time: '19:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: [] },
-    { time: '19:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: [] },
-    { time: '00:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: [] },
-    { time: '00:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: [] },
-    { time: '02:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: [] },
+    { time: '11:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: [] },
+    { time: '11:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: [] },
+    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: [] },
+    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: [] },
+    { time: '13:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: [] },
+    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: [] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: [] },
+    { time: '18:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: [] },
+    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: [] },
 ];
 
 (function() {

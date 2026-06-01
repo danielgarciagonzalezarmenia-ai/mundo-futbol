@@ -2,6 +2,9 @@ import urllib.request, json, re, os, subprocess
 from datetime import datetime, timezone, timedelta
 
 AGENDA_URL = 'https://futbol-libre.su/agenda/'
+SOURCE_UTC_OFFSET = 60       # futbol-libre.su times are in UTC+1
+COLOMBIA_UTC_OFFSET = -300   # Colombia is UTC-5
+TZ_DELTA = COLOMBIA_UTC_OFFSET - SOURCE_UTC_OFFSET  # -360 min
 
 MANUAL_FALLBACK = [
     {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': []},
@@ -97,8 +100,13 @@ def main():
         title = m.group(1).strip()
         time_str = m.group(2).strip()
         comp, home, away = parse_title(title)
+        # Convert from source timezone to Colombia UTC-5
+        parts = time_str.split(':')
+        src_min = int(parts[0]) * 60 + int(parts[1])
+        col_min = (src_min + TZ_DELTA) % 1440
+        col_time = f'{col_min // 60:02d}:{col_min % 60:02d}'
         matches.append({
-            'time': time_str,
+            'time': col_time,
             'comp': comp,
             'home': home,
             'away': away,
