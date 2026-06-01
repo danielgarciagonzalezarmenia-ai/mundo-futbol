@@ -106,7 +106,7 @@ def main():
             'channels': [e.get('link', '')],
         })
 
-    # Merge with fallback (dedup by team names)
+    # Merge with fallback (dedup by team names, merge channels)
     seen = {}
     merged = []
     for e in parsed:
@@ -114,11 +114,25 @@ def main():
         if key not in seen:
             seen[key] = True
             merged.append(e)
+        else:
+            for m in merged:
+                if m['home'] + ' vs ' + m['away'] == key:
+                    for ch in e['channels']:
+                        if ch not in m['channels']:
+                            m['channels'].append(ch)
+                    break
     for e in MANUAL_FALLBACK:
         key = e['home'] + ' vs ' + e['away']
         if key not in seen:
             seen[key] = True
             merged.append(e)
+        else:
+            for m in merged:
+                if m['home'] + ' vs ' + m['away'] == key:
+                    for ch in e['channels']:
+                        if ch not in m['channels']:
+                            m['channels'].append(ch)
+                    break
 
     print(f'[OK] {len(merged)} total events (API + fallback)')
 
