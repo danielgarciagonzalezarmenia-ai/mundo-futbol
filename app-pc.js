@@ -418,11 +418,11 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '11:00', comp: 'Amistoso', home: 'Eslovenia', away: 'Malta', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv'] },
-    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=espn'] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv', 'https://la14hd.com/vivo/canales.php?stream=caracol', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=caracol'] },
-    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] }
+    { time: '11:00', comp: 'Amistoso', home: 'Eslovenia', away: 'Malta', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2'] },
+    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv'] },
+    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://la14hd.com/vivo/canales.php?stream=caracol'] },
+    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2'] }
 ];
 
 (function() {
@@ -493,7 +493,7 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'block';
             opts.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;font-weight:600;">Opciones de Evento</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
                 currentEventChannels.map((c, i) => {
-                    const display = c.startsWith('http') ? (c.includes('?stream=') ? c.split('?stream=').pop() : 'Opci\u00f3n ' + (i + 1)) : c;
+                    const display = 'OPCIÓN ' + (i + 1);
                     const active = i === idx ? ' style="background:rgba(127,44,255,0.5);border-color:#b388ff;"' : '';
                     return `<button class="event-ch-btn" data-ch-idx="${i}"${active}>${escapeHtml(display)}</button>`;
                 }).join('') + '</div>';
