@@ -326,15 +326,15 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '17:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dspt3", "https://la14hd.com/vivo/canales.php?stream=disney1"] },
-    { time: '17:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dspt2", "https://la14hd.com/vivo/canales.php?stream=disney2", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//latamvidz1.com/canal.php%3Fstream%3Dsporttvbr2"] },
-    { time: '17:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ["https://la14hd.com/vivo/canales.php?stream=disney3"] },
-    { time: '18:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dspt1", "https://la14hd.com/vivo/canales.php?stream=disney4", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dfox2us", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//latamvidz1.com/canal.php%3Fstream%3Dsporttvbr1"] },
-    { time: '19:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: ["https://la14hd.com/vivo/canales.php?stream=disney5"] },
-    { time: '19:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ["https://la14hd.com/vivo/canales.php?stream=espn", "https://la14hd.com/vivo/canales.php?stream=disney6"] },
-    { time: '00:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dspt1", "https://la14hd.com/vivo/canales.php?stream=caracol", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//latamvidz1.com/canal.php%3Fstream%3Dsporttvbr1"] },
-    { time: '00:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: ["https://la14hd.com/vivo/canales.php?stream=disney1"] },
-    { time: '02:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dspt2", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//latamvidz1.com/canal.php%3Fstream%3Deventos", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//esvideofy.com/ote.php%3Fid%3Dfox2us", "https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A//latamvidz1.com/canal.php%3Fstream%3Dsporttvbr2"] },
+    { time: '17:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: [] },
+    { time: '17:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: [] },
+    { time: '17:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: [] },
+    { time: '18:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: [] },
+    { time: '19:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: [] },
+    { time: '19:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: [] },
+    { time: '00:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: [] },
+    { time: '00:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: [] },
+    { time: '02:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: [] },
 ];
 
 (function() {
@@ -354,11 +354,25 @@ let currentEventChannelIdx = 0;
 
 function openEventPlayer(idx) {
     const e = EVENTOS_MANUALES[idx];
-    if (!e || !e.channels || e.channels.length === 0) return;
-    currentEventChannels = e.channels;
-    currentEventChannelIdx = 0;
+    if (!e) return;
     const label = `${e.home} vs ${e.away}`;
     const comp = e.comp;
+    if (!e.channels || e.channels.length === 0) {
+        document.getElementById('modalCompetition').textContent = comp || 'EVENTO';
+        document.getElementById('modalMatchTitle').textContent = label;
+        document.getElementById('playerContainer').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:var(--bg-dark,#0d0d1a);color:var(--text-muted,#888);text-align:center;padding:2rem;font-family:inherit;"><div style="font-size:3rem;margin-bottom:1rem;">⚽</div><div style="font-size:1.2rem;font-weight:600;color:#e0e0e0;margin-bottom:0.5rem;">El evento empezar\u00e1 en breve</div><div style="font-size:0.85rem;color:var(--text-muted,#666);">Vuelve a intentar cuando el partido est\u00e9 en vivo</div></div>';
+        document.getElementById('signalPanelMount').innerHTML = '';
+        const opts = document.getElementById('eventChannelOptions');
+        if (opts) opts.style.display = 'none';
+        const modal = document.getElementById('playerModal');
+        modal.style.display = '';
+        modal.classList.add('active');
+        document.body.classList.add('player-open');
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+    currentEventChannels = e.channels;
+    currentEventChannelIdx = 0;
     renderEventChannel(0, label, comp);
 }
 

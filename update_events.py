@@ -1,32 +1,11 @@
-import urllib.request, json, re, os, subprocess, base64
+import urllib.request, json, re, os, subprocess
 from datetime import datetime, timezone, timedelta
-from urllib.parse import quote
 
 AGENDA_URL = 'https://futbol-libre.su/agenda/'
-PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev'
-
-LA14HD_MAP = {
-    'disney1': 'https://la14hd.com/vivo/canales.php?stream=disney1',
-    'disney2': 'https://la14hd.com/vivo/canales.php?stream=disney2',
-    'disney3': 'https://la14hd.com/vivo/canales.php?stream=disney3',
-    'disney4': 'https://la14hd.com/vivo/canales.php?stream=disney4',
-    'disney5': 'https://la14hd.com/vivo/canales.php?stream=disney5',
-    'disney6': 'https://la14hd.com/vivo/canales.php?stream=disney6',
-    'espn': 'https://la14hd.com/vivo/canales.php?stream=espn',
-    'caracoltv': 'https://la14hd.com/vivo/canales.php?stream=caracol',
-}
 
 MANUAL_FALLBACK = [
-    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://la14hd.com/vivo/canales.php?stream=caracol']},
+    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': []},
 ]
-
-def resolve_stream(decoded_url):
-    # Extract channel/stream name from URL and map to la14hd if known
-    for key, la14hd_url in LA14HD_MAP.items():
-        if key in decoded_url:
-            return la14hd_url
-    # Otherwise proxy through Cloudflare Worker with correct referrer
-    return f'{PROXY_BASE}/flibre?url={quote(decoded_url)}'
 
 def fetch_html(url):
     req = urllib.request.Request(url, headers={
@@ -47,6 +26,20 @@ def parse_title(title):
     else:
         home = title
     return comp, home, away
+
+def read_existing_channels(content):
+    existing = {}
+    pattern = re.compile(r"home:\s*'([^']+)',\s*away:\s*'([^']+)',\s*channels:\s*(\[[^\]]*\])\s*\}", re.DOTALL)
+    for m in pattern.finditer(content):
+        home = m.group(1)
+        away = m.group(2)
+        key = home + ' vs ' + away
+        try:
+            channels = json.loads(m.group(3))
+        except Exception:
+            channels = []
+        existing[key] = channels
+    return existing
 
 def format_events_js(events):
     lines = ['const EVENTOS_MANUALES = [']
@@ -93,7 +86,7 @@ def main():
         print(f'[Error] Failed to fetch: {e}')
         return
 
-    # Parse matches from HTML agenda
+    # Parse matches from HTML agenda (names/times only, no stream URLs)
     matches = []
     li_pattern = re.compile(
         r'<li class="[^"]*"><a href="#">(.*?)<span class="t">([^<]*)</span></a>\s*<ul>(.*?)</ul>\s*</li>',
@@ -103,37 +96,35 @@ def main():
     for m in li_pattern.finditer(html):
         title = m.group(1).strip()
         time_str = m.group(2).strip()
-        ul_content = m.group(3)
-
-        channels = []
-        stream_pattern = re.compile(
-            r'<a href="https://futbol-libre\.su/eventos\.html\?r=([^"]*)"',
-            re.DOTALL
-        )
-        for sm in stream_pattern.finditer(ul_content):
-            b64 = sm.group(1)
-            try:
-                decoded = base64.b64decode(b64).decode('utf-8')
-                if decoded.startswith('http'):
-                    channels.append(resolve_stream(decoded))
-            except Exception:
-                pass
-
-        if channels:
-            comp, home, away = parse_title(title)
-            matches.append({
-                'time': time_str,
-                'comp': comp,
-                'home': home,
-                'away': away,
-                'channels': channels,
-            })
+        comp, home, away = parse_title(title)
+        matches.append({
+            'time': time_str,
+            'comp': comp,
+            'home': home,
+            'away': away,
+            'channels': [],
+        })
 
     if not matches:
-        print(f'[!] No events found from futbol-libre')
+        print('[!] No events found from futbol-libre')
         return
 
     print(f'[OK] {len(matches)} events from futbol-libre')
+
+    base = os.path.dirname(os.path.abspath(__file__))
+
+    # Read existing channels from file to preserve user-added URLs
+    existing_channels = {}
+    existing_path = os.path.join(base, 'app-pc.js')
+    if os.path.exists(existing_path):
+        with open(existing_path, 'r', encoding='utf-8') as f:
+            existing_channels = read_existing_channels(f.read())
+
+    # Preserve user-added channels for matching events
+    for e in matches:
+        key = e['home'] + ' vs ' + e['away']
+        if key in existing_channels and existing_channels[key]:
+            e['channels'] = existing_channels[key]
 
     # Merge with fallback (dedup by team names, merge channels)
     seen = {}
@@ -144,11 +135,11 @@ def main():
             seen[key] = True
             merged.append(e)
         else:
-            for m in merged:
-                if m['home'] + ' vs ' + m['away'] == key:
+            for m_item in merged:
+                if m_item['home'] + ' vs ' + m_item['away'] == key:
                     for ch in e['channels']:
-                        if ch not in m['channels']:
-                            m['channels'].append(ch)
+                        if ch not in m_item['channels']:
+                            m_item['channels'].append(ch)
                     break
 
     for e in MANUAL_FALLBACK:
@@ -157,17 +148,16 @@ def main():
             seen[key] = True
             merged.append(e)
         else:
-            for m in merged:
-                if m['home'] + ' vs ' + m['away'] == key:
+            for m_item in merged:
+                if m_item['home'] + ' vs ' + m_item['away'] == key:
                     for ch in e['channels']:
-                        if ch not in m['channels']:
-                            m['channels'].append(ch)
+                        if ch not in m_item['channels']:
+                            m_item['channels'].append(ch)
                     break
 
     print(f'[OK] {len(merged)} total events (futbol-libre + fallback)')
 
     js_block = format_events_js(merged)
-    base = os.path.dirname(os.path.abspath(__file__))
 
     files = ['app-pc.js', 'app-mobile.js']
     updated = False
