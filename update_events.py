@@ -1,11 +1,11 @@
-import urllib.request, json, re, os, subprocess, base64
+import urllib.request, json, re, os, subprocess
 from datetime import datetime, timezone, timedelta
 
 AGENDA_URL = 'https://futbol-libre.su/agenda/'
 COLOMBIA_OFFSET = -300
 
 MANUAL_FALLBACK = [
-    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://latamvidz1.com/canal.php?stream=caracoltv']},
+    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://futbol-libre.su/eventos.html?r=aHR0cHM6Ly9sYXRhbXZpZHoxLmNvbS9jYW5hbC5waHA/c3RyZWFtPWNhcmFjb2x0dg==']},
 ]
 
 def fetch_html(url):
@@ -93,17 +93,11 @@ def main():
 
         channels = []
         stream_pattern = re.compile(
-            r'<a href="https://futbol-libre\.su/eventos\.html\?r=([^"]*)"',
+            r'<a href="(https://futbol-libre\.su/eventos\.html\?r=[^"]*)"',
             re.DOTALL
         )
         for sm in stream_pattern.finditer(ul_content):
-            b64 = sm.group(1)
-            try:
-                decoded = base64.b64decode(b64).decode('utf-8')
-                if decoded.startswith('http'):
-                    channels.append(decoded)
-            except Exception:
-                pass
+            channels.append(sm.group(1))
 
         if channels:
             comp, home, away = parse_title(title)
