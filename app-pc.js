@@ -1402,6 +1402,10 @@ function navigateToPage(page) {
 var popunderFired = false;
 function firePopunder() {
     if (popunderFired) return;
+    if (/TV|SmartTV|AndroidTV|AppleTV|Roku|Tizen|Web0S|Cast|BRAVIA|MundoFutbolTV/i.test(navigator.userAgent)) {
+        console.log('[TV Engine] Bypassing popunder script on TV.');
+        return;
+    }
     popunderFired = true;
     var s = document.createElement('script');
     s.src = 'https://pl29573725.effectivecpmnetwork.com/b5/3c/69/b53c69ae661772079385a4f2243185d5.js';
