@@ -154,15 +154,23 @@ def main():
 
     # Git commit and push
     try:
+        token = os.environ.get('GITHUB_TOKEN', '')
+        remote = subprocess.run(['git', 'remote', 'get-url', 'origin'], cwd=base, capture_output=True, text=True).stdout.strip()
+        if token and 'x-access-token:' not in remote and remote.startswith('https://'):
+            remote = remote.replace('https://', f'https://x-access-token:{token}@')
+            subprocess.run(['git', 'remote', 'set-url', 'origin', remote], cwd=base, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.name', 'scraper-bot'], cwd=base, check=True, capture_output=True)
+        subprocess.run(['git', 'config', 'user.email', 'scraper@bot.com'], cwd=base, check=True, capture_output=True)
         subprocess.run(['git', 'add', '-A'], cwd=base, check=True, capture_output=True)
         subprocess.run(['git', 'commit', '-m', f'auto: update events {today} [{len(merged)} events]'], cwd=base, check=True, capture_output=True)
         subprocess.run(['git', 'push'], cwd=base, check=True, capture_output=True)
         print('[OK] Pushed to GitHub')
     except subprocess.CalledProcessError as e:
-        if 'nothing to commit' in e.stderr.decode() or 'nothing to commit' in e.stdout.decode():
+        err = (e.stderr or b'') + (e.stdout or b'')
+        if b'nothing to commit' in err:
             print('[OK] No changes to commit')
         else:
-            print(f'[Error] Git: {e.stderr.decode()}')
+            print(f'[Error] Git: {err.decode()}')
 
 if __name__ == '__main__':
     main()

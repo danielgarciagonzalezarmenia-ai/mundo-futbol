@@ -1,0 +1,21 @@
+name: Update Events
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run scraper
+        run: python update_events.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
