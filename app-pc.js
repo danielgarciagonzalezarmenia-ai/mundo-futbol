@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAllEvents();
     setupEventListeners();
     startStatusCheck();
-    fetchEventsFromApi();
-    eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
+    // fetchEventsFromApi();
+    // eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
     
     // Restaurar página guardada
     const savedPage = localStorage.getItem('currentPage');
@@ -418,12 +418,11 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '11:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
-    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Flatamvidz1.com%2Fcanal.php%3Fstream%3Ddisney3'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv'] },
-    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=espn'] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=caracol'] },
-    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=foxsports2_usa'] },
+    { time: '11:00', comp: 'Amistoso', home: 'Eslovenia', away: 'Malta', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
+    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv'] },
+    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=espn'] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv', 'https://la14hd.com/vivo/canales.php?stream=caracol', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=caracol'] },
+    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] }
 ];
 
 (function() {
@@ -483,7 +482,7 @@ function renderEventChannel(idx, label, comp) {
     document.getElementById('modalMatchTitle').textContent = label;
     if (ch.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
+        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-autoplay allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation" style="width:100%;height:100%;border:none;"></iframe>`;
     } else {
         const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
@@ -1052,7 +1051,8 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             'tntsportschile': 'https://la14hd.com/vivo/canales.php?stream=tntsportschile',
             'foxdeportes': 'https://la14hd.com/vivo/canales.php?stream=foxdeportes',
             'liga1peru': 'https://la14hd.com/vivo/canales.php?stream=liga1max',
-            'sportv': 'https://tvtvhd.com/vivo/canales.php?stream=sportv',
+            'sportv': 'https://la14hd.com/vivo/canales.php?stream=sportv',
+            'sportv2': 'https://la14hd.com/vivo/canales.php?stream=sportv2',
             'mls': 'https://la14hd.com/vivo/canal.php?stream=mls1en'
         };
         const mapped = channelMap[streamUrl] || streamUrl;
@@ -1069,7 +1069,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             <iframe src="${escapeHtml(url)}" 
                 id="playerIframe"
                 allowfullscreen 
-                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-autoplay allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
                 style="width: 100%; height: 100%; border: none; background: #000;">
             </iframe>
@@ -1340,7 +1340,7 @@ function renderPlayer(match, signalIndex) {
         playerContainer.innerHTML = `
             <iframe src="${escapeHtml(selectedSignal.url)}" 
                 id="playerIframe_${match.id}"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-autoplay allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
                 allowfullscreen 
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
                 loading="lazy"
