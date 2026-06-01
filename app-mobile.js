@@ -326,12 +326,8 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '08:00', comp: 'Amistoso', home: 'Suiza', away: 'Jordania', channels: ['https://la14hd.com/vivo/canales.php?stream=espn', 'https://la14hd.com/vivo/canales.php?stream=foxsports2_usa'] },
-    { time: '09:00', comp: 'Brasileirão', home: 'RB Bragantino', away: 'Internacional', channels: ['https://la14hd.com/vivo/canales.php?stream=premiere1'] },
-    { time: '11:00', comp: 'Liga 1', home: 'Melgar', away: 'Alianza Atlético', channels: ['https://la14hd.com/vivo/canales.php?stream=liga1max'] },
-    { time: '11:30', comp: 'Primera División', home: 'Deportes Limache', away: 'Coquimbo Unido', channels: ['https://la14hd.com/vivo/canales.php?stream=tntsportschile'] },
-    { time: '13:45', comp: 'Amistoso', home: 'Alemania', away: 'Finlandia', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '14:30', comp: 'Amistoso', home: 'EE. UU.', away: 'Senegal', channels: ['https://la14hd.com/vivo/canales.php?stream=disney12'] }
+    { time: '12:00', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=caracol'] }
 ];
 
 (function() {
