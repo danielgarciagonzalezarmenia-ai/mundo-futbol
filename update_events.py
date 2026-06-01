@@ -1,21 +1,20 @@
-import urllib.request, json, re, os, subprocess
+import urllib.request, json, re, os, subprocess, base64
 from datetime import datetime, timezone, timedelta
 
-LA14HD_URL = 'https://la14hd.com/eventos/json/agenda123.json'
+AGENDA_URL = 'https://futbol-libre.su/agenda/'
 COLOMBIA_OFFSET = -300
 
 MANUAL_FALLBACK = [
-    {'time': '12:00', 'comp': 'Amistoso', 'home': 'Austria', 'away': 'Túnez', 'channels': ['https://la14hd.com/vivo/canales.php?stream=espn']},
-    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://la14hd.com/vivo/canales.php?stream=caracol']},
+    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://latamvidz1.com/canal.php?stream=caracoltv']},
 ]
 
-def fetch_json(url):
+def fetch_html(url):
     req = urllib.request.Request(url, headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'application/json',
+        'Accept': 'text/html',
     })
     with urllib.request.urlopen(req, timeout=15) as r:
-        return json.loads(r.read().decode())
+        return r.read().decode()
 
 def parse_title(title):
     comp, home, away = 'Futbol', '', ''
@@ -50,7 +49,7 @@ def update_js_file(filepath, new_events_block):
     replacement = new_events_block
     new_content = re.sub(pattern, replacement, content, count=1, flags=re.DOTALL)
     if new_content == content:
-        print(f'  [!] No se encontró EVENTOS_MANUALES en {filepath}')
+        print(f'  [!] No se encontr\u00f3 EVENTOS_MANUALES en {filepath}')
         return False
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(new_content)
@@ -62,7 +61,7 @@ def bump_version(filepath):
         content = f.read()
     match = re.search(r'<meta name="app-version" content="(\d+)">', content)
     if not match:
-        print('  [!] No se encontró app-version')
+        print('  [!] No se encontr\u00f3 app-version')
         return False
     ver = int(match.group(1)) + 1
     content = content.replace(f'v={ver - 1}', f'v={ver}')
@@ -73,37 +72,69 @@ def bump_version(filepath):
     return True
 
 def main():
-    print('[Scraper] Fetching events from la14hd.com...')
+    print('[Scraper] Fetching events from futbol-libre.su...')
     try:
-        data = fetch_json(LA14HD_URL)
+        html = fetch_html(AGENDA_URL)
     except Exception as e:
         print(f'[Error] Failed to fetch: {e}')
         return
 
-    today = datetime.now(timezone(timedelta(hours=-5))).strftime('%Y-%m-%d')
-    api_events = [e for e in data if e.get('date') == today]
+    # Parse matches from HTML agenda
+    matches = []
+    li_pattern = re.compile(
+        r'<li class="[^"]*"><a href="#">(.*?)<span class="t">([^<]*)</span></a>\s*<ul>(.*?)</ul>\s*</li>',
+        re.DOTALL
+    )
 
-    if not api_events:
-        print(f'[!] No events for {today}')
+    for m in li_pattern.finditer(html):
+        title = m.group(1).strip()
+        time_str = m.group(2).strip()
+        ul_content = m.group(3)
+
+        channels = []
+        stream_pattern = re.compile(
+            r'<a href="https://futbol-libre\.su/eventos\.html\?r=([^"]*)"',
+            re.DOTALL
+        )
+        for sm in stream_pattern.finditer(ul_content):
+            b64 = sm.group(1)
+            try:
+                decoded = base64.b64decode(b64).decode('utf-8')
+                if decoded.startswith('http'):
+                    channels.append(decoded)
+            except Exception:
+                pass
+
+        if channels:
+            comp, home, away = parse_title(title)
+            matches.append({
+                'time': time_str,
+                'comp': comp,
+                'home': home,
+                'away': away,
+                'channels': channels,
+            })
+
+    if not matches:
+        print(f'[!] No events found from futbol-libre')
         return
 
-    print(f'[OK] {len(api_events)} events for {today}')
+    print(f'[OK] {len(matches)} events from futbol-libre')
 
     user_offset = -datetime.now().astimezone().utcoffset().total_seconds() / 60
     tz_off = user_offset - (-COLOMBIA_OFFSET)
 
     parsed = []
-    for e in api_events:
-        comp, home, away = parse_title(e.get('title', ''))
-        t = e.get('time', '00:00')
+    for e in matches:
+        t = e['time']
         if abs(tz_off) > 1:
             t = adjust_time(t, int(tz_off))
         parsed.append({
             'time': t,
-            'comp': comp,
-            'home': home,
-            'away': away,
-            'channels': [e.get('link', '')],
+            'comp': e['comp'],
+            'home': e['home'],
+            'away': e['away'],
+            'channels': e['channels'],
         })
 
     # Merge with fallback (dedup by team names, merge channels)
@@ -121,6 +152,7 @@ def main():
                         if ch not in m['channels']:
                             m['channels'].append(ch)
                     break
+
     for e in MANUAL_FALLBACK:
         key = e['home'] + ' vs ' + e['away']
         if key not in seen:
@@ -134,7 +166,7 @@ def main():
                             m['channels'].append(ch)
                     break
 
-    print(f'[OK] {len(merged)} total events (API + fallback)')
+    print(f'[OK] {len(merged)} total events (futbol-libre + fallback)')
 
     js_block = format_events_js(merged)
     base = os.path.dirname(os.path.abspath(__file__))
@@ -150,6 +182,7 @@ def main():
         print('[!] No files updated')
         return
 
+    today = datetime.now(timezone(timedelta(hours=-5))).strftime('%Y-%m-%d')
     bump_version(os.path.join(base, 'index.html'))
 
     # Git commit and push

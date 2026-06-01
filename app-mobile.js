@@ -326,12 +326,15 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '11:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ["https://la14hd.com/vivo/canales.php?stream=disney2"] },
-    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ["https://la14hd.com/vivo/canales.php?stream=espn", "https://la14hd.com/vivo/canales.php?stream=disney4"] },
-    { time: '11:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: ["https://la14hd.com/vivo/canales.php?stream=disney1"] },
-    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ["https://la14hd.com/vivo/canales.php?stream=disney3"] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ["https://la14hd.com/vivo/canales.php?stream=disney5"] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ["https://la14hd.com/vivo/canales.php?stream=caracol"] },
+    { time: '17:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: ["https://esvideofy.com/ote.php?id=spt3", "https://latamvidz1.com/canal.php?stream=disney1"] },
+    { time: '17:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ["https://esvideofy.com/ote.php?id=spt2", "https://latamvidz1.com/canal.php?stream=disney2", "https://latamvidz1.com/canal.php?stream=sporttvbr2"] },
+    { time: '17:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ["https://latamvidz1.com/canal.php?stream=disney3"] },
+    { time: '18:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ["https://esvideofy.com/ote.php?id=spt1", "https://latamvidz1.com/canal.php?stream=disney4", "https://esvideofy.com/ote.php?id=fox2us", "https://latamvidz1.com/canal.php?stream=sporttvbr1"] },
+    { time: '19:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: ["https://latamvidz1.com/canal.php?stream=disney5"] },
+    { time: '19:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ["https://latamvidz1.com/canal.php?stream=espn", "https://latamvidz1.com/canal.php?stream=disney6"] },
+    { time: '00:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ["https://esvideofy.com/ote.php?id=spt1", "https://latamvidz1.com/canal.php?stream=caracoltv", "https://latamvidz1.com/canal.php?stream=sporttvbr1"] },
+    { time: '00:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: ["https://latamvidz1.com/canal.php?stream=disney1"] },
+    { time: '02:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ["https://esvideofy.com/ote.php?id=spt2", "https://latamvidz1.com/canal.php?stream=eventos", "https://esvideofy.com/ote.php?id=fox2us", "https://latamvidz1.com/canal.php?stream=sporttvbr2"] },
 ];
 
 (function() {
