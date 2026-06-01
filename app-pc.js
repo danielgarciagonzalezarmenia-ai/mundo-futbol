@@ -455,7 +455,7 @@ function renderEventChannel(idx, label, comp) {
     document.getElementById('modalMatchTitle').textContent = label;
     if (ch.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-storage-access-by-user-activation" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:none;"></iframe>`;
+        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
     } else {
         const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
