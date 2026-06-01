@@ -416,6 +416,7 @@ const COMPETITION_FLAGS = {
 };
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
+var PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev';
 
 const EVENTOS_MANUALES = [
     { time: '11:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: [] },
@@ -510,15 +511,16 @@ function addStreamUrl() {
     }
     const url = prompt('Pegue la URL del canal (debe empezar con http):');
     if (!url) return;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    const trimmed = url.trim();
+    if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
         alert('La URL debe empezar con http:// o https://');
         return;
     }
     const savedKey = 'mf_url_' + e.home + '_' + e.away;
-    localStorage.setItem(savedKey, url);
+    localStorage.setItem(savedKey, trimmed);
     const label = e.home + ' vs ' + e.away;
     const comp = e.comp;
-    currentEventChannels = [url];
+    currentEventChannels = [trimmed];
     currentEventChannelIdx = 0;
     renderEventChannel(0, label, comp);
 }
@@ -531,7 +533,7 @@ function renderEventChannel(idx, label, comp) {
     document.getElementById('modalMatchTitle').textContent = label;
     if (ch.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
+        container.innerHTML = `<iframe src="${escapeHtml(PROXY_BASE + '/proxy?url=' + encodeURIComponent(ch))}" allowfullscreen sandbox="allow-scripts allow-forms allow-popups allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
     } else {
         const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
