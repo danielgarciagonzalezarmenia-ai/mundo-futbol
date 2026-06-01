@@ -253,36 +253,6 @@ export default {
       }
     }
     
-    // Endpoint genérico para proxy de iframe (bypass X-Frame-Options)
-    if (url.pathname === '/proxy') {
-      const targetUrl = url.searchParams.get('url');
-      if (!targetUrl) return new Response('Error: Se requiere "url"', { status: 400 });
-      
-      try {
-        const response = await fetch(targetUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'es-419,es;q=0.5',
-            'Referer': new URL(targetUrl).origin,
-          }
-        });
-        if (!response.ok) return new Response(`Error: ${response.status}`, { status: response.status });
-        
-        const newResp = addCorsHeaders(response);
-        newResp.headers.delete('X-Frame-Options');
-        newResp.headers.delete('Content-Security-Policy');
-        if (!newResp.headers.get('Content-Type')) {
-          newResp.headers.set('Content-Type', 'text/html; charset=UTF-8');
-        }
-        newResp.headers.set('Cache-Control', 'no-cache');
-        return newResp;
-        
-      } catch (error) {
-        return new Response(`Error: ${error.message}`, { status: 500 });
-      }
-    }
-    
     // Endpoint genérico para proxy de streams (compatibilidad hacia atrás)
     const streamUrl = url.searchParams.get('url');
     if (!streamUrl) {

@@ -2124,28 +2124,6 @@ body.player-open .top-nav {
   z-index: 1;
 }
 
-.url-config-btn {
-  display: block;
-  width: 100%;
-  margin-top: 0.5rem;
-  padding: 0.6rem;
-  background: rgba(127,44,255,0.1);
-  border: 1px solid rgba(127,44,255,0.2);
-  border-radius: var(--radius-pill);
-  color: #b388ff;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  transition: all 0.3s var(--ease-smooth);
-}
-.url-config-btn:hover {
-  background: rgba(127,44,255,0.2);
-  border-color: rgba(127,44,255,0.4);
-  transform: translateY(-1px);
-}
-
 /* ============ EVENT STATUS SCREEN ============ */
 .event-status-screen {
   display: flex;

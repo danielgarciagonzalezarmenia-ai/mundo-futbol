@@ -416,7 +416,6 @@ const COMPETITION_FLAGS = {
 };
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
-var PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev';
 
 const EVENTOS_MANUALES = [
     { time: '11:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: [] },
@@ -444,10 +443,8 @@ const EVENTOS_MANUALES = [
 
 let currentEventChannels = [];
 let currentEventChannelIdx = 0;
-let currentEventIdx = -1;
 
 function openEventPlayer(idx) {
-    currentEventIdx = idx;
     const e = EVENTOS_MANUALES[idx];
     if (!e) return;
     const label = `${e.home} vs ${e.away}`;
@@ -456,15 +453,6 @@ function openEventPlayer(idx) {
     document.getElementById('modalMatchTitle').textContent = label;
     const opts = document.getElementById('eventChannelOptions');
     if (opts) opts.style.display = 'none';
-
-    const savedKey = 'mf_url_' + e.home + '_' + e.away;
-    const savedUrl = localStorage.getItem(savedKey);
-    if (savedUrl) {
-        currentEventChannels = [savedUrl];
-        currentEventChannelIdx = 0;
-        renderEventChannel(0, label, comp);
-        return;
-    }
 
     if (!e.channels || e.channels.length === 0) {
         document.getElementById('playerContainer').innerHTML =
@@ -476,9 +464,8 @@ function openEventPlayer(idx) {
                 '<div class="waiting-title">El evento empezar\u00e1 en breve</div>' +
                 '<div class="waiting-subtitle">Vuelve a intentar cuando el partido est\u00e9 en vivo</div>' +
                 '<div class="waiting-dots"><span class="waiting-dot"></span><span class="waiting-dot"></span><span class="waiting-dot"></span></div>' +
-                '<div class="waiting-tip">Mientras tanto, agrega una URL manual</div>' +
             '</div>';
-        showUrlConfig();
+        document.getElementById('signalPanelMount').innerHTML = '';
         const modal = document.getElementById('playerModal');
         modal.style.display = '';
         modal.classList.add('active');
@@ -491,40 +478,6 @@ function openEventPlayer(idx) {
     renderEventChannel(0, label, comp);
 }
 
-function showUrlConfig() {
-    const mount = document.getElementById('signalPanelMount');
-    const e = EVENTOS_MANUALES[currentEventIdx];
-    if (!e) return;
-    const savedKey = 'mf_url_' + e.home + '_' + e.away;
-    const savedUrl = localStorage.getItem(savedKey);
-    const btnText = savedUrl ? 'Cambiar URL del canal' : 'Agregar URL del canal';
-    mount.innerHTML = '<div style="margin-top:0.5rem;border-top:1px solid rgba(255,255,255,0.05);padding-top:0.5rem;"><div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:0.3rem;">URL personalizada</div><button class="url-config-btn" onclick="addStreamUrl()">' + btnText + '</button></div>';
-}
-
-function addStreamUrl() {
-    const e = EVENTOS_MANUALES[currentEventIdx];
-    if (!e) return;
-    const pin = prompt('Ingrese el PIN de configuraci\u00f3n:');
-    if (pin !== '2009') {
-        if (pin !== null) alert('PIN incorrecto');
-        return;
-    }
-    const url = prompt('Pegue la URL del canal (debe empezar con http):');
-    if (!url) return;
-    const trimmed = url.trim();
-    if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
-        alert('La URL debe empezar con http:// o https://');
-        return;
-    }
-    const savedKey = 'mf_url_' + e.home + '_' + e.away;
-    localStorage.setItem(savedKey, trimmed);
-    const label = e.home + ' vs ' + e.away;
-    const comp = e.comp;
-    currentEventChannels = [trimmed];
-    currentEventChannelIdx = 0;
-    renderEventChannel(0, label, comp);
-}
-
 function renderEventChannel(idx, label, comp) {
     const ch = currentEventChannels[idx];
     if (!ch) return;
@@ -533,7 +486,7 @@ function renderEventChannel(idx, label, comp) {
     document.getElementById('modalMatchTitle').textContent = label;
     if (ch.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(PROXY_BASE + '/proxy?url=' + encodeURIComponent(ch))}" allowfullscreen sandbox="allow-scripts allow-forms allow-popups allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
+        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-forms allow-popups allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
     } else {
         const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
@@ -552,7 +505,6 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'none';
         }
     }
-    showUrlConfig();
     const modal = document.getElementById('playerModal');
     modal.style.display = '';
     modal.classList.add('active');
