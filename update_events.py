@@ -1,12 +1,33 @@
-import urllib.request, json, re, os, subprocess
+import urllib.request, json, re, os, subprocess, base64
 from datetime import datetime, timezone, timedelta
+from urllib.parse import quote
 
 AGENDA_URL = 'https://futbol-libre.su/agenda/'
 COLOMBIA_OFFSET = -300
+PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev'
+
+LA14HD_MAP = {
+    'disney1': 'https://la14hd.com/vivo/canales.php?stream=disney1',
+    'disney2': 'https://la14hd.com/vivo/canales.php?stream=disney2',
+    'disney3': 'https://la14hd.com/vivo/canales.php?stream=disney3',
+    'disney4': 'https://la14hd.com/vivo/canales.php?stream=disney4',
+    'disney5': 'https://la14hd.com/vivo/canales.php?stream=disney5',
+    'disney6': 'https://la14hd.com/vivo/canales.php?stream=disney6',
+    'espn': 'https://la14hd.com/vivo/canales.php?stream=espn',
+    'caracoltv': 'https://la14hd.com/vivo/canales.php?stream=caracol',
+}
 
 MANUAL_FALLBACK = [
-    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://futbol-libre.su/eventos.html?r=aHR0cHM6Ly9sYXRhbXZpZHoxLmNvbS9jYW5hbC5waHA/c3RyZWFtPWNhcmFjb2x0dg==']},
+    {'time': '18:00', 'comp': 'Amistoso', 'home': 'Colombia', 'away': 'Costa Rica', 'channels': ['https://la14hd.com/vivo/canales.php?stream=caracol']},
 ]
+
+def resolve_stream(decoded_url):
+    # Extract channel/stream name from URL and map to la14hd if known
+    for key, la14hd_url in LA14HD_MAP.items():
+        if key in decoded_url:
+            return la14hd_url
+    # Otherwise proxy through Cloudflare Worker with correct referrer
+    return f'{PROXY_BASE}/flibre?url={quote(decoded_url)}'
 
 def fetch_html(url):
     req = urllib.request.Request(url, headers={
@@ -93,11 +114,17 @@ def main():
 
         channels = []
         stream_pattern = re.compile(
-            r'<a href="(https://futbol-libre\.su/eventos\.html\?r=[^"]*)"',
+            r'<a href="https://futbol-libre\.su/eventos\.html\?r=([^"]*)"',
             re.DOTALL
         )
         for sm in stream_pattern.finditer(ul_content):
-            channels.append(sm.group(1))
+            b64 = sm.group(1)
+            try:
+                decoded = base64.b64decode(b64).decode('utf-8')
+                if decoded.startswith('http'):
+                    channels.append(resolve_stream(decoded))
+            except Exception:
+                pass
 
         if channels:
             comp, home, away = parse_title(title)

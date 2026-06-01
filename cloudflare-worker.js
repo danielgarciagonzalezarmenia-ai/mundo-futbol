@@ -231,6 +231,28 @@ export default {
       }
     }
     
+    // Endpoint para proxy de streams de futbol-libre (latamvidz1, esvideofy)
+    if (url.pathname === '/flibre') {
+      const streamUrl = url.searchParams.get('url');
+      if (!streamUrl) return new Response('Error: Se requiere "url"', { status: 400 });
+      
+      try {
+        const response = await proxyFetch(streamUrl, {
+          'Referer': 'https://futbol-libre.su/eventos.html',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        });
+        if (!response.ok) return new Response(`Error: ${response.status}`, { status: response.status });
+        
+        const newResp = addCorsHeaders(response);
+        newResp.headers.set('Content-Type', 'text/html; charset=UTF-8');
+        newResp.headers.set('Cache-Control', 'no-cache');
+        return newResp;
+        
+      } catch (error) {
+        return new Response(`Error: ${error.message}`, { status: 500 });
+      }
+    }
+    
     // Endpoint genérico para proxy de streams (compatibilidad hacia atrás)
     const streamUrl = url.searchParams.get('url');
     if (!streamUrl) {
