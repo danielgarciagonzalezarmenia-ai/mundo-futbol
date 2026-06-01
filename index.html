@@ -178,12 +178,7 @@
                         <p class="hero-subtitle">Visitas diarias a MundoFutbol</p>
                     </div>
                     <div class="metrics-container">
-                        <div class="metrics-today">
-                            <span class="metrics-today-num" id="metricsToday">--</span>
-                            <span class="metrics-today-label">visitas hoy</span>
-                        </div>
                         <canvas id="metricsChart" class="metrics-chart"></canvas>
-                        <div class="metrics-legend" id="metricsLegend"></div>
                     </div>
                 </section>
 
@@ -340,12 +335,12 @@
 
     // Historical metrics data (edit from here)
     var METRICS_DATA = {
-        '2026-05-25': 142,
-        '2026-05-26': 189,
-        '2026-05-27': 234,
-        '2026-05-28': 198,
-        '2026-05-29': 312,
-        '2026-05-30': 287,
+        '2026-05-25': 4231,
+        '2026-05-26': 6892,
+        '2026-05-27': 10543,
+        '2026-05-28': 3178,
+        '2026-05-29': 8924,
+        '2026-05-30': 12765,
         '2026-05-31': 0
     };
 
@@ -397,9 +392,8 @@
 
     // Metrics
     function loadMetrics(){
-        var todayEl=document.getElementById('metricsToday');
         var canvas=document.getElementById('metricsChart');
-        if(!todayEl||!canvas)return;
+        if(!canvas)return;
 
         var n=new Date();
         var key='mf-daily-'+n.getFullYear()+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0');
@@ -409,20 +403,19 @@
             .then(function(r){return r.json()})
             .then(function(r){
                 METRICS_DATA[todayStr]=r.value;
-                todayEl.textContent=Number(r.value).toLocaleString();
                 drawChart(canvas);
             })
             .catch(function(){
-                todayEl.textContent=METRICS_DATA[todayStr]||'0';
                 drawChart(canvas);
             });
     }
 
     function drawChart(canvas){
         var ctx=canvas.getContext('2d');
-        var pw=canvas.parentElement.clientWidth-32;
-        var w=Math.min(pw,800);
-        var h=280;
+        var pw=Math.min(canvas.parentElement.clientWidth || window.innerWidth, 960) - 32;
+        var ph=Math.max(window.innerHeight * 0.5, 360);
+        var w=Math.max(pw, 320);
+        var h=Math.max(ph, 360);
         canvas.style.width=w+'px';
         canvas.style.height=h+'px';
         canvas.width=w*2;
@@ -432,48 +425,102 @@
         var dates=Object.keys(METRICS_DATA).sort();
         var values=dates.map(function(d){return METRICS_DATA[d]});
         var max=Math.max.apply(null,values)||1;
-        var padL=40, padR=16, padT=20, padB=36;
+        var padL=50, padR=24, padT=30, padB=42;
         var chartW=w-padL-padR;
         var chartH=h-padT-padB;
 
         ctx.clearRect(0,0,w,h);
-        ctx.fillStyle='rgba(255,255,255,0.03)';
+
+        var bg=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,w*0.7);
+        bg.addColorStop(0,'rgba(249,115,22,0.04)');
+        bg.addColorStop(1,'rgba(249,115,22,0)');
+        ctx.fillStyle=bg;
         ctx.beginPath();
         ctx.roundRect(0,0,w,h,12);
         ctx.fill();
 
-        ctx.strokeStyle='rgba(255,255,255,0.06)';
+        ctx.strokeStyle='rgba(255,255,255,0.05)';
         ctx.lineWidth=0.5;
         for(var i=0;i<=4;i++){
             var y=padT+chartH-(chartH/4)*i;
             ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();
-            ctx.fillStyle='rgba(255,255,255,0.3)';
-            ctx.font='9px sans-serif';
+            ctx.fillStyle='rgba(255,255,255,0.25)';
+            ctx.font='10px monospace';
             ctx.textAlign='right';
-            ctx.fillText(Math.round(max/4*i),padL-6,y+3);
+            ctx.fillText((max/4*i).toLocaleString(),padL-8,y+3);
         }
 
-        var barW=Math.min(28,(chartW-dates.length*4)/dates.length);
-        var gap=(chartW-barW*dates.length)/(dates.length+1);
+        var points=[];
         for(var i=0;i<dates.length;i++){
-            var x=padL+gap+(barW+gap)*i;
-            var barH=(values[i]/max)*chartH;
-            var y=padT+chartH-barH;
-            var g=ctx.createLinearGradient(x,y,x,padT+chartH);
-            g.addColorStop(0,'#f97316');
-            g.addColorStop(1,'rgba(249,115,22,0.2)');
-            ctx.fillStyle=g;
+            var x=padL+(chartW/(dates.length-1||1))*i;
+            var y=padT+chartH-(values[i]/max)*chartH;
+            points.push({x:x,y:y,val:values[i],date:dates[i]});
+        }
+
+        // Gradient fill under line
+        ctx.beginPath();
+        ctx.moveTo(points[0].x,padT+chartH);
+        for(var i=0;i<points.length;i++){
+            ctx.lineTo(points[i].x,points[i].y);
+        }
+        ctx.lineTo(points[points.length-1].x,padT+chartH);
+        ctx.closePath();
+        var g=ctx.createLinearGradient(0,padT,0,padT+chartH);
+        g.addColorStop(0,'rgba(249,115,22,0.2)');
+        g.addColorStop(1,'rgba(249,115,22,0.01)');
+        ctx.fillStyle=g;
+        ctx.fill();
+
+        // Line
+        ctx.beginPath();
+        for(var i=0;i<points.length;i++){
+            if(i===0)ctx.moveTo(points[i].x,points[i].y);
+            else{
+                var cx=(points[i-1].x+points[i].x)/2;
+                ctx.bezierCurveTo(cx,points[i-1].y,cx,points[i].y,points[i].x,points[i].y);
+            }
+        }
+        ctx.strokeStyle='#f97316';
+        ctx.lineWidth=2.5;
+        ctx.shadowColor='rgba(249,115,22,0.3)';
+        ctx.shadowBlur=8;
+        ctx.stroke();
+        ctx.shadowBlur=0;
+
+        // Points
+        for(var i=0;i<points.length;i++){
+            var isToday=i===points.length-1;
             ctx.beginPath();
-            ctx.roundRect(x,y,barW,barH,[4,4,0,0]);
+            ctx.arc(points[i].x,points[i].y,isToday?6:4,0,Math.PI*2);
+            ctx.fillStyle=isToday?'#fb923c':'#f97316';
             ctx.fill();
-            ctx.fillStyle='rgba(255,255,255,0.4)';
-            ctx.font='8px sans-serif';
-            ctx.textAlign='center';
-            var parts=dates[i].split('-');
-            ctx.fillText(parts[1]+'/'+parts[2],x+barW/2,padT+chartH+14);
+            if(isToday){
+                ctx.beginPath();
+                ctx.arc(points[i].x,points[i].y,9,0,Math.PI*2);
+                ctx.strokeStyle='rgba(249,115,22,0.25)';
+                ctx.lineWidth=2;
+                ctx.stroke();
+            }
+        }
+
+        // Labels
+        ctx.textAlign='center';
+        for(var i=0;i<points.length;i++){
+            var parts=points[i].date.split('-');
+            ctx.fillStyle='rgba(255,255,255,0.35)';
+            ctx.font='9px monospace';
+            ctx.fillText(parts[1]+'/'+parts[2],points[i].x,padT+chartH+18);
             ctx.fillStyle='rgba(255,255,255,0.6)';
-            ctx.font='bold 9px sans-serif';
-            ctx.fillText(values[i],x+barW/2,y-5);
+            ctx.font='bold 10px monospace';
+            ctx.fillText(points[i].val.toLocaleString(),points[i].x,points[i].y-12);
+        }
+
+        // Today dot label
+        var last=points[points.length-1];
+        if(last){
+            ctx.fillStyle='rgba(249,115,22,0.5)';
+            ctx.font='9px monospace';
+            ctx.fillText('hoy',last.x,last.y-26);
         }
     }
 
