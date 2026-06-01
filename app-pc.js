@@ -443,8 +443,10 @@ const EVENTOS_MANUALES = [
 
 let currentEventChannels = [];
 let currentEventChannelIdx = 0;
+let currentEventIdx = -1;
 
 function openEventPlayer(idx) {
+    currentEventIdx = idx;
     const e = EVENTOS_MANUALES[idx];
     if (!e) return;
     const label = `${e.home} vs ${e.away}`;
@@ -454,21 +456,28 @@ function openEventPlayer(idx) {
     const opts = document.getElementById('eventChannelOptions');
     if (opts) opts.style.display = 'none';
 
-    // Check if user saved a custom URL for this event
     const savedKey = 'mf_url_' + e.home + '_' + e.away;
     const savedUrl = localStorage.getItem(savedKey);
     if (savedUrl) {
         currentEventChannels = [savedUrl];
         currentEventChannelIdx = 0;
         renderEventChannel(0, label, comp);
-        showUrlConfig(idx, true);
         return;
     }
 
     if (!e.channels || e.channels.length === 0) {
-        document.getElementById('playerContainer').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:var(--bg-dark,#0d0d1a);color:var(--text-muted,#888);text-align:center;padding:2rem;font-family:inherit;"><div style="font-size:3rem;margin-bottom:1rem;">⚽</div><div style="font-size:1.2rem;font-weight:600;color:#e0e0e0;margin-bottom:0.5rem;">El evento empezar\u00e1 en breve</div><div style="font-size:0.85rem;color:var(--text-muted,#666);">Vuelve a intentar cuando el partido est\u00e9 en vivo</div></div>';
-        document.getElementById('signalPanelMount').innerHTML = '';
-        showUrlConfig(idx, false);
+        document.getElementById('playerContainer').innerHTML =
+            '<div class="waiting-state">' +
+                '<div class="waiting-icon-wrap">' +
+                    '<div class="waiting-icon-ring"></div>' +
+                    '<div class="waiting-icon-base">⚽</div>' +
+                '</div>' +
+                '<div class="waiting-title">El evento empezar\u00e1 en breve</div>' +
+                '<div class="waiting-subtitle">Vuelve a intentar cuando el partido est\u00e9 en vivo</div>' +
+                '<div class="waiting-dots"><span class="waiting-dot"></span><span class="waiting-dot"></span><span class="waiting-dot"></span></div>' +
+                '<div class="waiting-tip">Mientras tanto, agrega una URL manual</div>' +
+            '</div>';
+        showUrlConfig();
         const modal = document.getElementById('playerModal');
         modal.style.display = '';
         modal.classList.add('active');
@@ -479,21 +488,20 @@ function openEventPlayer(idx) {
     currentEventChannels = e.channels;
     currentEventChannelIdx = 0;
     renderEventChannel(0, label, comp);
-    showUrlConfig(idx, true);
 }
 
-function showUrlConfig(idx, hasStream) {
+function showUrlConfig() {
     const mount = document.getElementById('signalPanelMount');
-    const e = EVENTOS_MANUALES[idx];
+    const e = EVENTOS_MANUALES[currentEventIdx];
     if (!e) return;
     const savedKey = 'mf_url_' + e.home + '_' + e.away;
     const savedUrl = localStorage.getItem(savedKey);
     const btnText = savedUrl ? 'Cambiar URL del canal' : 'Agregar URL del canal';
-    mount.innerHTML = (mount.innerHTML || '') + '<div class="signal-panel" style="margin-top:0.5rem;border-top:1px solid rgba(255,255,255,0.05);padding-top:0.5rem;"><span style="font-size:0.75rem;opacity:0.6;">URL personalizada</span><button class="url-config-btn" onclick="addStreamUrl(' + idx + ')" style="display:block;width:100%;margin-top:0.3rem;padding:0.5rem;background:rgba(127,44,255,0.15);border:1px solid rgba(127,44,255,0.3);border-radius:6px;color:#b388ff;font-size:0.8rem;cursor:pointer;text-align:center;">' + btnText + '</button></div>';
+    mount.innerHTML = '<div style="margin-top:0.5rem;border-top:1px solid rgba(255,255,255,0.05);padding-top:0.5rem;"><div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:0.3rem;">URL personalizada</div><button class="url-config-btn" onclick="addStreamUrl()">' + btnText + '</button></div>';
 }
 
-function addStreamUrl(idx) {
-    const e = EVENTOS_MANUALES[idx];
+function addStreamUrl() {
+    const e = EVENTOS_MANUALES[currentEventIdx];
     if (!e) return;
     const pin = prompt('Ingrese el PIN de configuraci\u00f3n:');
     if (pin !== '2009') {
@@ -513,7 +521,6 @@ function addStreamUrl(idx) {
     currentEventChannels = [url];
     currentEventChannelIdx = 0;
     renderEventChannel(0, label, comp);
-    showUrlConfig(idx, true);
 }
 
 function renderEventChannel(idx, label, comp) {
@@ -529,7 +536,6 @@ function renderEventChannel(idx, label, comp) {
         const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
     }
-    document.getElementById('signalPanelMount').innerHTML = '';
     const opts = document.getElementById('eventChannelOptions');
     if (opts) {
         if (currentEventChannels.length > 1) {
@@ -544,6 +550,7 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'none';
         }
     }
+    showUrlConfig();
     const modal = document.getElementById('playerModal');
     modal.style.display = '';
     modal.classList.add('active');
