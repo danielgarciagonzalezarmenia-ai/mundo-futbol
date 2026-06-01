@@ -418,15 +418,12 @@ const COMPETITION_FLAGS = {
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
-    { time: '11:00', comp: 'Amistoso', home: 'Bulgaria', away: 'Montenegro', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Fesvideofy.com%2Fote.php%3Fid%3Dspt3"] },
-    { time: '11:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Fesvideofy.com%2Fote.php%3Fid%3Dspt2"] },
-    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Flatamvidz1.com%2Fcanal.php%3Fstream%3Ddisney3"] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ["https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Fesvideofy.com%2Fote.php%3Fid%3Dfox2us"] },
-    { time: '13:00', comp: 'Primera División', home: 'Boston River', away: 'Liverpool', channels: [] },
-    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: [] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: [] },
-    { time: '18:00', comp: 'Primera División', home: 'Peñarol', away: 'Central Español', channels: [] },
-    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: [] },
+    { time: '11:00', comp: 'Amistoso', home: 'Eslovaquia', away: 'Malta', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
+    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/flibre?url=https%3A%2F%2Flatamvidz1.com%2Fcanal.php%3Fstream%3Ddisney3'] },
+    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv'] },
+    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=espn'] },
+    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv', 'https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=caracol'] },
+    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://futbolibre-proxy.mundofutbolcol.workers.dev/canal?stream=sportv2'] },
 ];
 
 (function() {
