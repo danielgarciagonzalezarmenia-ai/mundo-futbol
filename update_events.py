@@ -3,7 +3,6 @@ from datetime import datetime, timezone, timedelta
 from urllib.parse import quote
 
 AGENDA_URL = 'https://futbol-libre.su/agenda/'
-COLOMBIA_OFFSET = -300
 PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev'
 
 LA14HD_MAP = {
@@ -49,12 +48,6 @@ def parse_title(title):
         home = title
     return comp, home, away
 
-def adjust_time(time_str, offset_minutes):
-    parts = time_str.split(':')
-    t = int(parts[0]) * 60 + int(parts[1]) + offset_minutes
-    t = t % 1440
-    return f'{t // 60:02d}:{t % 60:02d}'
-
 def format_events_js(events):
     lines = ['const EVENTOS_MANUALES = [']
     for e in events:
@@ -70,7 +63,7 @@ def update_js_file(filepath, new_events_block):
     replacement = new_events_block
     new_content = re.sub(pattern, replacement, content, count=1, flags=re.DOTALL)
     if new_content == content:
-        print(f'  [!] No se encontr\u00f3 EVENTOS_MANUALES en {filepath}')
+        print(f'  [-] Sin cambios en {os.path.basename(filepath)}')
         return False
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(new_content)
@@ -142,26 +135,10 @@ def main():
 
     print(f'[OK] {len(matches)} events from futbol-libre')
 
-    user_offset = -datetime.now().astimezone().utcoffset().total_seconds() / 60
-    tz_off = user_offset - (-COLOMBIA_OFFSET)
-
-    parsed = []
-    for e in matches:
-        t = e['time']
-        if abs(tz_off) > 1:
-            t = adjust_time(t, int(tz_off))
-        parsed.append({
-            'time': t,
-            'comp': e['comp'],
-            'home': e['home'],
-            'away': e['away'],
-            'channels': e['channels'],
-        })
-
     # Merge with fallback (dedup by team names, merge channels)
     seen = {}
     merged = []
-    for e in parsed:
+    for e in matches:
         key = e['home'] + ' vs ' + e['away']
         if key not in seen:
             seen[key] = True
@@ -200,7 +177,7 @@ def main():
             updated = True
 
     if not updated:
-        print('[!] No files updated')
+        print('[OK] No hay eventos nuevos')
         return
 
     today = datetime.now(timezone(timedelta(hours=-5))).strftime('%Y-%m-%d')
