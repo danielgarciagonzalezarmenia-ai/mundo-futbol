@@ -357,13 +357,25 @@ function openEventPlayer(idx) {
     if (!e) return;
     const label = `${e.home} vs ${e.away}`;
     const comp = e.comp;
+    document.getElementById('modalCompetition').textContent = comp || 'EVENTO';
+    document.getElementById('modalMatchTitle').textContent = label;
+    const opts = document.getElementById('eventChannelOptions');
+    if (opts) opts.style.display = 'none';
+
+    const savedKey = 'mf_url_' + e.home + '_' + e.away;
+    const savedUrl = localStorage.getItem(savedKey);
+    if (savedUrl) {
+        currentEventChannels = [savedUrl];
+        currentEventChannelIdx = 0;
+        renderEventChannel(0, label, comp);
+        showUrlConfig(idx, true);
+        return;
+    }
+
     if (!e.channels || e.channels.length === 0) {
-        document.getElementById('modalCompetition').textContent = comp || 'EVENTO';
-        document.getElementById('modalMatchTitle').textContent = label;
         document.getElementById('playerContainer').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:var(--bg-dark,#0d0d1a);color:var(--text-muted,#888);text-align:center;padding:2rem;font-family:inherit;"><div style="font-size:3rem;margin-bottom:1rem;">⚽</div><div style="font-size:1.2rem;font-weight:600;color:#e0e0e0;margin-bottom:0.5rem;">El evento empezar\u00e1 en breve</div><div style="font-size:0.85rem;color:var(--text-muted,#666);">Vuelve a intentar cuando el partido est\u00e9 en vivo</div></div>';
         document.getElementById('signalPanelMount').innerHTML = '';
-        const opts = document.getElementById('eventChannelOptions');
-        if (opts) opts.style.display = 'none';
+        showUrlConfig(idx, false);
         const modal = document.getElementById('playerModal');
         modal.style.display = '';
         modal.classList.add('active');
@@ -374,6 +386,41 @@ function openEventPlayer(idx) {
     currentEventChannels = e.channels;
     currentEventChannelIdx = 0;
     renderEventChannel(0, label, comp);
+    showUrlConfig(idx, true);
+}
+
+function showUrlConfig(idx, hasStream) {
+    const mount = document.getElementById('signalPanelMount');
+    const e = EVENTOS_MANUALES[idx];
+    if (!e) return;
+    const savedKey = 'mf_url_' + e.home + '_' + e.away;
+    const savedUrl = localStorage.getItem(savedKey);
+    const btnText = savedUrl ? 'Cambiar URL del canal' : 'Agregar URL del canal';
+    mount.innerHTML = (mount.innerHTML || '') + '<div class="signal-panel" style="margin-top:0.5rem;border-top:1px solid rgba(255,255,255,0.05);padding-top:0.5rem;"><span style="font-size:0.75rem;opacity:0.6;">URL personalizada</span><button class="url-config-btn" onclick="addStreamUrl(' + idx + ')" style="display:block;width:100%;margin-top:0.3rem;padding:0.5rem;background:rgba(127,44,255,0.15);border:1px solid rgba(127,44,255,0.3);border-radius:6px;color:#b388ff;font-size:0.8rem;cursor:pointer;text-align:center;">' + btnText + '</button></div>';
+}
+
+function addStreamUrl(idx) {
+    const e = EVENTOS_MANUALES[idx];
+    if (!e) return;
+    const pin = prompt('Ingrese el PIN de configuraci\u00f3n:');
+    if (pin !== '2009') {
+        if (pin !== null) alert('PIN incorrecto');
+        return;
+    }
+    const url = prompt('Pegue la URL del canal (debe empezar con http):');
+    if (!url) return;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        alert('La URL debe empezar con http:// o https://');
+        return;
+    }
+    const savedKey = 'mf_url_' + e.home + '_' + e.away;
+    localStorage.setItem(savedKey, url);
+    const label = e.home + ' vs ' + e.away;
+    const comp = e.comp;
+    currentEventChannels = [url];
+    currentEventChannelIdx = 0;
+    renderEventChannel(0, label, comp);
+    showUrlConfig(idx, true);
 }
 
 function renderEventChannel(idx, label, comp) {
