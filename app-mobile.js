@@ -340,7 +340,7 @@ var MANUAL_EVENTS_BACKUP = [
 var LA14HD_EVENTS_INTERVAL = null;
 
 function fetchLa14hdEvents() {
-    fetch('https://la14hd.com/eventos/json/agenda123.json')
+    fetch('https://futbolibre-proxy.mundofutbolcol.workers.dev/la14hd-events')
         .then(function(r){return r.json()})
         .then(function(data){
             if (!data || !data.length) return;

@@ -256,4 +256,32 @@ export default {
       return new Response(`Error: ${error.message}`, { status: 500 });
     }
   }
+  
+  // /la14hd-events endpoint: proxy la14hd events JSON con CORS
+  if (url.pathname === '/la14hd-events') {
+    try {
+      const response = await fetch('https://la14hd.com/eventos/json/agenda123.json', {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json',
+          'Referer': 'https://la14hd.com/eventos/',
+        }
+      });
+      if (!response.ok) return new Response(`Error: ${response.status}`, { status: response.status });
+      const data = await response.json();
+      const newResp = new Response(JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
+      return newResp;
+    } catch (error) {
+      return new Response(`Error: ${error.message}`, { status: 500 });
+    }
+  }
+  
+  // 404
+  return new Response('Not Found', { status: 404 });
 };
