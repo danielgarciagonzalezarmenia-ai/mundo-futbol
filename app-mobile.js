@@ -163,9 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPopularChannels();
     renderAllEvents();
     setupEventListeners();
-    startStatusCheck(); // Iniciar verificación de estado de canales
-    fetchEventsFromApi(); // Actualizar eventos desde API
+    startStatusCheck();
+    fetchEventsFromApi();
     eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
+    fetchLa14hdEvents();
+    LA14HD_EVENTS_INTERVAL = setInterval(fetchLa14hdEvents, 300000);
     
     // Restaurar página guardada
     const savedPage = localStorage.getItem('currentPage');
@@ -325,12 +327,36 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [
-    { time: '11:30', comp: 'Amistoso', home: 'Turquía', away: 'Macedonia del Norte', channels: ['https://la14hd.com/vivo/canales.php?stream=disney3'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=disney5'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=caracol'] }
-];
+const EVENTOS_MANUALES = [];
+
+var LA14HD_EVENTS_INTERVAL = null;
+
+function fetchLa14hdEvents() {
+    fetch('https://la14hd.com/eventos/json/agenda123.json')
+        .then(function(r){return r.json()})
+        .then(function(data){
+            if (!data || !data.length) return;
+            var today = new Date();
+            var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+            var events = data.filter(function(e){return e.date === todayStr});
+            if (!events.length) return;
+            var parsed = events.map(function(e){
+                var comp = 'Futbol', home = '', away = '';
+                var title = e.title || '';
+                var colonIdx = title.indexOf(': ');
+                if (colonIdx > 0) { comp = title.substring(0, colonIdx); title = title.substring(colonIdx + 2); }
+                var vsIdx = title.indexOf(' vs ');
+                if (vsIdx > 0) { home = title.substring(0, vsIdx); away = title.substring(vsIdx + 4); }
+                else { home = title; }
+                return { time: e.time, comp: comp, home: home, away: away, channels: [e.link] };
+            });
+            EVENTOS_MANUALES.length = 0;
+            parsed.forEach(function(e){EVENTOS_MANUALES.push(e)});
+            renderFeaturedEvents();
+            renderAllEvents();
+        })
+        .catch(function(){});
+}
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
