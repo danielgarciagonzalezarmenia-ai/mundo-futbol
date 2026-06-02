@@ -82,6 +82,7 @@ const TEAM_ALIASES = {
     'aguilasdoradas': 'aguilasdoradas',
     'alianzavalledupar': 'alianza',
     'independientemedellin': 'dim',
+    'medellin': 'dim',
     'internacionalbogota': 'internacionalbogota',
     'boyacachico': 'boyacachico',
     // Mexico

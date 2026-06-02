@@ -375,7 +375,14 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [];
+const EVENTOS_MANUALES = [
+    { time: '11:00', comp: 'Amistoso', home: 'Croacia', away: 'Bélgica', channels: [{ name: 'ESPN', url: 'https://la14hd.com/vivo/canales.php?stream=espn' }] },
+    { time: '13:45', comp: 'Amistoso', home: 'Gales', away: 'Ghana', channels: [{ name: 'ESPN', url: 'https://la14hd.com/vivo/canales.php?stream=espn' }, { name: 'Fox Sports 2', url: 'https://la14hd.com/vivo/canales.php?stream=foxsports2_usa' }] },
+    { time: '18:00', comp: 'MLB', home: 'New York Yankees', away: 'Cleveland Guardians', channels: [{ name: 'ESPN 3', url: 'https://la14hd.com/vivo/canales.php?stream=espn3' }] },
+    { time: '18:00', comp: 'Copa Colombia', home: 'Medellín', away: 'Cúcuta Deportivo', channels: [{ name: 'Win Sports', url: 'https://la14hd.com/vivo/canales.php?stream=winsports' }] },
+    { time: '19:00', comp: 'Amistoso', home: 'Haití', away: 'Nueva Zelanda', channels: [{ name: 'Fox Deportes', url: 'https://la14hd.com/vivo/canales.php?stream=foxdeportes' }] },
+    { time: '19:30', comp: 'Primera Division', home: 'Junior', away: 'Atlético Nacional', featured: true, channels: [{ name: 'Win Sports+', url: 'https://la14hd.com/vivo/canales.php?stream=winsportsplus' }, { name: 'Win Sports 2', url: 'https://la14hd.com/vivo/canales.php?stream=winsports2' }] }
+];
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
