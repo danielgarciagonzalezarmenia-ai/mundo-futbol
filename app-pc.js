@@ -172,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAllEvents();
     setupEventListeners();
     startStatusCheck();
+    initSponsoredCarousel();
     // fetchEventsFromApi();
     // eventsFetchInterval = setInterval(fetchEventsFromApi, 60000);
     
@@ -1504,4 +1505,80 @@ document.addEventListener('click', function(e) {
     document.addEventListener('selectstart',function(e){e.preventDefault()});
     document.addEventListener('dragstart',function(e){e.preventDefault()});
 })();
+
+// ============ PATROCINADORES Y ANUNCIOS ============
+var ANUNCIOS_PATROCINADOS = [
+    {
+        img: "img/patrocinio1.jpg",
+        link: "https://mundofutbolcol.online/",
+        alt: "Mundial 2026 en MundoFutbol"
+    }
+];
+
+function initSponsoredCarousel() {
+    const mount = document.getElementById('sponsoredCarouselMount');
+    if (!mount) return;
+    if (!ANUNCIOS_PATROCINADOS || ANUNCIOS_PATROCINADOS.length === 0) {
+        mount.style.display = 'none';
+        return;
+    }
+
+    let html = '<div class="sponsored-carousel">';
+    
+    // Generar slides
+    ANUNCIOS_PATROCINADOS.forEach((ad, index) => {
+        const isActive = index === 0 ? 'active' : '';
+        html += `
+            <div class="sponsored-slide ${isActive}" data-index="${index}">
+                <img src="${ad.img}" alt="${ad.alt}" class="sponsored-slide-img" onclick="window.open('${ad.link}', '_blank')">
+            </div>
+        `;
+    });
+
+    // Generar puntos de control si hay más de 1 imagen
+    if (ANUNCIOS_PATROCINADOS.length > 1) {
+        html += '<div class="sponsored-dots">';
+        ANUNCIOS_PATROCINADOS.forEach((_, index) => {
+            const isActive = index === 0 ? 'active' : '';
+            html += `<span class="sponsored-dot ${isActive}" data-index="${index}"></span>`;
+        });
+        html += '</div>';
+    }
+
+    html += '</div>';
+    mount.innerHTML = html;
+
+    if (ANUNCIOS_PATROCINADOS.length <= 1) return;
+
+    // Configurar ciclo automático de 5 segundos
+    let currentIdx = 0;
+    const slides = mount.querySelectorAll('.sponsored-slide');
+    const dots = mount.querySelectorAll('.sponsored-dot');
+    let cycleInterval = setInterval(nextSlide, 5000);
+
+    function showSlide(idx) {
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        
+        slides[idx].classList.add('active');
+        dots[idx].classList.add('active');
+        currentIdx = idx;
+    }
+
+    function nextSlide() {
+        let next = (currentIdx + 1) % ANUNCIOS_PATROCINADOS.length;
+        showSlide(next);
+    }
+
+    // Permitir clic en los puntos
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            clearInterval(cycleInterval);
+            const idx = parseInt(dot.dataset.index);
+            showSlide(idx);
+            cycleInterval = setInterval(nextSlide, 5000);
+        });
+    });
+}
+
 
