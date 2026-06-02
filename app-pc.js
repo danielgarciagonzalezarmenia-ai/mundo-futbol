@@ -1509,7 +1509,7 @@ document.addEventListener('click', function(e) {
 // ============ PATROCINADORES Y ANUNCIOS ============
 var ANUNCIOS_PATROCINADOS = [
     {
-        img: "img/patrocinio1.jpg?v=400",
+        img: "img/patrocinio1.png?v=400",
         link: "https://mundofutbolcol.online/",
         alt: "Mundial 2026 en MundoFutbol"
     }
