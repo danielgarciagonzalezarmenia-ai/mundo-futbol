@@ -1,6 +1,6 @@
-// Importar los scripts del SDK de Firebase
-importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.1/firebase-app-compat.min.js');
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.1/firebase-messaging-compat.min.js');
+
 
 // Configuración SDK de Firebase (debe coincidir con la de la app)
 const firebaseConfig = {
