@@ -161,12 +161,12 @@
                         <p class="hero-subtitle">Todos los partidos y eventos en vivo</p>
                     </div>
                     <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
-                    <div class="apk-download">
-                        <a href="MundoFutbol.apk" download class="apk-btn">
+                    <div class="apk-download" id="pwaInstallCard" style="display:none;">
+                        <button id="pwaInstallBtn" class="apk-btn" style="border:none; cursor:pointer; outline:none;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            <span>Instalar para Android</span>
-                        </a>
-                        <p class="apk-desc">Descarga la app APK para Android TV y celular</p>
+                            <span>Instalar Aplicación</span>
+                        </button>
+                        <p class="apk-desc" id="pwaInstallDesc">Añade MundoFutbol a tu pantalla de inicio para usarla como una app</p>
                     </div>
                     <div class="featured-events" id="allEvents"></div>
                 </section>

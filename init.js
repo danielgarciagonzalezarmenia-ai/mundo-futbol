@@ -31,27 +31,70 @@ if ('serviceWorker' in navigator) {
 (function() {
   var deferredPrompt = null;
   var installBtn = document.getElementById('installBtn');
-  if (!installBtn) return;
+  var pwaCard = document.getElementById('pwaInstallCard');
+  var pwaBtn = document.getElementById('pwaInstallBtn');
+
+  function showInstallUI() {
+    if (installBtn) installBtn.style.display = '';
+    if (pwaCard) pwaCard.style.display = 'block';
+  }
+
+  function hideInstallUI() {
+    if (installBtn) installBtn.style.display = 'none';
+    if (pwaCard) pwaCard.style.display = 'none';
+  }
+
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     deferredPrompt = e;
-    installBtn.style.display = '';
+    showInstallUI();
   });
-  installBtn.addEventListener('click', function() {
+
+  function triggerPrompt() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(function(result) {
-      if (result.outcome === 'accepted') installBtn.style.display = 'none';
+      if (result.outcome === 'accepted') {
+        hideInstallUI();
+      }
       deferredPrompt = null;
     });
-  });
+  }
+
+  if (installBtn) installBtn.addEventListener('click', triggerPrompt);
+  if (pwaBtn) pwaBtn.addEventListener('click', triggerPrompt);
+
   var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone;
   if (isIos) {
-    installBtn.style.display = '';
-    installBtn.textContent = 'Instalar';
-    installBtn.onclick = function() {
-      alert('Para instalar: toca Compartir → Agregar a Pantalla de Inicio');
+    showInstallUI();
+    var iosHandler = function() {
+      alert('Para instalar en iOS: toca el botón Compartir y selecciona "Agregar a Pantalla de Inicio"');
     };
+    if (installBtn) {
+      installBtn.textContent = 'Instalar';
+      installBtn.onclick = iosHandler;
+    }
+    if (pwaBtn) {
+      pwaBtn.onclick = iosHandler;
+      var desc = document.getElementById('pwaInstallDesc');
+      if (desc) desc.textContent = 'Toca Compartir → Agregar a Pantalla de Inicio en tu iPhone/iPad';
+    }
+  } else {
+    // Si es un dispositivo móvil y el prompt antes de instalar no se ha disparado aún,
+    // podemos mostrar el botón para guiar al usuario a agregarlo manualmente.
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      if (pwaCard) pwaCard.style.display = 'block';
+      if (pwaBtn && !pwaBtn.onclick) {
+        pwaBtn.addEventListener('click', function() {
+          if (deferredPrompt) {
+            triggerPrompt();
+          } else {
+            alert('Para instalar MundoFutbol: abre el menú de tu navegador (los tres puntos arriba a la derecha) y pulsa "Instalar aplicación" o "Agregar a la pantalla principal".');
+          }
+        });
+      }
+    }
   }
 })();
 document.addEventListener('click', function(e) {
