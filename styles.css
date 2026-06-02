@@ -3224,8 +3224,9 @@ body.player-open .top-nav {
 .sponsored-carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 7;
-  max-height: 460px;
+  max-width: 800px;
+  margin: 0 auto;
+  aspect-ratio: 2 / 1;
   background: rgba(255,255,255,0.015);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
@@ -3234,12 +3235,6 @@ body.player-open .top-nav {
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 12px 40px rgba(0,0,0,0.35);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-@media (max-width: 768px) {
-  .sponsored-carousel {
-    aspect-ratio: 16 / 8;
-    max-height: 300px;
-  }
 }
 .sponsored-carousel:hover {
   border-color: #f97316;
