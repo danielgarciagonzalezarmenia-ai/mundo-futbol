@@ -406,7 +406,7 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'block';
             opts.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;font-weight:600;">Opciones de Evento</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
                 currentEventChannels.map((c, i) => {
-                    const display = (typeof c === 'object' && c !== null) ? (c.name || 'OPCIÓN ' + (i + 1)) : 'OPCIÓN ' + (i + 1);
+                    const display = 'OPCIÓN ' + (i + 1);
                     const active = i === idx ? ' style="background:rgba(127,44,255,0.5);border-color:#b388ff;"' : '';
                     return `<button class="event-ch-btn" data-ch-idx="${i}"${active}>${escapeHtml(display)}</button>`;
                 }).join('') + '</div>';
