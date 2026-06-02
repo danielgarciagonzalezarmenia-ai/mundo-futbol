@@ -157,54 +157,6 @@ function startStatusCheck() {
 }
 const playerModalClose = document.querySelector('.player-modal-close');
 
-// Cargar partidos dinámicos desde Firebase Firestore en tiempo real
-function initFirebaseEvents() {
-    if (typeof db !== 'undefined') {
-        console.log('[Firebase] Escuchando partidos desde Firestore...');
-        db.collection('events')
-          .where('active', '==', true)
-          .onSnapshot((snapshot) => {
-              const cloudEvents = [];
-              snapshot.forEach((doc) => {
-                  const data = doc.data();
-                  data.id = doc.id;
-                  cloudEvents.push(data);
-              });
-              
-              console.log(`[Firebase] ${cloudEvents.length} partidos sincronizados en tiempo real.`);
-              
-              if (cloudEvents.length > 0) {
-                  // Reemplazar EVENTOS_MANUALES local por los de Firestore
-                  EVENTOS_MANUALES.length = 0;
-                  cloudEvents.forEach(e => {
-                      EVENTOS_MANUALES.push(e);
-                  });
-                  
-                  // Ajustar zona horaria local si difiere de Colombia (UTC-5)
-                  var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
-                  if (off !== 0) {
-                      EVENTOS_MANUALES.forEach(function(e) {
-                          if (e._tzAdjusted) return;
-                          var p = e.time.split(':');
-                          var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
-                          t = ((t % 1440) + 1440) % 1440;
-                          e.time = String(100 + Math.floor(t / 60)).slice(1) + ':' + String(100 + (t % 60)).slice(1);
-                          e._tzAdjusted = true;
-                      });
-                  }
-                  
-                  // Re-renderizar eventos
-                  renderFeaturedEvents();
-                  renderAllEvents();
-              }
-          }, (error) => {
-              console.error('[Firebase] Error al cargar partidos:', error);
-          });
-    } else {
-        console.log('[Firebase] Firestore no disponible, usando partidos locales.');
-    }
-}
-
 console.log('[La14HD] Initializing distribution node v3.2 - Licensed to La14HD.com');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -214,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     allMatches = [];
-    initFirebaseEvents(); // Sincronizar partidos en tiempo real de Firebase
     renderFeaturedEvents();
     renderOtherEvents();
     renderPopularChannels();
@@ -531,11 +482,14 @@ function renderEventChannel(idx, label, comp) {
     currentEventChannelIdx = idx;
     document.getElementById('modalCompetition').textContent = comp || 'EVENTO EN VIVO';
     document.getElementById('modalMatchTitle').textContent = label;
-    if (ch.startsWith('http')) {
+    
+    const chUrl = (typeof ch === 'object' && ch !== null) ? (ch.url || ch.name) : ch;
+    
+    if (chUrl && typeof chUrl === 'string' && chUrl.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(ch)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
-    } else {
-        const clean = ch.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
+        container.innerHTML = `<iframe src="${escapeHtml(chUrl)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
+    } else if (chUrl) {
+        const clean = chUrl.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
     }
     const opts = document.getElementById('eventChannelOptions');
@@ -544,7 +498,7 @@ function renderEventChannel(idx, label, comp) {
             opts.style.display = 'block';
             opts.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;font-weight:600;">Opciones de Evento</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
                 currentEventChannels.map((c, i) => {
-                    const display = 'OPCIÓN ' + (i + 1);
+                    const display = (typeof c === 'object' && c !== null) ? (c.name || 'OPCIÓN ' + (i + 1)) : 'OPCIÓN ' + (i + 1);
                     const active = i === idx ? ' style="background:rgba(127,44,255,0.5);border-color:#b388ff;"' : '';
                     return `<button class="event-ch-btn" data-ch-idx="${i}"${active}>${escapeHtml(display)}</button>`;
                 }).join('') + '</div>';
