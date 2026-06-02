@@ -326,13 +326,7 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [
-    { time: '11:00', comp: 'Amistoso', home: 'Eslovenia', away: 'Malta', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv2'] },
-    { time: '12:00', comp: 'Amistoso', home: 'Noruega', away: 'Suecia', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv'] },
-    { time: '13:45', comp: 'Amistoso', home: 'Austria', away: 'Túnez', channels: ['https://la14hd.com/vivo/canales.php?stream=espn'] },
-    { time: '18:00', comp: 'Amistoso', home: 'Colombia', away: 'Costa Rica', channels: ['https://la14hd.com/vivo/canales.php?stream=sportv', 'https://la14hd.com/vivo/canales.php?stream=caracol'] },
-    { time: '20:00', comp: 'Amistoso', home: 'Canadá', away: 'Uzbekistán', channels: ['https://la14hd.com/vivo/canales.php?stream=foxsports2_usa'] }
-];
+const EVENTOS_MANUALES = [];
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
