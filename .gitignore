@@ -6,3 +6,5 @@ node_modules/
 *.log
 
 test-hls.py
+firebase-service-account.json
+

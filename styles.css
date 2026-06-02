@@ -3289,4 +3289,149 @@ body.player-open .top-nav {
   box-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
 }
 
+/* ==========================================================================
+   ADMIN PANEL & TEAM SUGGESTIONS
+   ========================================================================== */
+.suggestions-dropdown {
+  background: rgba(18, 18, 28, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-hairline) !important;
+  border-radius: 12px;
+  overflow-y: auto;
+  max-height: 200px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  margin-top: 4px;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background 0.2s ease;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: #f97316 !important;
+}
+
+.suggestion-item img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.admin-tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.admin-tab-btn.active {
+  color: #f97316 !important;
+  background: rgba(249, 115, 22, 0.1) !important;
+  border: 1px solid rgba(249, 115, 22, 0.2) !important;
+  font-weight: 600;
+}
+
+.admin-tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admin-tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.admin-tab-content.active {
+  display: block;
+}
+
+.channel-row-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  animation: slideInDown 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.channel-row-input input {
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-hairline);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.channel-row-input input.ch-name {
+  flex: 1;
+}
+
+.channel-row-input input.ch-url {
+  flex: 2;
+}
+
+.channel-remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.channel-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.admin-match-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 

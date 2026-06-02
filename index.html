@@ -110,10 +110,9 @@
                     <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
                 </svg>
                 Legal
-            </a>
-            <a href="#" class="nav-link" data-page="metrics" id="metricsNavDesktop" style="display:none;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                Métricas
+                       <a href="#" class="nav-link" data-page="admin" id="metricsNavDesktop" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                Panel Admin
             </a>
         </div>
         <div class="top-nav-right">
@@ -126,7 +125,7 @@
             </button>
         </div>
     </nav>
-
+ 
     <!-- Login Modal -->
     <div id="loginModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)hideLogin()">
         <div class="modal-box">
@@ -140,14 +139,14 @@
             <p id="loginError" style="color:var(--accent-2);font-size:0.75rem;margin:8px 0 0;display:none;">Credenciales incorrectas</p>
         </div>
     </div>
-
+ 
     <div class="app-layout">
         <main class="main-content">
             <nav class="mobile-nav">
                 <a href="#" class="mobile-nav-link active" data-page="events">Eventos</a>
                 <a href="#" class="mobile-nav-link" data-page="channels">Canales</a>
                 <a href="#" class="mobile-nav-link" data-page="legal">Legal</a>
-                <a href="#" class="mobile-nav-link" data-page="metrics" id="metricsNavLink" style="display:none;">Métricas</a>
+                <a href="#" class="mobile-nav-link" data-page="admin" id="metricsNavLink" style="display:none;">Panel Admin</a>
             </nav>
 
             <div class="content-area">
@@ -159,7 +158,7 @@
                     </div>
                     <div class="play-ad-notice">Aviso: si el reproductor no reproduce a la primera, da clic en reproducir nuevamente.</div>
                     <div class="home-banner">
-                        <img src="img/anuncio.png?v=399" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
+                        <img src="img/anuncio.png?v=400" alt="Anuncio" class="home-banner-img" loading="lazy" onclick="firePopunder()">
                     </div>
                     <div class="featured-events" id="featuredEvents"></div>
                     <div id="trendingBanners"></div>
@@ -280,6 +279,127 @@
                         </div>
                     </div>
                 </section>
+
+                <section class="page" id="page-admin">
+                    <div class="hero-header">
+                        <h1 class="hero-title"><span class="hero-accent">Panel</span> de Administración</h1>
+                        <p class="hero-subtitle">Gestión de partidos en tiempo real y notificaciones push</p>
+                    </div>
+
+                    <!-- Admin Tabs Navigation -->
+                    <div class="admin-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-hairline); padding-bottom: 12px; overflow-x: auto;">
+                        <button class="admin-tab-btn active" data-tab="matches" onclick="switchAdminTab('matches')" style="background: none; border: none; color: var(--text-primary); padding: 8px 16px; border-radius: var(--radius-pill); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; transition: all 0.3s; background: var(--bg-card); border: 1px solid var(--border-hairline);">⚽ Gestionar Partidos</button>
+                        <button class="admin-tab-btn" data-tab="notifications" onclick="switchAdminTab('notifications')" style="background: none; border: none; color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-pill); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;">🔔 Enviar Notificaciones</button>
+                        <button class="admin-tab-btn" data-tab="metrics" onclick="switchAdminTab('metrics')" style="background: none; border: none; color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-pill); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;">📊 Métricas de Visitas</button>
+                    </div>
+
+                    <!-- TAB 1: MATCHES -->
+                    <div class="admin-tab-content active" id="admin-tab-matches">
+                        <!-- Add/Edit Match Glassmorphic Form -->
+                        <div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-hairline); border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                            <h3 id="adminFormTitle" style="color: var(--text-primary); margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--gradient-primary); width: 8px; height: 8px; border-radius: 50%;"></span>
+                                Agregar Nuevo Partido
+                            </h3>
+                            <form id="matchForm" onsubmit="saveMatch(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                                <input type="hidden" id="matchId">
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Torneo / Competición</label>
+                                        <input type="text" id="matchComp" required placeholder="Ej: Copa Libertadores" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Hora del Partido (Colombia)</label>
+                                        <input type="text" id="matchTime" required placeholder="Ej: 18:00" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                    </div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                                    <div style="display: flex; flex-direction: column; gap: 6px; position: relative;">
+                                        <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Equipo Local</label>
+                                        <input type="text" id="matchHome" required placeholder="Ej: Colombia" autocomplete="off" oninput="showTeamSuggestions(this, 'home')" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                        <div id="homeSuggestions" class="suggestions-dropdown" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-card); border:1px solid var(--border-hairline); border-radius:12px; z-index:100; max-height:150px; overflow-y:auto; margin-top:4px;"></div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 6px; position: relative;">
+                                        <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Equipo Visitante</label>
+                                        <input type="text" id="matchAway" required placeholder="Ej: Argentina" autocomplete="off" oninput="showTeamSuggestions(this, 'away')" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                        <div id="awaySuggestions" class="suggestions-dropdown" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-card); border:1px solid var(--border-hairline); border-radius:12px; z-index:100; max-height:150px; overflow-y:auto; margin-top:4px;"></div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;">
+                                        Señales / Canales de Transmisión
+                                        <button type="button" onclick="addChannelRow()" style="background: none; border: none; color: #f97316; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">➕ Añadir Canal</button>
+                                    </label>
+                                    <div id="channelsContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                                </div>
+
+                                <div style="display: flex; gap: 24px; align-items: center; margin-top: 8px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-size: 0.85rem; cursor: pointer;">
+                                        <input type="checkbox" id="matchFeatured" style="accent-color: #f97316;"> ⭐ Destacado (Banner Grande)
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-size: 0.85rem; cursor: pointer;">
+                                        <input type="checkbox" id="matchActive" checked style="accent-color: #f97316;"> 🟢 Mostrar en la Web
+                                    </label>
+                                </div>
+
+                                <div style="display: flex; gap: 12px; margin-top: 12px;">
+                                    <button type="button" id="cancelEditBtn" onclick="resetMatchForm()" style="display: none; flex: 1; padding: 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 0.85rem;">Cancelar Edición</button>
+                                    <button type="submit" style="flex: 2; padding: 12px; border-radius: var(--radius-pill); border: none; background: var(--gradient-primary); color: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(249,115,22,0.4); text-transform: uppercase;">Guardar Partido</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Matches List Grid -->
+                        <h3 style="color: var(--text-primary); margin-top: 24px; margin-bottom: 12px; font-size: 1.1rem;">Partidos en Vivo (En la Nube)</h3>
+                        <div id="adminMatchesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                            <div class="waiting-state" style="grid-column: 1/-1; padding: 30px;">Cargando partidos desde Firestore...</div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: NOTIFICATIONS -->
+                    <div class="admin-tab-content" id="admin-tab-notifications" style="display: none;">
+                        <div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-hairline); border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                            <h3 style="color: var(--text-primary); margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: #3b82f6; width: 8px; height: 8px; border-radius: 50%;"></span>
+                                Enviar Notificación Push Masiva
+                            </h3>
+                            <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); border-radius: 12px; padding: 14px; margin-bottom: 20px; font-size: 0.85rem; color: #93c5fd; display: flex; align-items: center; gap: 10px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                <span><strong>Estado del Canal Push:</strong> <span id="subscribersCount">Cargando suscriptores...</span></span>
+                            </div>
+
+                            <form id="notificationForm" onsubmit="sendNotification(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Título de la Alerta</label>
+                                    <input type="text" id="pushTitle" required placeholder="Ej: 🇨🇦 Canada vs Argentina 🇦🇷 en Vivo!" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Mensaje / Cuerpo de la Notificación</label>
+                                    <textarea id="pushMessage" required placeholder="Ej: Arranca el partidazo por Fox Sports. ¡Entra a ver el streaming aquí en vivo!" rows="3" style="padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none; resize: none; font-family: inherit;"></textarea>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <label style="color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Enlace de Destino (Al dar clic en la alerta)</label>
+                                    <input type="text" id="pushLink" placeholder="Ej: https://mundofutbol.com/?page=events" style="padding: 10px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hairline); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.85rem; outline: none;">
+                                </div>
+
+                                <button type="submit" style="padding: 12px; border-radius: var(--radius-pill); border: none; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(59,130,246,0.4); text-transform: uppercase; margin-top: 12px;">🚀 Enviar Notificación Push Masiva</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: METRICS -->
+                    <div class="admin-tab-content" id="admin-tab-metrics" style="display: none;">
+                        <div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-hairline); border-radius: 20px; padding: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                            <h3 style="color: var(--text-primary); margin-top: 0; margin-bottom: 16px; font-size: 1.1rem;">Visitas Diarias a MundoFutbol</h3>
+                            <div class="metrics-container" style="background: rgba(0,0,0,0.1); border-radius: 12px; padding: 12px;">
+                                <canvas id="adminMetricsChart" style="width: 100%; height: 350px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
@@ -350,18 +470,18 @@
         </div>
     </div>
 
-    <section class="page" id="page-admin" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:var(--bg-deep);padding:24px;overflow-y:auto;">
-        <div class="content-area">
-            <button data-action="close-admin" style="position:fixed;top:12px;right:12px;background:var(--bg-card);border:1px solid var(--border-hairline);color:var(--text-primary);padding:8px 16px;border-radius:var(--radius-pill);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Cerrar</button>
-            <h2 style="color:var(--text-primary);margin-bottom:12px;">Panel de Administración</h2>
-            <div id="apiEventsList" style="display:flex;flex-direction:column;gap:12px;"></div>
-        </div>
-    </section>
 
-    <script src="init.js?v=399"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+    <script src="firebase-config.js?v=400"></script>
+    <script src="admin.js?v=400"></script>
+
+    <script src="init.js?v=400"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1" integrity="sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn" crossorigin="anonymous"></script>
-    <script src="img/escudos/logo-index.js?v=399"></script>
-    <script src="teams-logos.js?v=399"></script>
+    <script src="img/escudos/logo-index.js?v=400"></script>
+    <script src="teams-logos.js?v=400"></script>
     <script>
     // Admin credentials
     var ADMIN_USER = 'admin';
@@ -388,6 +508,7 @@
             localStorage.setItem('mf_admin','1');
             hideLogin();
             showAdminUI();
+            if(typeof navigateTo==='function') navigateTo('admin');
         }else{
             document.getElementById('loginError').style.display='block';
         }
@@ -411,6 +532,11 @@
             el.style.marginLeft='4px';
             el.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
             document.querySelector('.top-nav-links').appendChild(el);
+        }
+        // Iniciar escuchas de base de datos si ya se cargó admin.js
+        if(typeof listenAdminMatches==='function') {
+            listenAdminMatches();
+            listenSubscribersCount();
         }
     }
     function hideAdminUI(){

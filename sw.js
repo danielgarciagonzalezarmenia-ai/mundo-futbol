@@ -1,9 +1,67 @@
-const CACHE = 'mundofutbol-v1';
+// Importar los scripts del SDK de Firebase
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
+
+// Configuración SDK de Firebase (debe coincidir con la de la app)
+const firebaseConfig = {
+  apiKey: "AIzaSyAIXqu1LL6G8LsdtKNgbh6VoGnVdTakMns",
+  authDomain: "mundo-futbol-39711.firebaseapp.com",
+  projectId: "mundo-futbol-39711",
+  storageBucket: "mundo-futbol-39711.firebasestorage.app",
+  messagingSenderId: "99443819214",
+  appId: "1:99443819214:web:f7fe9565cf4c6168b6c69f",
+  measurementId: "G-JQCJ7293NJ"
+};
+
+// Inicializar Firebase en el Service Worker
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// Controlar notificaciones en segundo plano
+messaging.onBackgroundMessage((payload) => {
+  console.log('[sw.js] Notificación recibida en segundo plano:', payload);
+  
+  const title = payload.notification.title || "¡Partido en Vivo!";
+  const options = {
+    body: payload.notification.body || "Mira la transmisión aquí.",
+    icon: '/favicon.png',
+    badge: '/favicon.png',
+    data: {
+      url: payload.data?.url || '/'
+    }
+  };
+
+  self.registration.showNotification(title, options);
+});
+
+// Manejar clics en las notificaciones
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const urlToOpen = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      // Si ya hay una ventana abierta, redirigirla
+      for (let i = 0; i < windowClients.length; i++) {
+        const client = windowClients[i];
+        if (client.url.includes(self.location.origin) && 'navigate' in client) {
+          return client.navigate(urlToOpen).then(c => c.focus());
+        }
+      }
+      // Si no, abrir una nueva
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
+const CACHE = 'mundofutbol-v2'; // Bumped cache key for service worker refresh
 const CORE = [
     '/manifest.json',
     '/favicon.png',
     '/favicon.ico',
-    '/teams-logos.js?v=1'
+    '/teams-logos.js?v=400'
 ];
 
 self.addEventListener('install', e => {

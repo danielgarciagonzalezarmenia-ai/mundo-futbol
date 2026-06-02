@@ -154,10 +154,59 @@ function startStatusCheck() {
     statusCheckInterval = setInterval(fetchChannelStatus, 30000); // Verificar cada 30 segundos
 }
 
+// Cargar partidos dinámicos desde Firebase Firestore en tiempo real
+function initFirebaseEvents() {
+    if (typeof db !== 'undefined') {
+        console.log('[Firebase] Escuchando partidos desde Firestore...');
+        db.collection('events')
+          .where('active', '==', true)
+          .onSnapshot((snapshot) => {
+              const cloudEvents = [];
+              snapshot.forEach((doc) => {
+                  const data = doc.data();
+                  data.id = doc.id;
+                  cloudEvents.push(data);
+              });
+              
+              console.log(`[Firebase] ${cloudEvents.length} partidos sincronizados en tiempo real.`);
+              
+              if (cloudEvents.length > 0) {
+                  // Reemplazar EVENTOS_MANUALES local por los de Firestore
+                  EVENTOS_MANUALES.length = 0;
+                  cloudEvents.forEach(e => {
+                      EVENTOS_MANUALES.push(e);
+                  });
+                  
+                  // Ajustar zona horaria local si difiere de Colombia (UTC-5)
+                  var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
+                  if (off !== 0) {
+                      EVENTOS_MANUALES.forEach(function(e) {
+                          if (e._tzAdjusted) return;
+                          var p = e.time.split(':');
+                          var t = parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + off;
+                          t = ((t % 1440) + 1440) % 1440;
+                          e.time = String(100 + Math.floor(t / 60)).slice(1) + ':' + String(100 + (t % 60)).slice(1);
+                          e._tzAdjusted = true;
+                      });
+                  }
+                  
+                  // Re-renderizar eventos
+                  renderFeaturedEvents();
+                  renderAllEvents();
+              }
+          }, (error) => {
+              console.error('[Firebase] Error al cargar partidos:', error);
+          });
+    } else {
+        console.log('[Firebase] Firestore no disponible, usando partidos locales.');
+    }
+}
+
 console.log('[La14HD] Initializing distribution node v3.2 - Licensed to La14HD.com');
 
 document.addEventListener('DOMContentLoaded', () => {
     allMatches = [];
+    initFirebaseEvents(); // Sincronizar partidos en tiempo real de Firebase
     renderFeaturedEvents();
     renderOtherEvents();
     renderPopularChannels();
