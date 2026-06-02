@@ -474,53 +474,32 @@ function renderFeaturedEvents() {
         cont.innerHTML = '';
         return;
     }
-    const featured = EVENTOS_MANUALES.find(e => e.featured);
-    const regular = EVENTOS_MANUALES.filter(e => !e.featured);
-    let html = '';
-    if (featured) {
-        const fi = EVENTOS_MANUALES.indexOf(featured);
-        html += `
-            <div class="featured-final-card" data-event-idx="${fi}">
-                <div class="featured-final-badge">🏆 FINAL</div>
-                <div class="featured-final-content">
-                    <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                    <div class="event-matchup">
-                        <div class="event-team home">
-                            <span class="event-team-name">${escapeHtml(featured.home)}</span>
-                            ${teamLogoHtml(featured.home)}
-                        </div>
-                        <div class="event-time-center">${escapeHtml(featured.time)}</div>
-                        <div class="event-team away">
-                            ${teamLogoHtml(featured.away)}
-                            <span class="event-team-name">${escapeHtml(featured.away)}</span>
-                        </div>
+    
+    let html = `<div class="events-compact">
+        ${EVENTOS_MANUALES.map((e) => {
+            const fi = EVENTOS_MANUALES.indexOf(e);
+            return `
+            <div class="event-row${e.featured ? ' featured-row' : ''}" data-event-idx="${fi}" style="${e.featured ? 'border: 1px solid rgba(249,115,22,0.4); background: rgba(249,115,22,0.03);' : ''}">
+                <div class="event-matchup">
+                    <div class="event-team home">
+                        <span class="event-team-name">${escapeHtml(e.home)}</span>
+                        ${teamLogoHtml(e.home)}
+                    </div>
+                    <div class="event-time-center" style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+                        ${e.featured ? '<span class="final-badge-pill" style="background: linear-gradient(135deg, #f97316, #e11d48); color: #fff; font-size: 0.58rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em; box-shadow: 0 0 10px rgba(249,115,22,0.4); white-space:nowrap; text-transform:uppercase;">🏆 FINAL</span>' : ''}
+                        <span style="font-weight: 700; color: #f97316; font-size: 0.85rem;">${escapeHtml(e.time)}</span>
+                    </div>
+                    <div class="event-team away">
+                        ${teamLogoHtml(e.away)}
+                        <span class="event-team-name">${escapeHtml(e.away)}</span>
                     </div>
                 </div>
+                <div class="event-comp-label">${escapeHtml(e.comp)}</div>
             </div>
         `;
-    }
-    if (regular.length > 0) {
-        html += `<div class="events-compact">
-            ${regular.map((e) => {
-                return `
-                <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                    <div class="event-matchup">
-                        <div class="event-team home">
-                            <span class="event-team-name">${escapeHtml(e.home)}</span>
-                            ${teamLogoHtml(e.home)}
-                        </div>
-                        <div class="event-time-center">${escapeHtml(e.time)}</div>
-                        <div class="event-team away">
-                            ${teamLogoHtml(e.away)}
-                            <span class="event-team-name">${escapeHtml(e.away)}</span>
-                        </div>
-                    </div>
-                    <div class="event-comp-label">${escapeHtml(e.comp)}</div>
-                </div>
-            `;
-            }).join('')}
-        </div>`;
-    }
+        }).join('')}
+    </div>`;
+    
     cont.innerHTML = html;
 }
 
@@ -577,55 +556,30 @@ function renderAllEvents() {
     
     let manualHtml = '';
     if (EVENTOS_MANUALES.length > 0) {
-        const featured = EVENTOS_MANUALES.find(e => e.featured);
-        const regular = EVENTOS_MANUALES.filter(e => !e.featured);
-        let eventsHtml = '';
-        if (featured) {
-            const fi = EVENTOS_MANUALES.indexOf(featured);
-            eventsHtml += `
-                <div class="featured-final-card" data-event-idx="${fi}">
-                    <div class="featured-final-badge">🏆 FINAL</div>
-                    <div class="featured-final-content">
-                        <div class="featured-final-comp">${escapeHtml(featured.comp)}</div>
-                        <div class="event-matchup">
-                            <div class="event-team home">
-                                ${teamLogoHtml(featured.home)}
-                                <span class="event-team-name">${escapeHtml(featured.home)}</span>
-                            </div>
-                            <div class="event-time-center">${escapeHtml(featured.time)}</div>
-                            <div class="event-team away">
-                                <span class="event-team-name">${escapeHtml(featured.away)}</span>
-                                ${teamLogoHtml(featured.away)}
-                            </div>
+        let eventsHtml = `<div class="events-compact" style="margin-top:0.75rem;">
+            ${EVENTOS_MANUALES.map((e) => {
+                const fi = EVENTOS_MANUALES.indexOf(e);
+                return `
+                <div class="event-row${e.featured ? ' featured-row' : ''}" data-event-idx="${fi}" style="${e.featured ? 'border: 1px solid rgba(249,115,22,0.4); background: rgba(249,115,22,0.03);' : ''}">
+                    <div class="event-matchup">
+                        <div class="event-team home">
+                            ${teamLogoHtml(e.home)}
+                            <span class="event-team-name">${escapeHtml(e.home)}</span>
+                        </div>
+                        <div class="event-time-center" style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+                            ${e.featured ? '<span class="final-badge-pill" style="background: linear-gradient(135deg, #f97316, #e11d48); color: #fff; font-size: 0.58rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em; box-shadow: 0 0 10px rgba(249,115,22,0.4); white-space:nowrap; text-transform:uppercase;">🏆 FINAL</span>' : ''}
+                            <span style="font-weight: 700; color: #f97316; font-size: 0.85rem;">${escapeHtml(e.time)}</span>
+                        </div>
+                        <div class="event-team away">
+                            <span class="event-team-name">${escapeHtml(e.away)}</span>
+                            ${teamLogoHtml(e.away)}
                         </div>
                     </div>
+                    <div class="event-comp-label">${escapeHtml(e.comp)}</div>
                 </div>
             `;
-        }
-        if (regular.length > 0) {
-            eventsHtml += `
-                <div class="events-compact" style="margin-top:0.75rem;">
-                    ${regular.map((e) => {
-                        return `
-                        <div class="event-row" data-event-idx="${EVENTOS_MANUALES.indexOf(e)}">
-                            <div class="event-matchup">
-                                <div class="event-team home">
-                                    ${teamLogoHtml(e.home)}
-                                    <span class="event-team-name">${escapeHtml(e.home)}</span>
-                                </div>
-                                <div class="event-time-center">${escapeHtml(e.time)}</div>
-                                <div class="event-team away">
-                                    <span class="event-team-name">${escapeHtml(e.away)}</span>
-                                    ${teamLogoHtml(e.away)}
-                                </div>
-                            </div>
-                            <div class="event-comp-label">${escapeHtml(e.comp)}</div>
-                        </div>
-                    `;
-                    }).join('')}
-                </div>
-            `;
-        }
+            }).join('')}
+        </div>`;
         manualHtml = `<h3 class="section-subtitle" style="margin:1rem 0 0.5rem;font-size:0.9rem;color:var(--text-muted);">Eventos Destacados</h3>${eventsHtml}`;
     }
     
