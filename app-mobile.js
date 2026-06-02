@@ -1503,15 +1503,19 @@ document.addEventListener('click', function(e) {
 // ============ PATROCINADORES Y ANUNCIOS ============
 var ANUNCIOS_PATROCINADOS = [
     {
-        img: "img/patrocinio1.jpg",
+        img: "img/patrocinio1.jpg?v=400",
         link: "https://mundofutbolcol.online/",
         alt: "Mundial 2026 en MundoFutbol"
     }
 ];
 
 function initSponsoredCarousel() {
+    console.log('[Sponsored] Inicializando carrusel con', ANUNCIOS_PATROCINADOS.length, 'anuncios.');
     const mount = document.getElementById('sponsoredCarouselMount');
-    if (!mount) return;
+    if (!mount) {
+        console.log('[Sponsored] No se encontro el punto de montaje.');
+        return;
+    }
     if (!ANUNCIOS_PATROCINADOS || ANUNCIOS_PATROCINADOS.length === 0) {
         mount.style.display = 'none';
         return;
