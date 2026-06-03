@@ -420,7 +420,9 @@ var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
 const EVENTOS_MANUALES = [
     { time: '12:30', comp: 'MLB', home: 'Minnesota Twins', away: 'Chicago White Sox', channels: [{ name: 'ESPN 5', url: 'https://la14hd.com/vivo/canales.php?stream=espn5' }] },
-    { time: '13:00', comp: 'Torneo de Reserva', home: 'Rosario Central', away: 'Racing Club', channels: [{ name: 'ESPN 3', url: 'https://la14hd.com/vivo/canales.php?stream=espn3' }] }
+    { time: '13:00', comp: 'Torneo de Reserva', home: 'Rosario Central', away: 'Racing Club', channels: [{ name: 'ESPN 3', url: 'https://la14hd.com/vivo/canales.php?stream=espn3' }] },
+    { time: '13:45', comp: 'Amistoso', home: 'Países Bajos', away: 'Argelia', channels: [{ name: 'ESPN', url: 'https://la14hd.com/vivo/canales.php?stream=espn' }] },
+    { time: '13:45', comp: 'Amistoso', home: 'Polonia', away: 'Nigeria', channels: [{ name: 'Sportv', url: 'https://la14hd.com/vivo/canales.php?stream=sportv' }] }
 ];
 
 (function() {
