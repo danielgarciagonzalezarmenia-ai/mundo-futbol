@@ -104,7 +104,7 @@ const CHANNEL_LOGOS = {
 // Función para obtener el estado de los canales desde la14hd.com
 async function fetchChannelStatus() {
     try {
-        const response = await fetch('https://la14hd.com/status.json?_=' + Date.now());
+        const response = await fetch($_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,71,30,74,91,13,26,94,18,11,0,81,81,25,14,31,24,15,26,81,78,20,23,25,29,30,1,83,6,69,81,70,88,29,1,74,95,16,17,3,88,14,11,78,27,29,15,3,73,31,28,84,9]) + encodeURIComponent('https://la14hd.com/status.json?_=' + Date.now()));
         const data = await response.json();
         
         // Construir mapa de estado de canales
