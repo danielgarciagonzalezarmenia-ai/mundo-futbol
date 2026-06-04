@@ -1453,7 +1453,8 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ====== SEGURIDAD ======
+// ====== SEGURIDAD DESHABILITADA PARA PRUEBAS ======
+/*
 (function(){
     document.addEventListener('contextmenu', function(e){e.preventDefault()});
     document.addEventListener('keydown', function(e){
@@ -1468,6 +1469,7 @@ document.addEventListener('click', function(e) {
     document.addEventListener('selectstart',function(e){e.preventDefault()});
     document.addEventListener('dragstart',function(e){e.preventDefault()});
 })();
+*/
 
 // ============ PATROCINADORES Y ANUNCIOS ============
 var ANUNCIOS_PATROCINADOS = [
