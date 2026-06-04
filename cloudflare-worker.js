@@ -121,7 +121,7 @@ export default {
         }
         
         // Not an M3U8, pass through
-        const newResp = addCorsHeaders(response);
+        const newResp = addCorsHeaders(new Response(text, response));
         newResp.headers.set('Cache-Control', 'no-cache');
         return newResp;
         
