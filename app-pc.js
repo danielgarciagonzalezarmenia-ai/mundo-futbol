@@ -483,7 +483,9 @@ function renderEventChannel(idx, label, comp) {
     
     const chUrl = (typeof ch === 'object' && ch !== null) ? (ch.url || ch.name) : ch;
     
-    if (chUrl && typeof chUrl === 'string' && chUrl.startsWith('http')) {
+    if (chUrl && typeof chUrl === 'string' && (chUrl.includes('.m3u8') || chUrl.includes('m3u8'))) {
+        renderHlsPlayer(chUrl);
+    } else if (chUrl && typeof chUrl === 'string' && chUrl.startsWith('http')) {
         const container = document.getElementById('playerContainer');
         container.innerHTML = `<iframe src="${escapeHtml(chUrl)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
     } else if (chUrl) {
@@ -1121,7 +1123,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         `;
 
         const video = document.getElementById('hlsPlayer');
-        const proxyUrl = $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,3,12,74,81,88,19,2,25,18,23,22,89,0,13,20,25,12,27,76,86,26,15,19,25,6,64,79,91,7,8,21,4,25,64,92,81,3,76,79,3,24,2,5]) + encodeURIComponent(url);
+        const proxyUrl = 'hls-proxy.php?url=' + encodeURIComponent(url);
         
         console.log('Usando proxy URL:', proxyUrl);
         
@@ -1192,7 +1194,12 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
 
         const video = document.getElementById('hlsPlayer');
         
-        console.log('Cargando stream con URL:', url);
+        // Si la URL tiene token (viene de canal.php), contiene fubohd o es HLS, usar proxy local en PHP
+        const proxiedUrl = (url.includes('token=') || url.includes('fubohd.com') || url.includes('.m3u8')) 
+            ? 'hls-proxy.php?url=' + encodeURIComponent(url)
+            : url;
+        
+        console.log('Cargando stream con URL:', proxiedUrl);
         
         const enableSound = () => {
             if (video.muted) {
@@ -1205,7 +1212,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         video.addEventListener('play', enableSound);
         
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
+            video.src = proxiedUrl;
             video.play().catch(e => console.log('Autoplay bloqueado:', e));
             return;
         }
@@ -1225,7 +1232,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
                 backBufferLength: 30,
                 maxLoadingDelay: 2
             });
-            hls.loadSource(url);
+            hls.loadSource(proxiedUrl);
             hls.attachMedia(video);
             
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
