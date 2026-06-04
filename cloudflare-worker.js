@@ -114,8 +114,7 @@ export default {
             return line;
           }).join('\n');
           
-          const newResp = new Response(rewritten);
-          addCorsHeaders(newResp);
+          const newResp = addCorsHeaders(new Response(rewritten));
           newResp.headers.set('Content-Type', contentType || 'application/vnd.apple.mpegurl');
           newResp.headers.set('Cache-Control', 'no-cache');
           return newResp;

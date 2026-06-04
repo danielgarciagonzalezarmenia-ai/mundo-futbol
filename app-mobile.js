@@ -1337,7 +1337,9 @@ function navigateTo(page) {
         'channels': 'Canales',
         'legal': 'Derechos de Autor'
     };
-    pageTitle.textContent = titles[page] || 'Eventos';
+    if (pageTitle) {
+        pageTitle.textContent = titles[page] || 'Eventos';
+    }
 
     // Guardar página actual en localStorage
     localStorage.setItem('currentPage', page);
