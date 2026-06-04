@@ -1019,7 +1019,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             </div>
         `;
 
-        const proxyUrl = $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,3,12,74,81,88,19,2,25,18,23,22,89,0,13,20,25,12,27,76,86,26,15,19,25,6,64,79,91,7,8,21,4,25,64,92,81,3,76,79,3,24,2,5]) + encodeURIComponent(url);
+        const proxyUrl = $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,71,30,74,91,13,26,94,18,11,0,81,81,25,14,31,24,15,26,81,78,20,23,25,29,30,1,83,6,69,81,70,88,29,1,74,95,16,17,3,88,14,11,78,27,29,15,3,73,31,28,84,9]) + encodeURIComponent(url);
         
         console.log('Usando proxy URL:', proxyUrl);
         
@@ -1180,7 +1180,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         
         // Si la URL tiene token (viene de canal.php), contiene fubohd o es HLS, usar Worker como proxy
         const proxiedUrl = (url.includes('token=') || url.includes('fubohd.com') || url.includes('.m3u8')) 
-            ? $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,3,12,74,81,88,19,2,25,18,23,22,89,0,13,20,25,12,27,76,86,26,15,19,25,6,64,79,91,7,8,21,4,25,64,92,81,3,76,79,3,24,2,5]) + encodeURIComponent(url)
+            ? $_([80,64,1,19,3,76,69,65,94,65,1,1,31,26,71,30,74,91,13,26,94,18,11,0,81,81,25,14,31,24,15,26,81,78,20,23,25,29,30,1,83,6,69,81,70,88,29,1,74,95,16,17,3,88,14,11,78,27,29,15,3,73,31,28,84,9]) + encodeURIComponent(url)
             : url;
         
         console.log('Usando URL:', proxiedUrl);

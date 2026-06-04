@@ -1,7 +1,7 @@
 // Cloudflare Worker para proxy de streams HLS y canal.php
 // Este worker actúa como intermediario para bypass de restricciones de IP y CORS
 
-const PROXY_BASE = 'https://futbolibre-proxy.mundofutbolcol.workers.dev';
+const PROXY_BASE = 'https://futbol-proxy.danielmonetizatiktok2026.workers.dev';
 
 function addCorsHeaders(response) {
   const newResp = new Response(response.body, response);
