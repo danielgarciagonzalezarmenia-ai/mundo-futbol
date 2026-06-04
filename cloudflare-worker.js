@@ -82,13 +82,14 @@ export default {
       try {
         const baseUrl = m3u8Url.substring(0, m3u8Url.lastIndexOf('/') + 1);
         const isXtream = m3u8Url.includes('ahhshitherewegoagain') || m3u8Url.includes('dieselhosting');
+        const referer = m3u8Url.includes('fubohd.com') ? 'https://la14hd.com/' : new URL(m3u8Url).origin;
         const response = await fetch(m3u8Url, {
           headers: {
             'User-Agent': isXtream ? 'VLC/3.0.18' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             'Accept': '*/*',
             'Accept-Language': 'es-419,es;q=0.5',
-            'Referer': new URL(m3u8Url).origin,
-            'Origin': new URL(m3u8Url).origin,
+            'Referer': referer,
+            'Origin': referer,
           }
         });
         if (!response.ok) return new Response(`Error: ${response.status}`, { status: response.status });
@@ -137,11 +138,12 @@ export default {
       
       try {
         const isXtream = segUrl.includes('ahhshitherewegoagain') || segUrl.includes('dieselhosting');
+        const referer = segUrl.includes('fubohd.com') ? 'https://la14hd.com/' : new URL(segUrl).origin;
         const response = await fetch(segUrl, {
           headers: {
             'User-Agent': isXtream ? 'VLC/3.0.18' : 'Mozilla/5.0',
-            'Referer': new URL(segUrl).origin,
-            'Origin': new URL(segUrl).origin,
+            'Referer': referer,
+            'Origin': referer,
             'Range': request.headers.get('Range') || 'bytes=0-',
           }
         });
@@ -260,9 +262,10 @@ export default {
     }
     
     try {
+      const referer = streamUrl.includes('fubohd.com') ? 'https://la14hd.com/' : new URL(streamUrl).origin;
       const response = await proxyFetch(streamUrl, {
-        'Referer': new URL(streamUrl).origin,
-        'Origin': new URL(streamUrl).origin,
+        'Referer': referer,
+        'Origin': referer,
         'Range': request.headers.get('Range') || 'bytes=0-',
       });
       if (!response.ok) return new Response(`Error: ${response.status}`, { status: response.status });
