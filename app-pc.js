@@ -323,7 +323,7 @@ function getChannelStreamUrl(channelName) {
         'Fox Sports 3': 'https://la14hd.com/vivo/canales.php?stream=foxsports3',
         'TNT Sports': 'https://la14hd.com/vivo/canales.php?stream=tntsports',
         'TNT Sports Chile': 'https://latamvidz1.com/canal.php?stream=tntsportschile',
-        'Win Sports': 'https://la14hd.com/vivo/canales.php?stream=winsports',
+        'Win Sports': 'https://player.magmaplayer.com/api/channels/pG2MzVKUaZ/playlist.m3u8',
         'Win Sports+': 'https://la14hd.com/vivo/canales.php?stream=winsportsplus',
         'TyC Sports': 'https://la14hd.com/vivo/canales.php?stream=tycsports',
         'DAZN 1': 'https://la14hd.com/vivo/canales.php?stream=dazn1',
@@ -1002,7 +1002,7 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             'foxsports3': 'foxsports3',
             'dazn1': 'dazn1',
             'dazn2': 'dazn2',
-            'winsports': 'https://la14hd.com/vivo/canales.php?stream=winsportsplus',
+            'winsports': 'https://player.magmaplayer.com/api/channels/pG2MzVKUaZ/playlist.m3u8',
             'winsportsplus': 'https://la14hd.com/vivo/canales.php?stream=winsportsplus',
             'tyc': 'tycinternacional',
             'tycinternacional': 'tycinternacional',
@@ -1019,7 +1019,12 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
         const playerUrl = mapped.startsWith('http')
             ? mapped
             : `https://la14hd.com/vivo/canales.php?stream=${mapped}`;
-        loadIframePlayer(playerUrl);
+        
+        if (playerUrl.includes('.m3u8')) {
+            loadPlayer(playerUrl);
+        } else {
+            loadIframePlayer(playerUrl);
+        }
     } else {
         loadPlayer(streamUrl);
     }
