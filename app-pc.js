@@ -418,13 +418,7 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [
-    { time: '12:00', comp: 'Amistoso', home: 'Andorra', away: 'Liechtenstein', channels: [{ name: 'Sportv 2', url: 'https://la14hd.com/vivo/canales.php?stream=sportv2' }] },
-    { time: '14:00', comp: 'Amistoso', home: 'España', away: 'Iraq', channels: [{ name: 'Señal principal', url: 'https://tv.la14hd.com/mpd/drm.php?url=aHR0cHM6Ly9vdHRlLmxpdmUuZmx5Lnd3LmFpdi1jZG4ubmV0L2xoci1uaXRyby9saXZlL2NsaWVudHMvZGFzaC9lbmMvNjJxZGtlZnY5Zi9vdXQvdjEvZjdkNWIzNTZlMDQ4NDk0YTgzMjU1NjNlODkxNmQ1MGIvY2VuYy5tcGQ=&k=ZmQ4NmRkZTBhZTNlMTRmZjUxYzhmYzhmMjQ4YTUwZGI6ZDEwNmFlNzhiMDg5M2RhMmU0MzkzZWNlOTk0MjBiYWE=' }] },
-    { time: '14:10', comp: 'Amistoso', home: 'Francia', away: 'Costa de Marfil', channels: [{ name: 'ESPN', url: 'https://tvtvhd.com/canales.php?stream=espn' }, { name: 'Sportv', url: 'https://tvtvhd.com/vivo/canales.php?stream=sportv' }] },
-    { time: '19:00', comp: 'Amistoso', home: 'República Checa', away: 'Guatemala', channels: [{ name: 'Sportv', url: 'https://tvtvhd.com/vivo/canales.php?stream=sportv' }] },
-    { time: '21:00', comp: 'Amistoso', home: 'México', away: 'Serbia', channels: [{ name: 'Fox Deportes', url: 'https://tvtvhd.com/vivo/canal.php?stream=foxdeportes' }] }
-];
+const EVENTOS_MANUALES = [];
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
