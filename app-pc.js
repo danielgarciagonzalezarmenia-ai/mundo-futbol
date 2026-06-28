@@ -503,7 +503,7 @@ function renderEventChannel(idx, label, comp) {
         renderHlsPlayer(chUrl);
     } else if (chUrl && typeof chUrl === 'string' && chUrl.startsWith('http')) {
         const container = document.getElementById('playerContainer');
-        container.innerHTML = `<iframe src="${escapeHtml(chUrl)}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
+        container.innerHTML = `<iframe src="${escapeHtml(chUrl)}" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
     } else if (chUrl) {
         const clean = chUrl.toLowerCase().replace(/[^a-z0-9+]/g, '').replace('+', 'plus');
         renderHlsPlayer(clean);
@@ -1049,7 +1049,6 @@ function renderHlsPlayer(streamUrl, tempStreamUrl = null) {
             <iframe src="${escapeHtml(url)}" 
                 id="playerIframe"
                 allowfullscreen 
-                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
                 style="width: 100%; height: 100%; border: none; background: #000;">
             </iframe>
@@ -1327,7 +1326,6 @@ function renderPlayer(match, signalIndex) {
         playerContainer.innerHTML = `
             <iframe src="${escapeHtml(selectedSignal.url)}" 
                 id="playerIframe_${match.id}"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-autoplay"
                 allowfullscreen 
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
                 loading="lazy"
