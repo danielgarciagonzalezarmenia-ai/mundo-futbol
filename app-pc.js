@@ -418,7 +418,28 @@ const COMPETITION_FLAGS = {
 
 var COLOMBIA_OFFSET = -300; // UTC-5 in minutes
 
-const EVENTOS_MANUALES = [];
+const EVENTOS_MANUALES = [
+    {
+        time: '14:00',
+        comp: 'Amistoso',
+        home: 'Sudáfrica',
+        away: 'Canadá',
+        channels: [
+            { name: 'Dsports HD', url: 'https://sudamericaplay.sbs/canal_8112/cza_dsports.html' },
+            { name: 'Dsports FHD | Solo LATAM', url: 'https://sudamericaplay.sbs/canal_8112/dsports4541.html' },
+            { name: 'TV LA 1 ES', url: 'https://sudamericaplay.sbs/canal_8112/tvla1es.html' },
+            { name: 'Trece FHD', url: 'https://sudamericaplay.sbs/canal_41/trecepy.php' },
+            { name: 'Caze TV', url: 'https://sudamericaplay.sbs/canal_8112/34cazetv.html' },
+            { name: 'TSN 1', url: 'https://sudamericaplay.sbs/canal_8112/tsn1.html' },
+            { name: 'CTV', url: 'https://sudamericaplay.sbs/canal_8112/ctv.html' },
+            { name: 'Fox 1 US', url: 'https://sudamericaplay.sbs/canal_8112/1foxus.html' },
+            { name: 'DAS DE', url: 'https://sudamericaplay.sbs/canal_8112/das_de.html' },
+            { name: 'Dsports 1', url: 'https://streamtpday1.xyz/global2.php?stream=dsports' },
+            { name: 'VIX', url: 'https://streamtpday1.xyz/global2.php?stream=vix1' },
+            { name: 'Telemundo USA', url: 'https://streamtpday1.xyz/global2.php?stream=telemundousa' }
+        ]
+    }
+];
 
 (function() {
     var off = -new Date().getTimezoneOffset() - COLOMBIA_OFFSET;
